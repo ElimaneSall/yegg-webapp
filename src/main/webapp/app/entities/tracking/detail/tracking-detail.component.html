@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (tracking(); as trackingRef) {
+      <div>
+        <h2 data-cy="trackingDetailsHeading"><span jhiTranslate="yeggApp.tracking.detail.title">Tracking</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ trackingRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.latitude">Latitude</span></dt>
+          <dd>
+            <span>{{ trackingRef.latitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.longitude">Longitude</span></dt>
+          <dd>
+            <span>{{ trackingRef.longitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.vitesse">Vitesse</span></dt>
+          <dd>
+            <span>{{ trackingRef.vitesse }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.cap">Cap</span></dt>
+          <dd>
+            <span>{{ trackingRef.cap }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.timestamp">Timestamp</span></dt>
+          <dd>
+            <span>{{ trackingRef.timestamp | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.source">Source</span></dt>
+          <dd>
+            <span>{{ trackingRef.source }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.bus">Bus</span></dt>
+          <dd>
+            @if (tracking()!.bus) {
+              <div>
+                <a [routerLink]="['/bus', tracking()!.bus?.id, 'view']">{{ trackingRef.bus?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/tracking', trackingRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

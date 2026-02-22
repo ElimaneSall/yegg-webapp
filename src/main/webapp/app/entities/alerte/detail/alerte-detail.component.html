@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (alerte(); as alerteRef) {
+      <div>
+        <h2 data-cy="alerteDetailsHeading"><span jhiTranslate="yeggApp.alerte.detail.title">Alerte</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ alerteRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.typeCible">Type Cible</span></dt>
+          <dd>
+            <span>{{ alerteRef.typeCible }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.cibleId">Cible Id</span></dt>
+          <dd>
+            <span>{{ alerteRef.cibleId }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.seuilMinutes">Seuil Minutes</span></dt>
+          <dd>
+            <span>{{ alerteRef.seuilMinutes }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.joursActivation">Jours Activation</span></dt>
+          <dd>
+            <span>{{ alerteRef.joursActivation }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.heureDebut">Heure Debut</span></dt>
+          <dd>
+            <span>{{ alerteRef.heureDebut | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.heureFin">Heure Fin</span></dt>
+          <dd>
+            <span>{{ alerteRef.heureFin | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.statut">Statut</span></dt>
+          <dd>
+            <span>{{ alerteRef.statut }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.dernierDeclenchement">Dernier Declenchement</span></dt>
+          <dd>
+            <span>{{ alerteRef.dernierDeclenchement | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.nombreDeclenchements">Nombre Declenchements</span></dt>
+          <dd>
+            <span>{{ alerteRef.nombreDeclenchements }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerte.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (alerte()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', alerte()!.utilisateur?.id, 'view']">{{ alerteRef.utilisateur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/alerte', alerteRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

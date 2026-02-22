@@ -1,0 +1,154 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-ligne-heading" data-cy="LigneCreateUpdateHeading" jhiTranslate="yeggApp.ligne.home.createOrEditLabel">
+        Créer ou éditer un Ligne
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.ligne.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let numeroRef = editForm.get('numero')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_numero" jhiTranslate="yeggApp.ligne.numero">Numero</label>
+          <input type="text" class="form-control" name="numero" id="field_numero" data-cy="numero" formControlName="numero" />
+          @if (numeroRef.invalid && (numeroRef.dirty || numeroRef.touched)) {
+            <div>
+              @if (editForm.get('numero')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              @if (editForm.get('numero')?.errors?.minlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: '1' }"
+                  >Ce champ doit faire au minimum 1 caractères.</small
+                >
+              }
+              @if (editForm.get('numero')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
+                  >Ce champ doit faire moins de 10 caractères.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let nomRef = editForm.get('nom')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nom" jhiTranslate="yeggApp.ligne.nom">Nom</label>
+          <input type="text" class="form-control" name="nom" id="field_nom" data-cy="nom" formControlName="nom" />
+          @if (nomRef.invalid && (nomRef.dirty || nomRef.touched)) {
+            <div>
+              @if (editForm.get('nom')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let directionRef = editForm.get('direction')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_direction" jhiTranslate="yeggApp.ligne.direction">Direction</label>
+          <input type="text" class="form-control" name="direction" id="field_direction" data-cy="direction" formControlName="direction" />
+          @if (directionRef.invalid && (directionRef.dirty || directionRef.touched)) {
+            <div>
+              @if (editForm.get('direction')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let couleurRef = editForm.get('couleur')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_couleur" jhiTranslate="yeggApp.ligne.couleur">Couleur</label>
+          <input type="text" class="form-control" name="couleur" id="field_couleur" data-cy="couleur" formControlName="couleur" />
+          @if (couleurRef.invalid && (couleurRef.dirty || couleurRef.touched)) {
+            <div>
+              @if (editForm.get('couleur')?.errors?.pattern) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Couleur' }"
+                  >Ce champ doit suivre l&apos;expression régulière Couleur.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_distanceKm" jhiTranslate="yeggApp.ligne.distanceKm">Distance Km</label>
+          <input
+            type="number"
+            class="form-control"
+            name="distanceKm"
+            id="field_distanceKm"
+            data-cy="distanceKm"
+            formControlName="distanceKm"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dureeMoyenne" jhiTranslate="yeggApp.ligne.dureeMoyenne">Duree Moyenne</label>
+          <input
+            type="number"
+            class="form-control"
+            name="dureeMoyenne"
+            id="field_dureeMoyenne"
+            data-cy="dureeMoyenne"
+            formControlName="dureeMoyenne"
+          />
+        </div>
+
+        @let statutRef = editForm.get('statut')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_statut" jhiTranslate="yeggApp.ligne.statut">Statut</label>
+          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
+            <div>
+              @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_operateur" jhiTranslate="yeggApp.ligne.operateur">Operateur</label>
+          <select
+            class="form-control"
+            id="field_operateur"
+            data-cy="operateur"
+            name="operateur"
+            formControlName="operateur"
+            [compareWith]="compareOperateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (operateurOption of operateursSharedCollection; track $index) {
+              <option [ngValue]="operateurOption">{{ operateurOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

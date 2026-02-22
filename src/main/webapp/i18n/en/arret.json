@@ -1,0 +1,32 @@
+{
+  "yeggApp": {
+    "arret": {
+      "home": {
+        "title": "Arrets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Arret",
+        "createOrEditLabel": "Create or edit a Arret",
+        "notFound": "No Arrets found"
+      },
+      "created": "A new Arret is created with identifier {{ param }}",
+      "updated": "A Arret is updated with identifier {{ param }}",
+      "deleted": "A Arret is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Arret {{ id }}?"
+      },
+      "detail": {
+        "title": "Arret"
+      },
+      "id": "ID",
+      "nom": "Nom",
+      "code": "Code",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "adresse": "Adresse",
+      "zoneTarifaire": "Zone Tarifaire",
+      "equipements": "Equipements",
+      "actif": "Actif",
+      "ligneArrets": "Ligne Arrets"
+    }
+  }
+}

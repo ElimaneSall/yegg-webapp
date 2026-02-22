@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (arret(); as arretRef) {
+      <div>
+        <h2 data-cy="arretDetailsHeading"><span jhiTranslate="yeggApp.arret.detail.title">Arret</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ arretRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.nom">Nom</span></dt>
+          <dd>
+            <span>{{ arretRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.code">Code</span></dt>
+          <dd>
+            <span>{{ arretRef.code }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.latitude">Latitude</span></dt>
+          <dd>
+            <span>{{ arretRef.latitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.longitude">Longitude</span></dt>
+          <dd>
+            <span>{{ arretRef.longitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.adresse">Adresse</span></dt>
+          <dd>
+            <span>{{ arretRef.adresse }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.zoneTarifaire">Zone Tarifaire</span></dt>
+          <dd>
+            <span>{{ arretRef.zoneTarifaire }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.equipements">Equipements</span></dt>
+          <dd>
+            <span>{{ arretRef.equipements }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.arret.actif">Actif</span></dt>
+          <dd>
+            <span>{{ arretRef.actif }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/arret', arretRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

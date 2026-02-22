@@ -1,0 +1,30 @@
+{
+  "yeggApp": {
+    "tracking": {
+      "home": {
+        "title": "Trackings",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Tracking",
+        "createOrEditLabel": "Créer ou éditer un Tracking",
+        "notFound": "Aucun Tracking trouvé"
+      },
+      "created": "Un nouveau Tracking a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Tracking avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Tracking avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Tracking {{ id }} ?"
+      },
+      "detail": {
+        "title": "Tracking"
+      },
+      "id": "ID",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "vitesse": "Vitesse",
+      "cap": "Cap",
+      "timestamp": "Timestamp",
+      "source": "Source",
+      "bus": "Bus"
+    }
+  }
+}

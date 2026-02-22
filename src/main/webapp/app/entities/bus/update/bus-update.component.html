@@ -1,0 +1,308 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-bus-heading" data-cy="BusCreateUpdateHeading" jhiTranslate="yeggApp.bus.home.createOrEditLabel">
+        Créer ou éditer un Bus
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.bus.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let numeroVehiculeRef = editForm.get('numeroVehicule')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_numeroVehicule" jhiTranslate="yeggApp.bus.numeroVehicule">Numero Vehicule</label>
+          <input
+            type="text"
+            class="form-control"
+            name="numeroVehicule"
+            id="field_numeroVehicule"
+            data-cy="numeroVehicule"
+            formControlName="numeroVehicule"
+          />
+          @if (numeroVehiculeRef.invalid && (numeroVehiculeRef.dirty || numeroVehiculeRef.touched)) {
+            <div>
+              @if (editForm.get('numeroVehicule')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let plaqueRef = editForm.get('plaque')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_plaque" jhiTranslate="yeggApp.bus.plaque">Plaque</label>
+          <input type="text" class="form-control" name="plaque" id="field_plaque" data-cy="plaque" formControlName="plaque" />
+          @if (plaqueRef.invalid && (plaqueRef.dirty || plaqueRef.touched)) {
+            <div>
+              @if (editForm.get('plaque')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_modele" jhiTranslate="yeggApp.bus.modele">Modele</label>
+          <input type="text" class="form-control" name="modele" id="field_modele" data-cy="modele" formControlName="modele" />
+        </div>
+
+        @let capaciteRef = editForm.get('capacite')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_capacite" jhiTranslate="yeggApp.bus.capacite">Capacite</label>
+          <input type="number" class="form-control" name="capacite" id="field_capacite" data-cy="capacite" formControlName="capacite" />
+          @if (capaciteRef.invalid && (capaciteRef.dirty || capaciteRef.touched)) {
+            <div>
+              @if (editForm.get('capacite')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              @if (editForm.get('capacite')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Ce champ doit être supérieur à 1.</small
+                >
+              }
+              @if (editForm.get('capacite')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '200' }"
+                  >Ce champ doit être inférieur à 200.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('capacite')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_anneeFabrication" jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</label>
+          <input
+            type="number"
+            class="form-control"
+            name="anneeFabrication"
+            id="field_anneeFabrication"
+            data-cy="anneeFabrication"
+            formControlName="anneeFabrication"
+          />
+        </div>
+
+        @let gpsDeviceIdRef = editForm.get('gpsDeviceId')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_gpsDeviceId" jhiTranslate="yeggApp.bus.gpsDeviceId">Gps Device Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="gpsDeviceId"
+            id="field_gpsDeviceId"
+            data-cy="gpsDeviceId"
+            formControlName="gpsDeviceId"
+          />
+          @if (gpsDeviceIdRef.invalid && (gpsDeviceIdRef.dirty || gpsDeviceIdRef.touched)) {
+            <div></div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_gpsStatus" jhiTranslate="yeggApp.bus.gpsStatus">Gps Status</label>
+          <input type="text" class="form-control" name="gpsStatus" id="field_gpsStatus" data-cy="gpsStatus" formControlName="gpsStatus" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_gpsLastPing" jhiTranslate="yeggApp.bus.gpsLastPing">Gps Last Ping</label>
+          <div class="d-flex">
+            <input
+              id="field_gpsLastPing"
+              data-cy="gpsLastPing"
+              type="datetime-local"
+              class="form-control"
+              name="gpsLastPing"
+              formControlName="gpsLastPing"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        @let gpsBatteryLevelRef = editForm.get('gpsBatteryLevel')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_gpsBatteryLevel" jhiTranslate="yeggApp.bus.gpsBatteryLevel">Gps Battery Level</label>
+          <input
+            type="number"
+            class="form-control"
+            name="gpsBatteryLevel"
+            id="field_gpsBatteryLevel"
+            data-cy="gpsBatteryLevel"
+            formControlName="gpsBatteryLevel"
+          />
+          @if (gpsBatteryLevelRef.invalid && (gpsBatteryLevelRef.dirty || gpsBatteryLevelRef.touched)) {
+            <div>
+              @if (editForm.get('gpsBatteryLevel')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              @if (editForm.get('gpsBatteryLevel')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '100' }"
+                  >Ce champ doit être inférieur à 100.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('gpsBatteryLevel')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currentLatitude" jhiTranslate="yeggApp.bus.currentLatitude">Current Latitude</label>
+          <input
+            type="number"
+            class="form-control"
+            name="currentLatitude"
+            id="field_currentLatitude"
+            data-cy="currentLatitude"
+            formControlName="currentLatitude"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currentLongitude" jhiTranslate="yeggApp.bus.currentLongitude">Current Longitude</label>
+          <input
+            type="number"
+            class="form-control"
+            name="currentLongitude"
+            id="field_currentLongitude"
+            data-cy="currentLongitude"
+            formControlName="currentLongitude"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currentVitesse" jhiTranslate="yeggApp.bus.currentVitesse">Current Vitesse</label>
+          <input
+            type="number"
+            class="form-control"
+            name="currentVitesse"
+            id="field_currentVitesse"
+            data-cy="currentVitesse"
+            formControlName="currentVitesse"
+          />
+        </div>
+
+        @let currentCapRef = editForm.get('currentCap')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_currentCap" jhiTranslate="yeggApp.bus.currentCap">Current Cap</label>
+          <input
+            type="number"
+            class="form-control"
+            name="currentCap"
+            id="field_currentCap"
+            data-cy="currentCap"
+            formControlName="currentCap"
+          />
+          @if (currentCapRef.invalid && (currentCapRef.dirty || currentCapRef.touched)) {
+            <div>
+              @if (editForm.get('currentCap')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              @if (editForm.get('currentCap')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '359' }"
+                  >Ce champ doit être inférieur à 359.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('currentCap')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_positionUpdatedAt" jhiTranslate="yeggApp.bus.positionUpdatedAt">Position Updated At</label>
+          <div class="d-flex">
+            <input
+              id="field_positionUpdatedAt"
+              data-cy="positionUpdatedAt"
+              type="datetime-local"
+              class="form-control"
+              name="positionUpdatedAt"
+              formControlName="positionUpdatedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        @let statutRef = editForm.get('statut')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_statut" jhiTranslate="yeggApp.bus.statut">Statut</label>
+          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
+            <div>
+              @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_utilisateur" jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</label>
+          <select
+            class="form-control"
+            id="field_utilisateur"
+            data-cy="utilisateur"
+            name="utilisateur"
+            formControlName="utilisateur"
+            [compareWith]="compareUtilisateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (utilisateurOption of utilisateursCollection; track $index) {
+              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ligne" jhiTranslate="yeggApp.bus.ligne">Ligne</label>
+          <select class="form-control" id="field_ligne" data-cy="ligne" name="ligne" formControlName="ligne" [compareWith]="compareLigne">
+            <option [ngValue]="null"></option>
+            @for (ligneOption of lignesSharedCollection; track $index) {
+              <option [ngValue]="ligneOption">{{ ligneOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233524"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "typeCible",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cibleId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "seuilMinutes",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "60",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "joursActivation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "heureDebut",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "heureFin",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dernierDeclenchement",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "nombreDeclenchements",
+      "fieldType": "Integer"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Alerte",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "utilisateur",
+      "relationshipName": "utilisateur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

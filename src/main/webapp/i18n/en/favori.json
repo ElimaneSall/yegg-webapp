@@ -1,0 +1,30 @@
+{
+  "yeggApp": {
+    "favori": {
+      "home": {
+        "title": "Favoris",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Favori",
+        "createOrEditLabel": "Create or edit a Favori",
+        "notFound": "No Favoris found"
+      },
+      "created": "A new Favori is created with identifier {{ param }}",
+      "updated": "A Favori is updated with identifier {{ param }}",
+      "deleted": "A Favori is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Favori {{ id }}?"
+      },
+      "detail": {
+        "title": "Favori"
+      },
+      "id": "ID",
+      "type": "Type",
+      "cibleId": "Cible Id",
+      "nomPersonnalise": "Nom Personnalise",
+      "ordre": "Ordre",
+      "alerteActive": "Alerte Active",
+      "alerteSeuil": "Alerte Seuil",
+      "utilisateur": "Utilisateur"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+@if (alerte) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(alerte.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="alerteDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirmation de suppression</h4>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error />
+      <p id="jhi-delete-alerte-heading" jhiTranslate="yeggApp.alerte.delete.question" [translateValues]="{ id: alerte.id }">
+        Êtes-vous certain de vouloir supprimer le Alerte {{ alerte.id }} ?
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+      </button>
+
+      <button id="jhi-confirm-delete-alerte" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Supprimer</span>
+      </button>
+    </div>
+  </form>
+}

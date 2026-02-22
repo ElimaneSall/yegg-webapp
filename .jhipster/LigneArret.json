@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233527"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "ordre",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tempsTrajetDepart",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "distanceDepart",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "LigneArret",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "ligne",
+      "otherEntityRelationshipName": "ligneArrets",
+      "relationshipName": "ligne",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "arret",
+      "otherEntityRelationshipName": "ligneArrets",
+      "relationshipName": "arret",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

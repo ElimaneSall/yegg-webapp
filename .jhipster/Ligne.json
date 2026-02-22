@@ -1,0 +1,66 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233519"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "numero",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "10",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "nom",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "direction",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "couleur",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    {
+      "fieldName": "distanceKm",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "dureeMoyenne",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Ligne",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "ligneArret",
+      "otherEntityRelationshipName": "ligne",
+      "relationshipName": "ligneArrets",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "operateur",
+      "otherEntityRelationshipName": "lignes",
+      "relationshipName": "operateur",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

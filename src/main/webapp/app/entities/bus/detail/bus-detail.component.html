@@ -1,0 +1,106 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (bus(); as busRef) {
+      <div>
+        <h2 data-cy="busDetailsHeading"><span jhiTranslate="yeggApp.bus.detail.title">Bus</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ busRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.numeroVehicule">Numero Vehicule</span></dt>
+          <dd>
+            <span>{{ busRef.numeroVehicule }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.plaque">Plaque</span></dt>
+          <dd>
+            <span>{{ busRef.plaque }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.modele">Modele</span></dt>
+          <dd>
+            <span>{{ busRef.modele }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.capacite">Capacite</span></dt>
+          <dd>
+            <span>{{ busRef.capacite }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</span></dt>
+          <dd>
+            <span>{{ busRef.anneeFabrication }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.gpsDeviceId">Gps Device Id</span></dt>
+          <dd>
+            <span>{{ busRef.gpsDeviceId }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.gpsStatus">Gps Status</span></dt>
+          <dd>
+            <span>{{ busRef.gpsStatus }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.gpsLastPing">Gps Last Ping</span></dt>
+          <dd>
+            <span>{{ busRef.gpsLastPing | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.gpsBatteryLevel">Gps Battery Level</span></dt>
+          <dd>
+            <span>{{ busRef.gpsBatteryLevel }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.currentLatitude">Current Latitude</span></dt>
+          <dd>
+            <span>{{ busRef.currentLatitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.currentLongitude">Current Longitude</span></dt>
+          <dd>
+            <span>{{ busRef.currentLongitude }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.currentVitesse">Current Vitesse</span></dt>
+          <dd>
+            <span>{{ busRef.currentVitesse }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.currentCap">Current Cap</span></dt>
+          <dd>
+            <span>{{ busRef.currentCap }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.positionUpdatedAt">Position Updated At</span></dt>
+          <dd>
+            <span>{{ busRef.positionUpdatedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.statut">Statut</span></dt>
+          <dd>
+            <span>{{ busRef.statut }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (bus()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', bus()!.utilisateur?.id, 'view']">{{ busRef.utilisateur?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.ligne">Ligne</span></dt>
+          <dd>
+            @if (bus()!.ligne) {
+              <div>
+                <a [routerLink]="['/ligne', bus()!.ligne?.id, 'view']">{{ busRef.ligne?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/bus', busRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

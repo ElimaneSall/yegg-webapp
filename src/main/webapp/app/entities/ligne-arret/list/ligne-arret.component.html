@@ -1,0 +1,147 @@
+<div>
+  <h2 id="page-heading" data-cy="LigneArretHeading">
+    <span jhiTranslate="yeggApp.ligneArret.home.title">LigneArrets</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.ligneArret.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-ligne-arret"
+        [routerLink]="['/ligne-arret/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.ligneArret.home.createLabel">Créer un nouveau Ligne Arret</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (ligneArrets().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.ligneArret.home.notFound">Aucun Ligne Arret trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ordre">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.ordre">Ordre</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tempsTrajetDepart">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.tempsTrajetDepart">Temps Trajet Depart</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="distanceDepart">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.distanceDepart">Distance Depart</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ligne.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.ligne">Ligne</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="arret.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.arret">Arret</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ligneArret of ligneArrets(); track trackId(ligneArret)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/ligne-arret', ligneArret.id, 'view']">{{ ligneArret.id }}</a>
+              </td>
+              <td>{{ ligneArret.ordre }}</td>
+              <td>{{ ligneArret.tempsTrajetDepart }}</td>
+              <td>{{ ligneArret.distanceDepart }}</td>
+              <td>
+                @if (ligneArret.ligne) {
+                  <div>
+                    <a [routerLink]="['/ligne', ligneArret.ligne.id, 'view']">{{ ligneArret.ligne.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (ligneArret.arret) {
+                  <div>
+                    <a [routerLink]="['/arret', ligneArret.arret.id, 'view']">{{ ligneArret.arret.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/ligne-arret', ligneArret.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/ligne-arret', ligneArret.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(ligneArret)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (ligneArrets().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

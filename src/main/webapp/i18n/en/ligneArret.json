@@ -1,0 +1,28 @@
+{
+  "yeggApp": {
+    "ligneArret": {
+      "home": {
+        "title": "Ligne Arrets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Ligne Arret",
+        "createOrEditLabel": "Create or edit a Ligne Arret",
+        "notFound": "No Ligne Arrets found"
+      },
+      "created": "A new Ligne Arret is created with identifier {{ param }}",
+      "updated": "A Ligne Arret is updated with identifier {{ param }}",
+      "deleted": "A Ligne Arret is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Ligne Arret {{ id }}?"
+      },
+      "detail": {
+        "title": "Ligne Arret"
+      },
+      "id": "ID",
+      "ordre": "Ordre",
+      "tempsTrajetDepart": "Temps Trajet Depart",
+      "distanceDepart": "Distance Depart",
+      "ligne": "Ligne",
+      "arret": "Arret"
+    }
+  }
+}

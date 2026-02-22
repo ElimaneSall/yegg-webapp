@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (favori(); as favoriRef) {
+      <div>
+        <h2 data-cy="favoriDetailsHeading"><span jhiTranslate="yeggApp.favori.detail.title">Favori</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ favoriRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.type">Type</span></dt>
+          <dd>
+            <span>{{ favoriRef.type }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.cibleId">Cible Id</span></dt>
+          <dd>
+            <span>{{ favoriRef.cibleId }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.nomPersonnalise">Nom Personnalise</span></dt>
+          <dd>
+            <span>{{ favoriRef.nomPersonnalise }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.ordre">Ordre</span></dt>
+          <dd>
+            <span>{{ favoriRef.ordre }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.alerteActive">Alerte Active</span></dt>
+          <dd>
+            <span>{{ favoriRef.alerteActive }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.alerteSeuil">Alerte Seuil</span></dt>
+          <dd>
+            <span>{{ favoriRef.alerteSeuil }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.favori.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (favori()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', favori()!.utilisateur?.id, 'view']">{{ favoriRef.utilisateur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/favori', favoriRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

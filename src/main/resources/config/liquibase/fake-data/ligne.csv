@@ -1,0 +1,16 @@
+id;numero;nom;direction;couleur;distance_km;duree_moyenne;statut;operateur_id
+1;1;Yoff - Palais;Aéroport > Palais de Justice;#FF0000;22.5;65;actif;1
+2;1B;Yoff - Gueule Tapée;Yoff > Palais;#00AAFF;18.3;55;actif;1
+3;2;Parcelles Assainies - Médina;PAU > Médina;#00FF00;14.2;45;actif;1
+4;4;Ouakam - Grand Yoff;Ouakam > VDN;#FFAA00;12.8;40;actif;1
+5;7;Camp Vert - Thiaroye;Camp Vert > Thiaroye Gare;#AA00FF;16.5;50;actif;2
+6;8;Liberté 6 - Gare Routière;L6 > Pompier;#FFA500;10.2;35;actif;2
+7;9;Fann - Colobane;Fann Hôpital > Colobane;#0000FF;8.5;25;actif;2
+8;14;Rufisque - Patte d'Oie;Rufisque > POM;#FF69B4;28.3;75;actif;3
+9;15;Diamniadio - Dakar Centre;Diamniadio > Médina;#800080;35.7;90;actif;3
+10;20;Pikine - Khar Yalla;Pikine Technopole > Khar Yalla;#008080;11.5;40;actif;4
+11;23;Keur Massar - Castors;Keur Massar > Castors;#FF1493;18.9;60;actif;5
+12;33;Cambérène - Guédiawaye;Cambérène > Guédiawaye;#808000;9.8;30;actif;5
+13;45;Yeumbeul - HLM;Yeumbeul > HLM;#FF4500;14.5;45;actif;6
+14;50;Mbao - Grand Médine;Mbao > GM;#2E8B57;12.3;40;inactif;6
+15;68;Sébikotane - Ouakam;Sébikotane > UCAD;#4B0082;42.6;110;actif;3

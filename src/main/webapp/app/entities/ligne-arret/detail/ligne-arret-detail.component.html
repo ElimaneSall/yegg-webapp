@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (ligneArret(); as ligneArretRef) {
+      <div>
+        <h2 data-cy="ligneArretDetailsHeading"><span jhiTranslate="yeggApp.ligneArret.detail.title">Ligne Arret</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.ordre">Ordre</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.ordre }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.tempsTrajetDepart">Temps Trajet Depart</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.tempsTrajetDepart }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.distanceDepart">Distance Depart</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.distanceDepart }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.ligne">Ligne</span></dt>
+          <dd>
+            @if (ligneArret()!.ligne) {
+              <div>
+                <a [routerLink]="['/ligne', ligneArret()!.ligne?.id, 'view']">{{ ligneArretRef.ligne?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.arret">Arret</span></dt>
+          <dd>
+            @if (ligneArret()!.arret) {
+              <div>
+                <a [routerLink]="['/arret', ligneArret()!.arret?.id, 'view']">{{ ligneArretRef.arret?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/ligne-arret', ligneArretRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

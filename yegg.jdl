@@ -1,0 +1,160 @@
+// ================================================
+// JDL pour Application de Gestion de Flotte de Bus
+// ================================================
+// ================================================
+// ENTITÉS
+// ================================================
+
+entity Operateur {
+    nom        String required
+    email      String required unique
+    telephone  String pattern(/^[0-9]{9,15}$/)
+    adresse    TextBlob
+    logo       Blob
+    actif      Boolean required
+}
+
+entity Ligne {
+    numero          String required minlength(1) maxlength(10)
+    nom             String required
+    direction       String required
+    couleur         String pattern(/^#[0-9A-Fa-f]{6}$/)
+    distanceKm      BigDecimal
+    dureeMoyenne    Integer
+    statut          String required
+}
+
+entity Arret {
+    nom           String required
+    code          String required unique
+    latitude      BigDecimal required min(-90) max(90)
+    longitude     BigDecimal required min(-180) max(180)
+    adresse       String
+    zoneTarifaire String
+    equipements   TextBlob
+    actif         Boolean required
+}
+
+entity Bus {
+    numeroVehicule    String required unique
+    plaque            String required unique
+    modele            String
+    capacite          Integer required min(1) max(200)
+    anneeFabrication  Integer
+    gpsDeviceId       String unique
+    gpsStatus         String
+    gpsLastPing       Instant
+    gpsBatteryLevel   Integer min(0) max(100)
+    currentLatitude   BigDecimal
+    currentLongitude  BigDecimal
+    currentVitesse    BigDecimal
+    currentCap        Integer min(0) max(359)
+    positionUpdatedAt Instant
+    statut            String required
+}
+
+entity Utilisateur {
+    matricule         String unique
+    telephone         String pattern(/^[0-9]{9,15}$/)
+    fcmToken          String
+    notificationsPush Boolean
+    langue            String
+    dateEmbauche      LocalDate
+    numeroPermis      String
+}
+
+entity Tracking {
+    latitude   BigDecimal required
+    longitude  BigDecimal required
+    vitesse    BigDecimal
+    cap        Integer min(0) max(359)
+    timestamp  Instant required
+    source     String
+}
+
+entity Alerte {
+    typeCible              String required
+    cibleId                Long required
+    seuilMinutes           Integer required min(1) max(60)
+    joursActivation        String
+    heureDebut             Instant
+    heureFin               Instant
+    statut                 String required
+    dernierDeclenchement   Instant
+    nombreDeclenchements   Integer
+    // SUPPRIMEZ: utilisateurId Long
+}
+
+entity Favori {
+    type            String required
+    cibleId         Long required
+    nomPersonnalise String
+    ordre           Integer
+    alerteActive    Boolean
+    alerteSeuil     Integer min(1) max(60)
+    // SUPPRIMEZ: utilisateurId Long
+}
+
+entity Notification {
+    type        String
+    titre       String required
+    message     TextBlob required
+    donnees     TextBlob
+    priorite    String
+    statut      String
+    lu          Boolean
+    dateLecture Instant
+    // SUPPRIMEZ: utilisateurId Long
+}
+
+entity LigneArret {
+    ordre             Integer required
+    tempsTrajetDepart Integer
+    distanceDepart    BigDecimal
+}
+
+// ================================================
+// RELATIONS
+// ================================================
+
+relationship OneToMany {
+    Operateur{lignes} to Ligne{operateur}
+}
+
+relationship OneToMany {
+    Ligne{ligneArrets} to LigneArret{ligne}
+}
+
+relationship OneToMany {
+    Arret{ligneArrets} to LigneArret{arret}
+}
+
+relationship ManyToOne {
+    Bus{ligne} to Ligne
+}
+
+relationship OneToOne {
+    Bus to Utilisateur
+}
+
+relationship ManyToOne {
+    Tracking{bus} to Bus
+}
+
+relationship ManyToOne {
+    Alerte{utilisateur} to Utilisateur
+}
+
+relationship ManyToOne {
+    Favori{utilisateur} to Utilisateur
+}
+
+relationship ManyToOne {
+    Notification{utilisateur} to Utilisateur
+}
+
+// Options
+service * with serviceImpl
+paginate * with pagination
+dto * with mapstruct
+filter *

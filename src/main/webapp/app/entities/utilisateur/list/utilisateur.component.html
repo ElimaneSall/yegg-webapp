@@ -1,0 +1,153 @@
+<div>
+  <h2 id="page-heading" data-cy="UtilisateurHeading">
+    <span jhiTranslate="yeggApp.utilisateur.home.title">Utilisateurs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.utilisateur.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-utilisateur"
+        [routerLink]="['/utilisateur/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.utilisateur.home.createLabel">Créer un nouveau Utilisateur</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (utilisateurs().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.utilisateur.home.notFound">Aucun Utilisateur trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="matricule">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="telephone">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.telephone">Telephone</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fcmToken">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.fcmToken">Fcm Token</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="notificationsPush">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.notificationsPush">Notifications Push</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="langue">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.langue">Langue</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateEmbauche">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.dateEmbauche">Date Embauche</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numeroPermis">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.numeroPermis">Numero Permis</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (utilisateur of utilisateurs(); track trackId(utilisateur)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/utilisateur', utilisateur.id, 'view']">{{ utilisateur.id }}</a>
+              </td>
+              <td>{{ utilisateur.matricule }}</td>
+              <td>{{ utilisateur.telephone }}</td>
+              <td>{{ utilisateur.fcmToken }}</td>
+              <td>{{ utilisateur.notificationsPush }}</td>
+              <td>{{ utilisateur.langue }}</td>
+              <td>{{ utilisateur.dateEmbauche | formatMediumDate }}</td>
+              <td>{{ utilisateur.numeroPermis }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/utilisateur', utilisateur.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/utilisateur', utilisateur.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(utilisateur)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (utilisateurs().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

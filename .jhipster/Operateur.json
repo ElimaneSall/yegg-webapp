@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233518"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "telephone",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[0-9]{9,15}$"
+    },
+    {
+      "fieldName": "adresse",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "Blob"
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Operateur",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "ligne",
+      "otherEntityRelationshipName": "operateur",
+      "relationshipName": "lignes",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

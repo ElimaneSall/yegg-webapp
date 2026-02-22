@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (ligne(); as ligneRef) {
+      <div>
+        <h2 data-cy="ligneDetailsHeading"><span jhiTranslate="yeggApp.ligne.detail.title">Ligne</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ ligneRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.numero">Numero</span></dt>
+          <dd>
+            <span>{{ ligneRef.numero }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.nom">Nom</span></dt>
+          <dd>
+            <span>{{ ligneRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.direction">Direction</span></dt>
+          <dd>
+            <span>{{ ligneRef.direction }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.couleur">Couleur</span></dt>
+          <dd>
+            <span>{{ ligneRef.couleur }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.distanceKm">Distance Km</span></dt>
+          <dd>
+            <span>{{ ligneRef.distanceKm }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.dureeMoyenne">Duree Moyenne</span></dt>
+          <dd>
+            <span>{{ ligneRef.dureeMoyenne }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.statut">Statut</span></dt>
+          <dd>
+            <span>{{ ligneRef.statut }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.operateur">Operateur</span></dt>
+          <dd>
+            @if (ligne()!.operateur) {
+              <div>
+                <a [routerLink]="['/operateur', ligne()!.operateur?.id, 'view']">{{ ligneRef.operateur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/ligne', ligneRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

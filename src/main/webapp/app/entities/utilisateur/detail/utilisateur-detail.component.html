@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (utilisateur(); as utilisateurRef) {
+      <div>
+        <h2 data-cy="utilisateurDetailsHeading"><span jhiTranslate="yeggApp.utilisateur.detail.title">Utilisateur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.matricule }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.telephone">Telephone</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.telephone }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.fcmToken">Fcm Token</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.fcmToken }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.notificationsPush">Notifications Push</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.notificationsPush }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.langue">Langue</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.langue }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.dateEmbauche">Date Embauche</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.dateEmbauche | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.numeroPermis">Numero Permis</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.numeroPermis }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/utilisateur', utilisateurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,40 @@
+{
+  "yeggApp": {
+    "bus": {
+      "home": {
+        "title": "Buses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bus",
+        "createOrEditLabel": "Create or edit a Bus",
+        "notFound": "No Buses found"
+      },
+      "created": "A new Bus is created with identifier {{ param }}",
+      "updated": "A Bus is updated with identifier {{ param }}",
+      "deleted": "A Bus is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Bus {{ id }}?"
+      },
+      "detail": {
+        "title": "Bus"
+      },
+      "id": "ID",
+      "numeroVehicule": "Numero Vehicule",
+      "plaque": "Plaque",
+      "modele": "Modele",
+      "capacite": "Capacite",
+      "anneeFabrication": "Annee Fabrication",
+      "gpsDeviceId": "Gps Device Id",
+      "gpsStatus": "Gps Status",
+      "gpsLastPing": "Gps Last Ping",
+      "gpsBatteryLevel": "Gps Battery Level",
+      "currentLatitude": "Current Latitude",
+      "currentLongitude": "Current Longitude",
+      "currentVitesse": "Current Vitesse",
+      "currentCap": "Current Cap",
+      "positionUpdatedAt": "Position Updated At",
+      "statut": "Statut",
+      "utilisateur": "Utilisateur",
+      "ligne": "Ligne"
+    }
+  }
+}

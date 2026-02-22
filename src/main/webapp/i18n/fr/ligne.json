@@ -1,0 +1,32 @@
+{
+  "yeggApp": {
+    "ligne": {
+      "home": {
+        "title": "Lignes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Ligne",
+        "createOrEditLabel": "Créer ou éditer un Ligne",
+        "notFound": "Aucun Ligne trouvé"
+      },
+      "created": "Un nouveau Ligne a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Ligne avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Ligne avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Ligne {{ id }} ?"
+      },
+      "detail": {
+        "title": "Ligne"
+      },
+      "id": "ID",
+      "numero": "Numero",
+      "nom": "Nom",
+      "direction": "Direction",
+      "couleur": "Couleur",
+      "distanceKm": "Distance Km",
+      "dureeMoyenne": "Duree Moyenne",
+      "statut": "Statut",
+      "ligneArrets": "Ligne Arrets",
+      "operateur": "Operateur"
+    }
+  }
+}

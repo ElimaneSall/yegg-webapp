@@ -1,0 +1,243 @@
+<div>
+  <h2 id="page-heading" data-cy="BusHeading">
+    <span jhiTranslate="yeggApp.bus.home.title">Buses</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.bus.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-bus"
+        [routerLink]="['/bus/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.bus.home.createLabel">Créer un nouveau Bus</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (buses().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.bus.home.notFound">Aucun Bus trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numeroVehicule">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.numeroVehicule">Numero Vehicule</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="plaque">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.plaque">Plaque</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="modele">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.modele">Modele</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="capacite">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.capacite">Capacite</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="anneeFabrication">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="gpsDeviceId">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.gpsDeviceId">Gps Device Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="gpsStatus">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.gpsStatus">Gps Status</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="gpsLastPing">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.gpsLastPing">Gps Last Ping</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="gpsBatteryLevel">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.gpsBatteryLevel">Gps Battery Level</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentLatitude">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.currentLatitude">Current Latitude</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentLongitude">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.currentLongitude">Current Longitude</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentVitesse">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.currentVitesse">Current Vitesse</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentCap">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.currentCap">Current Cap</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="positionUpdatedAt">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.positionUpdatedAt">Position Updated At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="statut">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.statut">Statut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="utilisateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ligne.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.ligne">Ligne</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bus of buses(); track trackId(bus)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/bus', bus.id, 'view']">{{ bus.id }}</a>
+              </td>
+              <td>{{ bus.numeroVehicule }}</td>
+              <td>{{ bus.plaque }}</td>
+              <td>{{ bus.modele }}</td>
+              <td>{{ bus.capacite }}</td>
+              <td>{{ bus.anneeFabrication }}</td>
+              <td>{{ bus.gpsDeviceId }}</td>
+              <td>{{ bus.gpsStatus }}</td>
+              <td>{{ bus.gpsLastPing | formatMediumDatetime }}</td>
+              <td>{{ bus.gpsBatteryLevel }}</td>
+              <td>{{ bus.currentLatitude }}</td>
+              <td>{{ bus.currentLongitude }}</td>
+              <td>{{ bus.currentVitesse }}</td>
+              <td>{{ bus.currentCap }}</td>
+              <td>{{ bus.positionUpdatedAt | formatMediumDatetime }}</td>
+              <td>{{ bus.statut }}</td>
+              <td>
+                @if (bus.utilisateur) {
+                  <div>
+                    <a [routerLink]="['/utilisateur', bus.utilisateur.id, 'view']">{{ bus.utilisateur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (bus.ligne) {
+                  <div>
+                    <a [routerLink]="['/ligne', bus.ligne.id, 'view']">{{ bus.ligne.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/bus', bus.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/bus', bus.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(bus)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (buses().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

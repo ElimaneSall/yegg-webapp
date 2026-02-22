@@ -1,0 +1,102 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233521"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "numeroVehicule",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "plaque",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "modele",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "capacite",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "200",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "anneeFabrication",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "gpsDeviceId",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "gpsStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "gpsLastPing",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "gpsBatteryLevel",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "100",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "currentLatitude",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "currentLongitude",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "currentVitesse",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "currentCap",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "359",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "positionUpdatedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Bus",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "utilisateur",
+      "otherEntityRelationshipName": "bus",
+      "relationshipName": "utilisateur",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "ligne",
+      "relationshipName": "ligne",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

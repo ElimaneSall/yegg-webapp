@@ -1,0 +1,54 @@
+{
+  "annotations": {
+    "changelogDate": "20260221233522"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "matricule",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "telephone",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[0-9]{9,15}$"
+    },
+    {
+      "fieldName": "fcmToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "notificationsPush",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "langue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateEmbauche",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "numeroPermis",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Utilisateur",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "bus",
+      "otherEntityRelationshipName": "utilisateur",
+      "relationshipName": "bus",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

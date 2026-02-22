@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-utilisateur-heading" data-cy="UtilisateurCreateUpdateHeading" jhiTranslate="yeggApp.utilisateur.home.createOrEditLabel">
+        Créer ou éditer un Utilisateur
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.utilisateur.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let matriculeRef = editForm.get('matricule')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_matricule" jhiTranslate="yeggApp.utilisateur.matricule">Matricule</label>
+          <input type="text" class="form-control" name="matricule" id="field_matricule" data-cy="matricule" formControlName="matricule" />
+          @if (matriculeRef.invalid && (matriculeRef.dirty || matriculeRef.touched)) {
+            <div></div>
+          }
+        </div>
+
+        @let telephoneRef = editForm.get('telephone')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_telephone" jhiTranslate="yeggApp.utilisateur.telephone">Telephone</label>
+          <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
+          @if (telephoneRef.invalid && (telephoneRef.dirty || telephoneRef.touched)) {
+            <div>
+              @if (editForm.get('telephone')?.errors?.pattern) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Telephone' }"
+                  >Ce champ doit suivre l&apos;expression régulière Telephone.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fcmToken" jhiTranslate="yeggApp.utilisateur.fcmToken">Fcm Token</label>
+          <input type="text" class="form-control" name="fcmToken" id="field_fcmToken" data-cy="fcmToken" formControlName="fcmToken" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_notificationsPush" jhiTranslate="yeggApp.utilisateur.notificationsPush"
+            >Notifications Push</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="notificationsPush"
+            id="field_notificationsPush"
+            data-cy="notificationsPush"
+            formControlName="notificationsPush"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_langue" jhiTranslate="yeggApp.utilisateur.langue">Langue</label>
+          <input type="text" class="form-control" name="langue" id="field_langue" data-cy="langue" formControlName="langue" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateEmbauche" jhiTranslate="yeggApp.utilisateur.dateEmbauche">Date Embauche</label>
+          <div class="input-group">
+            <input
+              id="field_dateEmbauche"
+              data-cy="dateEmbauche"
+              type="text"
+              class="form-control"
+              name="dateEmbauche"
+              ngbDatepicker
+              #dateEmbaucheDp="ngbDatepicker"
+              formControlName="dateEmbauche"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateEmbaucheDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numeroPermis" jhiTranslate="yeggApp.utilisateur.numeroPermis">Numero Permis</label>
+          <input
+            type="text"
+            class="form-control"
+            name="numeroPermis"
+            id="field_numeroPermis"
+            data-cy="numeroPermis"
+            formControlName="numeroPermis"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

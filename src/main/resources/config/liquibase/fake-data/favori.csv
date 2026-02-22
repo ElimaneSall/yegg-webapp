@@ -1,0 +1,16 @@
+id;type;cible_id;nom_personnalise;ordre;alerte_active;alerte_seuil;utilisateur_id
+1;ligne;1;Ligne Aéroport;1;true;5;1
+2;arret;3;Palais Justice;2;false;;1
+3;bus;2;Bus Moussa;3;true;10;1
+4;ligne;3;Parcelles;1;true;8;2
+5;arret;11;Médina;2;false;;2
+6;ligne;4;Ouakam;1;true;7;3
+7;bus;5;Bus Ibrahima;2;false;;3
+8;ligne;7;Thiaroye;1;true;12;5
+9;arret;10;Gare Thiaroye;2;false;;5
+10;ligne;9;Diamniadio Express;1;true;15;8
+11;bus;11;Bus Ousmane;2;false;;8
+12;ligne;8;Rufisque;1;true;10;9
+13;arret;14;Rufisque Centre;2;false;;9
+14;bus;13;Bus Bineta;3;true;8;14
+15;ligne;15;Sébikotane;1;true;20;10

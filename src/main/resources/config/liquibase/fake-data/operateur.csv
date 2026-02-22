@@ -1,0 +1,10 @@
+id;nom;email;telephone;adresse;actif
+1;Dakar Dem Dikk;contact@dakardemdikk.sn;338890101;Route de Ouakam, BP 27528, Dakar;true
+2;Aftu;aftu.dakar@aftu.sn;338210202;Gare Routière de Pompier, Colobane, Dakar;true
+3;Bus Rapid Transit Dakar;contact@brtdakar.sn;338450303;VDN, Immeuble FARA, Dakar;true
+4;Transac;commercial@transac.sn;338670404;Rue 9, Zone Industrielle, Diamniadio;true
+5;Dakar Horizon;info@dakarhorizon.sn;338820505;Gare Routière de Petersen, Dakar;true
+6;Sakho Transport;contact@sakho.sn;773330606;Parcelles Assainies, Unité 15, Dakar;true
+7;Senbus;info@senbus.sn;765440707;Rufisque, Cité Alizé;false
+8;Petit Car Rapide;carrapide.senegal@gmail.com;774550808;Thiaroye, Marché;true
+9;Zone de Dakar;contact@zonedakar.sn;338660909;Liberté 6, Extension;false

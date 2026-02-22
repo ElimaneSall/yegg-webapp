@@ -1,0 +1,28 @@
+{
+  "yeggApp": {
+    "ligneArret": {
+      "home": {
+        "title": "LigneArrets",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Ligne Arret",
+        "createOrEditLabel": "Créer ou éditer un Ligne Arret",
+        "notFound": "Aucun Ligne Arret trouvé"
+      },
+      "created": "Un nouveau Ligne Arret a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Ligne Arret avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Ligne Arret avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Ligne Arret {{ id }} ?"
+      },
+      "detail": {
+        "title": "Ligne Arret"
+      },
+      "id": "ID",
+      "ordre": "Ordre",
+      "tempsTrajetDepart": "Temps Trajet Depart",
+      "distanceDepart": "Distance Depart",
+      "ligne": "Ligne",
+      "arret": "Arret"
+    }
+  }
+}
