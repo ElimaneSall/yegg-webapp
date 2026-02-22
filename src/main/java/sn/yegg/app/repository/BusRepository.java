@@ -1,5 +1,6 @@
 package sn.yegg.app.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import sn.yegg.app.domain.Bus;
@@ -9,4 +10,6 @@ import sn.yegg.app.domain.Bus;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface BusRepository extends JpaRepository<Bus, Long>, JpaSpecificationExecutor<Bus> {}
+public interface BusRepository extends JpaRepository<Bus, Long>, JpaSpecificationExecutor<Bus> {
+    Optional<Bus> findByGpsDeviceId(String deviceId);
+}

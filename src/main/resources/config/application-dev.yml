@@ -113,3 +113,13 @@ jhipster:
 # ===================================================================
 
 # application:
+ttn:
+  mqtt:
+    broker: eu1.cloud.thethings.network
+    port: 1883
+    tls-port: 8883
+    username: mysensorsapp@ttn
+    password: NNSXS.XXKCUQ2PWAVJLPMPVYJXJUTG53UZSIP2L2ZMT3I.PO63YNCLF7FAQ2MFLOCTZPDWJAYPP5S62BXKFYFWYS42P4BD6MTQ
+    client-id: bus-fleet-${random.value}
+    topic: v3/mysensorsapp@ttn/devices/+/up
+    use-tls: false
