@@ -1,0 +1,201 @@
+// src/main/webapp/app/layouts/sidebar/sidebar.component.scss
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: #ffffff;
+  color: white;
+  transition: width 0.3s ease;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+
+  &.collapsed {
+    width: 70px;
+
+    .menu-text,
+    .submenu-icon,
+    .user-details {
+      display: none;
+    }
+
+    .submenu {
+      position: absolute;
+      left: 70px;
+      background: #2c3e50;
+      min-width: 200px;
+      border-radius: 4px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .sidebar-header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: black;
+      text-decoration: none;
+
+      .logo-img {
+        width: 32px;
+        height: 32px;
+        background: black;
+        border-radius: 8px;
+      }
+
+      .logo-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+
+    .sidebar-toggle {
+      background: transparent;
+      border: none;
+      color: black;
+      cursor: pointer;
+      padding: 0.5rem;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .sidebar-menu {
+    padding: 1rem 0;
+    overflow-y: auto;
+    height: calc(100vh - 140px);
+
+    .nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-item {
+      margin: 4px 8px;
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: black;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        fa-icon {
+          min-width: 20px;
+          margin-right: 0.5rem;
+        }
+
+        .menu-text {
+          flex: 1;
+          font-size: 0.9rem;
+        }
+
+        .submenu-icon {
+          font-size: 0.8rem;
+        }
+
+        &:hover {
+          background: #0066b3;
+          color: white;
+        }
+
+        &.active {
+          background: #0066b3;
+          color: white;
+        }
+      }
+
+      &.has-submenu > .nav-link {
+        position: relative;
+      }
+    }
+
+    .submenu {
+      list-style: none;
+      padding-left: 2.5rem;
+      margin: 0;
+
+      .nav-link {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+
+        fa-icon {
+          min-width: 16px;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    background: #0066b3;
+    border-top: 1px solid black;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .user-name {
+          font-weight: bold;
+          font-size: 0.9rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .user-role {
+          font-size: 0.75rem;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+// Mobile menu
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    &.mobile-open {
+      transform: translateX(0);
+    }
+  }
+}

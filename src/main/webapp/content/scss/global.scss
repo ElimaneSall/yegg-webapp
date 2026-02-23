@@ -1,6 +1,7 @@
 @import 'bootstrap-variables';
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
+@import 'leaflet/dist/leaflet.css';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -234,3 +235,47 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   }
 }
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+// src/main/webapp/content/scss/global.scss (à ajouter)
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 70px); // Hauteur navbar = 70px
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 250px; // Largeur sidebar
+  transition: margin-left 0.3s ease;
+  background: #f8f9fa;
+  min-height: 100%;
+
+  .container-fluid {
+    padding: 20px;
+  }
+
+  .jh-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+}
+
+// Quand la sidebar est réduite
+.sidebar.collapsed + .main-content {
+  margin-left: 70px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+}

@@ -62,7 +62,7 @@
           <select class="form-control" id="field_ligne" data-cy="ligne" name="ligne" formControlName="ligne" [compareWith]="compareLigne">
             <option [ngValue]="null"></option>
             @for (ligneOption of lignesSharedCollection; track $index) {
-              <option [ngValue]="ligneOption">{{ ligneOption.id }}</option>
+              <option [ngValue]="ligneOption">{{ ligneOption.numero }}</option>
             }
           </select>
         </div>
@@ -72,7 +72,7 @@
           <select class="form-control" id="field_arret" data-cy="arret" name="arret" formControlName="arret" [compareWith]="compareArret">
             <option [ngValue]="null"></option>
             @for (arretOption of arretsSharedCollection; track $index) {
-              <option [ngValue]="arretOption">{{ arretOption.id }}</option>
+              <option [ngValue]="arretOption">{{ arretOption.code }}</option>
             }
           </select>
         </div>

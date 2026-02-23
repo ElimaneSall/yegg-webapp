@@ -21,12 +21,98 @@
   </h2>
 
   <jhi-alert-error />
-
   <jhi-alert />
 
-  <jhi-filter [filters]="filters" />
+  <!-- Filtres avancés -->
+  <div class="card mb-3">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" (click)="toggleFilters()">
+          <fa-icon [icon]="showFilters ? 'chevron-down' : 'chevron-right'"></fa-icon>
+          Filtres avancés
+        </button>
+      </h5>
+    </div>
+    <div class="card-body" [hidden]="!showFilters">
+      <div class="row">
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.typeCible">Type Cible</label>
+          <select class="form-select" [(ngModel)]="advancedFilters.typeCible" (ngModelChange)="applyFilters()">
+            <option value="">{{ 'yeggApp.alerte.home.allTypes' | translate }}</option>
+            <option value="TYPE1">Type 1</option>
+            <option value="TYPE2">Type 2</option>
+            <option value="TYPE3">Type 3</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.statut">Statut</label>
+          <select class="form-select" [(ngModel)]="advancedFilters.statut" (ngModelChange)="applyFilters()">
+            <option value="">{{ 'yeggApp.alerte.home.allStatus' | translate }}</option>
+            <option value="ACTIF">Actif</option>
+            <option value="INACTIF">Inactif</option>
+            <option value="SUSPENDU">Suspendu</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.cibleId">Cible ID</label>
+          <input type="text" class="form-control" [(ngModel)]="advancedFilters.cibleId" (ngModelChange)="applyFilters()" />
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.utilisateur">Utilisateur</label>
+          <input type="text" class="form-control" [(ngModel)]="advancedFilters.utilisateurId" (ngModelChange)="applyFilters()" />
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.seuilMinutes">Seuil min</label>
+          <input type="number" class="form-control" [(ngModel)]="advancedFilters.seuilMin" (ngModelChange)="applyFilters()" />
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label" jhiTranslate="yeggApp.alerte.seuilMinutes">Seuil max</label>
+          <input type="number" class="form-control" [(ngModel)]="advancedFilters.seuilMax" (ngModelChange)="applyFilters()" />
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label">Date début</label>
+          <input type="date" class="form-control" [(ngModel)]="advancedFilters.dateDebut" (ngModelChange)="applyFilters()" />
+        </div>
+        <div class="col-md-3 mb-2">
+          <label class="form-label">Date fin</label>
+          <input type="date" class="form-control" [(ngModel)]="advancedFilters.dateFin" (ngModelChange)="applyFilters()" />
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <button class="btn btn-secondary me-2" (click)="resetFilters()"><fa-icon icon="undo"></fa-icon> Réinitialiser</button>
+          <button class="btn btn-primary" (click)="applyFilters()"><fa-icon icon="search"></fa-icon> Appliquer</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  @if (alertes().length === 0) {
+  <!-- Barre de recherche globale -->
+  <div class="row mb-3">
+    <div class="col-md-6 offset-md-6">
+      <div class="input-group">
+        <span class="input-group-text">
+          <fa-icon icon="search"></fa-icon>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'yeggApp.alerte.home.searchPlaceholder' | translate"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+        />
+        @if (searchTerm) {
+          <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (filteredAlertes().length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span jhiTranslate="yeggApp.alerte.home.notFound">Aucun Alerte trouvé</span>
     </div>
@@ -38,70 +124,60 @@
             <th scope="col" jhiSortBy="id">
               <div class="d-flex">
                 <span jhiTranslate="global.field.id">ID</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="typeCible">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.typeCible">Type Cible</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="cibleId">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.cibleId">Cible Id</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="seuilMinutes">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.seuilMinutes">Seuil Minutes</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="joursActivation">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.joursActivation">Jours Activation</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="heureDebut">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.heureDebut">Heure Debut</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="heureFin">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.heureFin">Heure Fin</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="statut">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.statut">Statut</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="dernierDeclenchement">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.dernierDeclenchement">Dernier Declenchement</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="nombreDeclenchements">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.alerte.nombreDeclenchements">Nombre Declenchements</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -115,29 +191,62 @@
           </tr>
         </thead>
         <tbody>
-          @for (alerte of alertes(); track trackId(alerte)) {
-            <tr data-cy="entityTable">
+          @for (alerte of paginatedAlertes(); track trackId(alerte)) {
+            <tr data-cy="entityTable" [class.table-active]="selectedAlerte?.id === alerte.id" (click)="selectAlerte(alerte)">
               <td>
                 <a [routerLink]="['/alerte', alerte.id, 'view']">{{ alerte.id }}</a>
               </td>
-              <td>{{ alerte.typeCible }}</td>
+              <td>
+                <span class="badge" [ngClass]="getTypeCibleClass(alerte.typeCible || '')">
+                  {{ alerte.typeCible }}
+                </span>
+              </td>
               <td>{{ alerte.cibleId }}</td>
-              <td>{{ alerte.seuilMinutes }}</td>
-              <td>{{ alerte.joursActivation }}</td>
+              <td>
+                <div class="progress" style="height: 20px" [attr.title]="(alerte.seuilMinutes || 0) + ' minutes'">
+                  <div
+                    class="progress-bar"
+                    [ngClass]="getSeuilProgressClass(alerte.seuilMinutes || 0)"
+                    [style.width.%]="getSeuilPercentage(alerte.seuilMinutes || 0)"
+                  >
+                    {{ alerte.seuilMinutes }}
+                  </div>
+                </div>
+              </td>
+              <td>
+                @for (jour of parseJoursActivation(alerte.joursActivation || ''); track jour) {
+                  <span class="badge bg-info me-1">{{ jour }}</span>
+                }
+              </td>
               <td>{{ alerte.heureDebut | formatMediumDatetime }}</td>
               <td>{{ alerte.heureFin | formatMediumDatetime }}</td>
-              <td>{{ alerte.statut }}</td>
-              <td>{{ alerte.dernierDeclenchement | formatMediumDatetime }}</td>
-              <td>{{ alerte.nombreDeclenchements }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatutClass(alerte.statut || '')">
+                  {{ alerte.statut }}
+                </span>
+              </td>
+              <td>
+                {{ alerte.dernierDeclenchement | formatMediumDatetime }}
+                @if (isExpired(alerte)) {
+                  <fa-icon icon="exclamation-triangle" class="text-warning ms-1" [title]="'Expiré'"></fa-icon>
+                }
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getDeclenchementsClass(alerte.nombreDeclenchements || 0)">
+                  {{ alerte.nombreDeclenchements }}
+                </span>
+              </td>
               <td>
                 @if (alerte.utilisateur) {
                   <div>
-                    <a [routerLink]="['/utilisateur', alerte.utilisateur.id, 'view']">{{ alerte.utilisateur.id }}</a>
+                    <a [routerLink]="['/utilisateur', alerte.utilisateur.id, 'view']">
+                      <fa-icon icon="user"></fa-icon> {{ alerte.utilisateur.id }}
+                    </a>
                   </div>
                 }
               </td>
               <td class="text-end">
-                <div class="btn-group">
+                <div class="btn-group" role="group">
                   <a [routerLink]="['/alerte', alerte.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
@@ -148,7 +257,7 @@
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
                   </a>
 
-                  <button type="submit" (click)="delete(alerte)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <button type="submit" (click)="confirmDelete(alerte)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
                   </button>
@@ -160,15 +269,33 @@
       </table>
     </div>
   }
-  @if (alertes().length > 0) {
+
+  <!-- Pagination et résumé -->
+  @if (filteredAlertes().length > 0) {
     <div>
-      <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <jhi-item-count [params]="{ page, totalItems: filteredAlertes().length, itemsPerPage }" />
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="me-2">Lignes par page:</span>
+          <select
+            class="form-select form-select-sm"
+            style="width: auto"
+            [(ngModel)]="itemsPerPage"
+            (ngModelChange)="onItemsPerPageChange()"
+          >
+            <option [value]="10">10</option>
+            <option [value]="25">25</option>
+            <option [value]="50">50</option>
+            <option [value]="100">100</option>
+          </select>
+        </div>
       </div>
 
       <div class="d-flex justify-content-center">
         <ngb-pagination
-          [collectionSize]="totalItems"
+          [collectionSize]="filteredAlertes().length"
           [page]="page"
           [pageSize]="itemsPerPage"
           [maxSize]="5"

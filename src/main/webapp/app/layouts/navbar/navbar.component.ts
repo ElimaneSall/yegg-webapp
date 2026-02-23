@@ -1,3 +1,4 @@
+// src/main/webapp/app/layouts/navbar/navbar.component.ts
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';

@@ -1,7 +1,13 @@
 {
   "login": {
-    "title": "Sign in",
+    "title": "Authentication",
+    "title": {
+      "welcome": "Welcome to Yegg!"
+    },
+    "subtitle": "Sign in to continue",
     "form": {
+      "username": "Username",
+      "username.placeholder": "Your username",
       "password": "Password",
       "password.placeholder": "Your password",
       "rememberme": "Remember me",
@@ -9,11 +15,30 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+        "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
       }
     },
     "password": {
       "forgot": "Did you forget your password?"
+    }
+  },
+  "global": {
+    "form": {
+      "username": {
+        "label": "Username",
+        "placeholder": "Your username"
+      }
+    },
+    "messages": {
+      "info": {
+        "register": {
+          "noaccount": "Don't have an account yet?",
+          "link": "Register a new account"
+        }
+      },
+      "validate": {
+        "required": "This field is required."
+      }
     }
   }
 }

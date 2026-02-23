@@ -10,6 +10,7 @@ import { AccountService } from 'app/core/auth/account.service';
   selector: 'jhi-login',
   imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
@@ -40,6 +41,10 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.authenticationError.set(false);

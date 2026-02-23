@@ -6,7 +6,10 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Alerte",
         "createOrEditLabel": "Créer ou éditer un Alerte",
-        "notFound": "Aucun Alerte trouvé"
+        "notFound": "Aucun Alerte trouvé",
+        "searchPlaceholder": "Entrer un mot clé",
+        "allTypes": "Tous les types",
+        "allStatus": "Tous les statuts"
       },
       "created": "Un nouveau Alerte a été créé avec l'identifiant {{ param }}",
       "updated": "Le Alerte avec l'identifiant {{ param }} a été mis à jour",

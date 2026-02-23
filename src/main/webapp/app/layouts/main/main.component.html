@@ -1,13 +1,20 @@
-<jhi-page-ribbon />
+<!-- src/main/webapp/app/layouts/main/main.component.html -->
+<div class="app-wrapper">
+  <!-- Navbar en haut -->
+  <jhi-navbar></jhi-navbar>
 
-<div>
-  <router-outlet name="navbar" />
-</div>
+  <!-- Layout principal avec sidebar -->
+  <div class="app-container">
+    <jhi-sidebar></jhi-sidebar>
 
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet />
+    <div class="main-content">
+      <div class="container-fluid">
+        <div class="card jh-card">
+          <router-outlet />
+        </div>
+      </div>
+
+      <jhi-footer></jhi-footer>
+    </div>
   </div>
-
-  <jhi-footer />
 </div>

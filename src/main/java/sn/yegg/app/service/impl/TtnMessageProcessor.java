@@ -14,18 +14,21 @@ import sn.yegg.app.domain.Bus;
 import sn.yegg.app.domain.Tracking;
 import sn.yegg.app.repository.BusRepository;
 import sn.yegg.app.repository.TrackingRepository;
+import sn.yegg.app.service.dto.BusPositionDTO;
 
 @Service
 public class TtnMessageProcessor {
 
     private final BusRepository busRepository;
     private final TrackingRepository trackingRepository;
+    private final WebSocketService webSocketService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Logger log = LoggerFactory.getLogger(TtnMessageProcessor.class);
 
-    public TtnMessageProcessor(BusRepository busRepository, TrackingRepository trackingRepository) {
+    public TtnMessageProcessor(BusRepository busRepository, TrackingRepository trackingRepository, WebSocketService webSocketService) {
         this.busRepository = busRepository;
         this.trackingRepository = trackingRepository;
+        this.webSocketService = webSocketService;
     }
 
     @Transactional
@@ -35,7 +38,6 @@ public class TtnMessageProcessor {
 
             JsonNode root = objectMapper.readTree(payload);
 
-            // Récupérer le bus correspondant
             Optional<Bus> busOpt = busRepository.findByGpsDeviceId(deviceId);
             if (busOpt.isEmpty()) {
                 log.warn("Aucun bus trouvé avec device ID: {}", deviceId);
@@ -45,28 +47,28 @@ public class TtnMessageProcessor {
             Bus bus = busOpt.get();
             log.info("Bus trouvé: {} ({})", bus.getNumeroVehicule(), bus.getPlaque());
 
-            // Extraire les données de localisation
             boolean positionUpdated = extractAndUpdatePosition(bus, root);
 
             if (positionUpdated) {
-                // Sauvegarder le bus avec sa nouvelle position
                 busRepository.save(bus);
-
-                // Créer une entrée de tracking
                 saveTracking(bus, root);
 
                 log.info(
-                    "✅ Position mise à jour pour bus {}: lat={}, lng={}",
+                    "✅ Position mise à jour pour bus {}: lat={}, lng={}, vitesse={}",
                     bus.getNumeroVehicule(),
                     bus.getCurrentLatitude(),
-                    bus.getCurrentLongitude()
+                    bus.getCurrentLongitude(),
+                    bus.getCurrentVitesse()
                 );
+
+                // 🚀 Envoyer la position via WebSocket
+                sendBusPositionViaWebSocket(bus);
             } else {
                 log.warn("⚠️ Aucune position valide trouvée dans le message");
             }
 
-            // Nettoyer les anciennes données (une fois par jour environ)
-            if (Math.random() < 0.01) { // 1% de chance, pour ne pas le faire à chaque message
+            // Nettoyer les anciennes données (1% de chance)
+            if (Math.random() < 0.01) {
                 cleanupOldTrackingData();
             }
         } catch (Exception e) {
@@ -74,6 +76,33 @@ public class TtnMessageProcessor {
         }
     }
 
+    /**
+     * Envoie la position du bus via WebSocket
+     */
+    private void sendBusPositionViaWebSocket(Bus bus) {
+        try {
+            BusPositionDTO positionDTO = new BusPositionDTO(
+                bus.getId(),
+                bus.getNumeroVehicule(),
+                bus.getPlaque(),
+                bus.getCurrentLatitude(),
+                bus.getCurrentLongitude(),
+                bus.getCurrentVitesse(),
+                bus.getCurrentCap(),
+                bus.getPositionUpdatedAt(),
+                bus.getStatut()
+            );
+
+            webSocketService.sendBusPosition(positionDTO);
+            log.debug("Position envoyée via WebSocket pour bus {}", bus.getNumeroVehicule());
+        } catch (Exception e) {
+            log.error("Erreur lors de l'envoi WebSocket: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Extrait et met à jour la position du bus à partir du payload TTN
+     */
     private boolean extractAndUpdatePosition(Bus bus, JsonNode root) {
         try {
             JsonNode uplinkMessage = root.path("uplink_message");
@@ -89,76 +118,94 @@ public class TtnMessageProcessor {
                 bus.setGpsLastPing(timestamp);
             }
 
-            // Méthode 1: Chercher dans decoded_payload (format Cayenne LPP)
+            // Récupérer le decoded_payload
             JsonNode decodedPayload = uplinkMessage.path("decoded_payload");
+
+            // Variables pour stocker les données extraites
+            BigDecimal latitude = null;
+            BigDecimal longitude = null;
+            BigDecimal vitesse = null;
+            Integer cap = null;
+
+            // STRUCTURE 1: Format Cayenne LPP avec gps_1 (votre format actuel)
             if (!decodedPayload.isMissingNode()) {
                 log.debug("decoded_payload: {}", decodedPayload);
 
-                // Chercher le GPS dans le format Cayenne
+                // Chercher gps_1
                 JsonNode gpsNode = decodedPayload.path("gps_1");
                 if (!gpsNode.isMissingNode()) {
-                    BigDecimal latitude = getBigDecimal(gpsNode, "latitude");
-                    BigDecimal longitude = getBigDecimal(gpsNode, "longitude");
-
-                    if (latitude != null && longitude != null) {
-                        bus.setCurrentLatitude(latitude);
-                        bus.setCurrentLongitude(longitude);
-
-                        // Vitesse et cap optionnels
-                        BigDecimal vitesse = getBigDecimal(decodedPayload, "analog_in_2");
-                        if (vitesse != null) {
-                            bus.setCurrentVitesse(vitesse);
-                        }
-
-                        log.info("Position extraite de gps_1: {}, {}", latitude, longitude);
-                        return true;
-                    }
+                    latitude = getBigDecimal(gpsNode, "latitude");
+                    longitude = getBigDecimal(gpsNode, "longitude");
+                    log.info("Structure gps_1 trouvée dans decoded_payload");
                 }
 
-                // Chercher des champs individuels
-                BigDecimal latitude = getBigDecimal(decodedPayload, "latitude");
-                BigDecimal longitude = getBigDecimal(decodedPayload, "longitude");
+                // Chercher la vitesse dans analog_in_2
+                if (decodedPayload.has("analog_in_2")) {
+                    vitesse = getBigDecimal(decodedPayload, "analog_in_2");
+                }
 
-                if (latitude != null && longitude != null) {
-                    bus.setCurrentLatitude(latitude);
-                    bus.setCurrentLongitude(longitude);
-                    log.info("Position extraite des champs individuels: {}, {}", latitude, longitude);
-                    return true;
+                // Chercher le cap si disponible
+                if (decodedPayload.has("cap")) {
+                    cap = getIntegerFromJson(decodedPayload, "cap");
                 }
             }
 
-            // Méthode 2: Chercher dans locations.frm-payload
-            JsonNode locations = uplinkMessage.path("locations");
-            if (!locations.isMissingNode()) {
-                JsonNode frmPayload = locations.path("frm-payload");
-                if (!frmPayload.isMissingNode()) {
-                    BigDecimal latitude = getBigDecimal(frmPayload, "latitude");
-                    BigDecimal longitude = getBigDecimal(frmPayload, "longitude");
+            // STRUCTURE 2: Champs directs dans decoded_payload
+            if (latitude == null && decodedPayload.has("latitude")) {
+                latitude = getBigDecimal(decodedPayload, "latitude");
+                longitude = getBigDecimal(decodedPayload, "longitude");
+                log.info("Structure champs directs trouvée dans decoded_payload");
+            }
 
-                    if (latitude != null && longitude != null) {
-                        bus.setCurrentLatitude(latitude);
-                        bus.setCurrentLongitude(longitude);
-                        log.info("Position extraite de locations.frm-payload: {}, {}", latitude, longitude);
-                        return true;
-                    }
+            // STRUCTURE 3: Locations frm-payload
+            if (latitude == null) {
+                JsonNode locations = uplinkMessage.path("locations");
+                if (locations.has("frm-payload")) {
+                    JsonNode gps = locations.get("frm-payload");
+                    latitude = getBigDecimal(gps, "latitude");
+                    longitude = getBigDecimal(gps, "longitude");
+                    log.info("Structure locations.frm-payload trouvée");
                 }
             }
 
-            // Méthode 3: Parser le frm_payload manuellement (si nécessaire)
-            String frmPayload = uplinkMessage.path("frm_payload").asText();
-            if (!frmPayload.isEmpty()) {
-                // Décoder le base64 et parser selon votre format
-                // À implémenter selon votre format spécifique
-                log.debug("frm_payload brut: {}", frmPayload);
+            // STRUCTURE 4: Parsing manuel du frm_payload (si nécessaire)
+            if (latitude == null) {
+                String frmPayload = uplinkMessage.path("frm_payload").asText();
+                if (!frmPayload.isEmpty()) {
+                    log.debug("frm_payload brut: {}", frmPayload);
+                    // Ajouter ici le parsing spécifique si besoin
+                }
             }
 
+            // Si on a trouvé une position valide
+            if (latitude != null && longitude != null) {
+                bus.setCurrentLatitude(latitude);
+                bus.setCurrentLongitude(longitude);
+
+                if (vitesse != null) {
+                    bus.setCurrentVitesse(vitesse);
+                }
+
+                if (cap != null) {
+                    bus.setCurrentCap(cap);
+                }
+
+                log.info("✅ Position extraite: lat={}, lng={}, vitesse={}", latitude, longitude, vitesse);
+                return true;
+            }
+
+            log.warn("⚠️ Aucune position trouvée dans le payload");
+            log.debug("Payload complet: {}", root);
             return false;
         } catch (Exception e) {
-            log.error("Erreur lors de l'extraction de la position: {}", e.getMessage());
+            log.error("❌ Erreur lors de l'extraction de la position: {}", e.getMessage(), e);
             return false;
         }
     }
 
+    /**
+     * Sauvegarde une entrée de tracking
+     */
     private void saveTracking(Bus bus, JsonNode root) {
         try {
             Tracking tracking = new Tracking();
@@ -177,19 +224,24 @@ public class TtnMessageProcessor {
         }
     }
 
+    /**
+     * Extrait le timestamp du message
+     */
     private Instant extractTimestamp(JsonNode uplinkMessage) {
         try {
-            // Essayer received_at
             String receivedAt = uplinkMessage.path("received_at").asText();
             if (receivedAt != null && !receivedAt.isEmpty()) {
                 return Instant.parse(receivedAt);
             }
         } catch (DateTimeParseException e) {
-            log.warn("Format de timestamp invalide");
+            log.warn("Format de timestamp invalide: {}", e.getMessage());
         }
         return Instant.now();
     }
 
+    /**
+     * Nettoie les anciennes données de tracking (plus de 7 jours)
+     */
     private void cleanupOldTrackingData() {
         try {
             Instant cutoffDate = Instant.now().minusSeconds(7 * 24 * 3600); // 7 jours
@@ -202,6 +254,9 @@ public class TtnMessageProcessor {
         }
     }
 
+    /**
+     * Récupère un BigDecimal d'un nœud JSON
+     */
     private BigDecimal getBigDecimal(JsonNode node, String field) {
         if (node.has(field) && !node.path(field).isNull()) {
             try {
@@ -214,6 +269,9 @@ public class TtnMessageProcessor {
         return null;
     }
 
+    /**
+     * Récupère un Integer d'un nœud JSON
+     */
     private Integer getIntegerFromJson(JsonNode node, String field) {
         if (node.has(field) && !node.path(field).isNull()) {
             try {

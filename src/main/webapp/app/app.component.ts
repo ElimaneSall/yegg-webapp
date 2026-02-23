@@ -10,6 +10,62 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { fontAwesomeIcons } from './config/font-awesome-icons';
 import MainComponent from './layouts/main/main.component';
 import { TrackerService } from './core/tracker/tracker.service';
+import {
+  // Icônes de base
+  faChevronRight,
+  faChevronDown,
+  faChevronLeft,
+  faUndo,
+  faSearch,
+  faTimes,
+  faSync,
+  faPlus,
+  faSort,
+  faEye,
+  faPencilAlt,
+  faExclamationTriangle,
+  faUser,
+  faUsers,
+  faNetworkWired,
+  faCircle,
+  faUserCircle,
+
+  // Icônes pour les entités
+  faBuilding, // Opérateurs
+  faRoad, // Lignes
+  faMapPin, // Arrêts
+  faBus, // Bus
+  faMap, // Trackings
+  faBell, // Alertes
+  faStar, // Favoris
+  faEnvelope, // Notifications
+  faLink, // Lignes-Arrêts
+
+  // Icônes supplémentaires
+  faHome,
+  faThList,
+  faLock,
+  faWrench,
+  faSignOutAlt,
+  faSignInAlt,
+  faUserPlus,
+  faFlag,
+  faBars,
+  faUsersCog,
+  faTachometerAlt,
+  faHeart,
+  faCogs,
+  faTasks,
+  faBook,
+  faAsterisk,
+} from '@fortawesome/free-solid-svg-icons';
+
+import {
+  faBuilding as farBuilding,
+  faBell as farBell,
+  faStar as farStar,
+  faEnvelope as farEnvelope,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'jhi-app',
@@ -25,7 +81,59 @@ export default class AppComponent {
   private readonly trackerService = inject(TrackerService);
   private readonly dpConfig = inject(NgbDatepickerConfig);
 
-  constructor() {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(
+      faChevronRight,
+      faChevronDown,
+      faUndo,
+      faSearch,
+      faTimes,
+      faSync,
+      faPlus,
+      faSort,
+      faEye,
+      faPencilAlt,
+      faExclamationTriangle,
+      faUser,
+      faUsers,
+      faNetworkWired,
+      faChevronLeft,
+      faCircle,
+      faUserCircle,
+      // Icônes pour les entités
+      faBuilding, // Opérateurs
+      faRoad, // Lignes
+      faMapPin, // Arrêts
+      faBus, // Bus
+      faMap, // Trackings
+      faBell, // Alertes
+      faStar, // Favoris
+      faEnvelope, // Notifications
+      faLink, // Lignes-Arrêts
+
+      // Icônes supplémentaires
+      faHome,
+      faThList,
+      faLock,
+      faWrench,
+      faSignOutAlt,
+      faSignInAlt,
+      faUserPlus,
+      faFlag,
+      faBars,
+      faUsersCog,
+      faTachometerAlt,
+      faHeart,
+      faCogs,
+      faTasks,
+      faBook,
+      faAsterisk,
+      farBuilding,
+      farBell,
+      farStar,
+      farEnvelope,
+    );
+
     this.trackerService.setup();
     this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);

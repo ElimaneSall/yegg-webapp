@@ -1,0 +1,158 @@
+<!-- src/main/webapp/app/layouts/sidebar/sidebar.component.html -->
+<div class="sidebar" [class.collapsed]="isSidebarCollapsed()">
+  <!-- Logo et titre -->
+  <div class="sidebar-header">
+    <a routerLink="/" class="logo" (click)="closeMobileMenu()">
+      <img width="20" height="20" class="rounded-circle" src="./content/images/logo.png" alt="logo" />
+      @if (!isSidebarCollapsed()) {
+        <span class="logo-text">YeggApp</span>
+      }
+    </a>
+    <button class="sidebar-toggle" (click)="toggleSidebar()">
+      <fa-icon [icon]="isSidebarCollapsed() ? 'chevron-right' : 'chevron-left'"></fa-icon>
+    </button>
+  </div>
+
+  <!-- Menu principal -->
+  <div class="sidebar-menu">
+    <ul class="nav flex-column">
+      <!-- Accueil -->
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
+        >
+          <fa-icon icon="home" [fixedWidth]="true"></fa-icon>
+          @if (!isSidebarCollapsed()) {
+            <span class="menu-text" jhiTranslate="global.menu.home">Accueil</span>
+          }
+        </a>
+      </li>
+
+      @if (account() !== null) {
+        <!-- Réseau -->
+        <li class="nav-item has-submenu">
+          <a class="nav-link" href="javascript:void(0)" (click)="toggleSubmenu('network')">
+            <fa-icon icon="network-wired" [fixedWidth]="true"></fa-icon>
+            @if (!isSidebarCollapsed()) {
+              <span class="menu-text">Réseau</span>
+              <fa-icon class="submenu-icon" [icon]="isSubmenuExpanded('network') ? 'chevron-down' : 'chevron-right'"></fa-icon>
+            }
+          </a>
+          @if (!isSidebarCollapsed() && isSubmenuExpanded('network')) {
+            <ul class="submenu">
+              @for (item of menuGroups().network; track item.route) {
+                <li>
+                  <a class="nav-link" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
+                    <fa-icon [icon]="item.icon || 'circle'" [fixedWidth]="true"></fa-icon>
+                    <span class="submenu-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+
+        <!-- Véhicules -->
+        <li class="nav-item has-submenu">
+          <a class="nav-link" href="javascript:void(0)" (click)="toggleSubmenu('vehicles')">
+            <fa-icon icon="bus" [fixedWidth]="true"></fa-icon>
+            @if (!isSidebarCollapsed()) {
+              <span class="menu-text">Véhicules</span>
+              <fa-icon class="submenu-icon" [icon]="isSubmenuExpanded('vehicles') ? 'chevron-down' : 'chevron-right'"></fa-icon>
+            }
+          </a>
+          @if (!isSidebarCollapsed() && isSubmenuExpanded('vehicles')) {
+            <ul class="submenu">
+              @for (item of menuGroups().vehicles; track item.route) {
+                <li>
+                  <a class="nav-link" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
+                    <fa-icon [icon]="item.icon || 'circle'" [fixedWidth]="true"></fa-icon>
+                    <span class="submenu-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+
+        <!-- Utilisateurs & Alertes -->
+        <li class="nav-item has-submenu">
+          <a class="nav-link" href="javascript:void(0)" (click)="toggleSubmenu('users')">
+            <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
+            @if (!isSidebarCollapsed()) {
+              <span class="menu-text">Utilisateurs & Alertes</span>
+              <fa-icon class="submenu-icon" [icon]="isSubmenuExpanded('users') ? 'chevron-down' : 'chevron-right'"></fa-icon>
+            }
+          </a>
+          @if (!isSidebarCollapsed() && isSubmenuExpanded('users')) {
+            <ul class="submenu">
+              @for (item of menuGroups().users; track item.route) {
+                <li>
+                  <a class="nav-link" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
+                    <fa-icon [icon]="item.icon || 'circle'" [fixedWidth]="true"></fa-icon>
+                    <span class="submenu-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      }
+
+      <!-- Administration (visible seulement pour admin) -->
+      <li *jhiHasAnyAuthority="'ROLE_ADMIN'" class="nav-item has-submenu">
+        <a class="nav-link" href="javascript:void(0)" (click)="toggleSubmenu('admin')">
+          <fa-icon icon="users-cog" [fixedWidth]="true"></fa-icon>
+          @if (!isSidebarCollapsed()) {
+            <span class="menu-text" jhiTranslate="global.menu.admin.main">Administration</span>
+            <fa-icon class="submenu-icon" [icon]="isSubmenuExpanded('admin') ? 'chevron-down' : 'chevron-right'"></fa-icon>
+          }
+        </a>
+        @if (!isSidebarCollapsed() && isSubmenuExpanded('admin')) {
+          <ul class="submenu">
+            <li>
+              <a class="nav-link" routerLink="/authority" routerLinkActive="active">
+                <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+                <span class="submenu-text" jhiTranslate="global.menu.entities.adminAuthority">Autorités</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/admin/user-management" routerLinkActive="active">
+                <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
+                <span class="submenu-text" jhiTranslate="global.menu.admin.userManagement">Gestion utilisateurs</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" routerLink="/admin/tracker" routerLinkActive="active">
+                <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+                <span class="submenu-text" jhiTranslate="global.menu.admin.tracker">Suivi</span>
+              </a>
+            </li>
+          </ul>
+        }
+      </li>
+    </ul>
+  </div>
+
+  <!-- Footer de la sidebar avec infos utilisateur -->
+  <div class="sidebar-footer" *ngIf="account()">
+    <div class="user-info">
+      <fa-icon icon="user-circle" size="2x"></fa-icon>
+      @if (!isSidebarCollapsed()) {
+        <div class="user-details">
+          <span class="user-name">{{ account()?.login }}</span>
+          <span class="user-role">{{ account()?.authorities?.[0] }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Mobile menu overlay -->
+@if (isMobileMenuOpen()) {
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()"></div>
+}
