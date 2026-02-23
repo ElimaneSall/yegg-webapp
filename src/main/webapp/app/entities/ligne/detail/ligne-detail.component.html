@@ -27,6 +27,10 @@
           <dd>
             <span>{{ ligneRef.direction }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.description">Description</span></dt>
+          <dd>
+            <span>{{ ligneRef.description }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.ligne.couleur">Couleur</span></dt>
           <dd>
             <span>{{ ligneRef.couleur }}</span>
@@ -39,9 +43,33 @@
           <dd>
             <span>{{ ligneRef.dureeMoyenne }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.frequence">Frequence</span></dt>
+          <dd>
+            <span>{{ ligneRef.frequence }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.ligne.statut">Statut</span></dt>
           <dd>
-            <span>{{ ligneRef.statut }}</span>
+            <span [jhiTranslate]="'yeggApp.LineStatus.' + (ligneRef.statut ?? 'null')">{{
+              { null: '', ACTIVE: 'ACTIVE', SUSPENDED: 'SUSPENDED', CLOSED: 'CLOSED', UNDER_CONSTRUCTION: 'UNDER_CONSTRUCTION' }[
+                ligneRef.statut ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.joursFeries">Jours Feries</span></dt>
+          <dd>
+            <span>{{ ligneRef.joursFeries }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.dateDebut">Date Debut</span></dt>
+          <dd>
+            <span>{{ ligneRef.dateDebut | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.dateFin">Date Fin</span></dt>
+          <dd>
+            <span>{{ ligneRef.dateFin | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligne.actif">Actif</span></dt>
+          <dd>
+            <span>{{ ligneRef.actif }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.ligne.operateur">Operateur</span></dt>
           <dd>

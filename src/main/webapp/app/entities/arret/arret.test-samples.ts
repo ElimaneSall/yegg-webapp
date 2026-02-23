@@ -10,12 +10,14 @@ export const sampleWithRequiredData: IArret = {
 };
 
 export const sampleWithPartialData: IArret = {
-  id: 9865,
-  nom: 'garder ouch',
-  code: 'contre personnel recta',
-  latitude: 74,
-  longitude: -10.3,
-  equipements: '../fake-data/blob/hipster.txt',
+  id: 15009,
+  nom: 'pff repousser paf',
+  code: 'grâce à si',
+  latitude: -68.59,
+  longitude: -139.35,
+  ville: 'crac',
+  codePostal: 'considérable de manière à ce que certes',
+  accessiblePMR: false,
   actif: true,
 };
 
@@ -25,10 +27,16 @@ export const sampleWithFullData: IArret = {
   code: 'assez afin de',
   latitude: 64.6,
   longitude: 176.98,
-  adresse: 'raisonner',
-  zoneTarifaire: 'lectorat équipe de recherche',
+  altitude: 1595,
+  adresse: 'partir lectorat',
+  ville: 'énergique représenter',
+  codePostal: "fonctionnaire à l'insu de au cas où",
+  zoneTarifaire: 'broum',
   equipements: '../fake-data/blob/hipster.txt',
-  actif: true,
+  photo: '../fake-data/blob/hipster.png',
+  photoContentType: 'unknown',
+  accessiblePMR: false,
+  actif: false,
 };
 
 export const sampleWithNewData: NewArret = {

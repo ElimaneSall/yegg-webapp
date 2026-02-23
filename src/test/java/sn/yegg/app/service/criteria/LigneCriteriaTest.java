@@ -82,7 +82,11 @@ class LigneCriteriaTest {
         ligneCriteria.couleur();
         ligneCriteria.distanceKm();
         ligneCriteria.dureeMoyenne();
+        ligneCriteria.frequence();
         ligneCriteria.statut();
+        ligneCriteria.dateDebut();
+        ligneCriteria.dateFin();
+        ligneCriteria.actif();
         ligneCriteria.ligneArretsId();
         ligneCriteria.operateurId();
         ligneCriteria.distinct();
@@ -98,7 +102,11 @@ class LigneCriteriaTest {
                 condition.apply(criteria.getCouleur()) &&
                 condition.apply(criteria.getDistanceKm()) &&
                 condition.apply(criteria.getDureeMoyenne()) &&
+                condition.apply(criteria.getFrequence()) &&
                 condition.apply(criteria.getStatut()) &&
+                condition.apply(criteria.getDateDebut()) &&
+                condition.apply(criteria.getDateFin()) &&
+                condition.apply(criteria.getActif()) &&
                 condition.apply(criteria.getLigneArretsId()) &&
                 condition.apply(criteria.getOperateurId()) &&
                 condition.apply(criteria.getDistinct()),
@@ -116,7 +124,11 @@ class LigneCriteriaTest {
                 condition.apply(criteria.getCouleur(), copy.getCouleur()) &&
                 condition.apply(criteria.getDistanceKm(), copy.getDistanceKm()) &&
                 condition.apply(criteria.getDureeMoyenne(), copy.getDureeMoyenne()) &&
+                condition.apply(criteria.getFrequence(), copy.getFrequence()) &&
                 condition.apply(criteria.getStatut(), copy.getStatut()) &&
+                condition.apply(criteria.getDateDebut(), copy.getDateDebut()) &&
+                condition.apply(criteria.getDateFin(), copy.getDateFin()) &&
+                condition.apply(criteria.getActif(), copy.getActif()) &&
                 condition.apply(criteria.getLigneArretsId(), copy.getLigneArretsId()) &&
                 condition.apply(criteria.getOperateurId(), copy.getOperateurId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),

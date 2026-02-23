@@ -27,13 +27,27 @@
       "fieldValidateRulesMin": "0"
     },
     {
+      "fieldName": "precision",
+      "fieldType": "Integer"
+    },
+    {
       "fieldName": "timestamp",
       "fieldType": "Instant",
       "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "source",
+      "fieldType": "TrackingSource",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ONBOARD_GPS,DRIVER_APP,MANUAL"
+    },
+    {
+      "fieldName": "evenement",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "commentaire",
+      "fieldType": "TextBlob"
     }
   ],
   "jpaMetamodelFiltering": true,

@@ -1,0 +1,92 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (alerteApproche(); as alerteApprocheRef) {
+      <div>
+        <h2 data-cy="alerteApprocheDetailsHeading"><span jhiTranslate="yeggApp.alerteApproche.detail.title">Alerte Approche</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.nom">Nom</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.seuilDistance">Seuil Distance</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.seuilDistance }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.seuilTemps">Seuil Temps</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.seuilTemps }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.typeSeuil">Type Seuil</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.ThresholdType.' + (alerteApprocheRef.typeSeuil ?? 'null')">{{
+              { null: '', DISTANCE: 'DISTANCE', TIME: 'TIME', OR_BOTH: 'OR_BOTH', AND_BOTH: 'AND_BOTH' }[
+                alerteApprocheRef.typeSeuil ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.joursActivation">Jours Activation</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.joursActivation }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.heureDebut">Heure Debut</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.heureDebut }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.heureFin">Heure Fin</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.heureFin }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.AlertStatus.' + (alerteApprocheRef.statut ?? 'null')">{{
+              { null: '', ACTIVE: 'ACTIVE', PAUSED: 'PAUSED', DISABLED: 'DISABLED' }[alerteApprocheRef.statut ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.dateCreation">Date Creation</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.dateCreation | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.dateModification">Date Modification</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.dateModification | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.dernierDeclenchement">Dernier Declenchement</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.dernierDeclenchement | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.nombreDeclenchements">Nombre Declenchements</span></dt>
+          <dd>
+            <span>{{ alerteApprocheRef.nombreDeclenchements }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteApproche.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (alerteApproche()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', alerteApproche()!.utilisateur?.id, 'view']">{{ alerteApprocheRef.utilisateur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/alerte-approche', alerteApprocheRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

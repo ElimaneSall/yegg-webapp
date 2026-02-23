@@ -1,0 +1,97 @@
+{
+  "annotations": {
+    "changelogDate": "20260223002345"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "seuilDistance",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1000",
+      "fieldValidateRulesMin": "50"
+    },
+    {
+      "fieldName": "seuilTemps",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "60",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "typeSeuil",
+      "fieldType": "ThresholdType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DISTANCE,TIME,OR_BOTH,AND_BOTH"
+    },
+    {
+      "fieldName": "joursActivation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "heureDebut",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "heureFin",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "AlertStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,PAUSED,DISABLED"
+    },
+    {
+      "fieldName": "dateCreation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dernierDeclenchement",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "nombreDeclenchements",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "AlerteApproche",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "alerteLigneArret",
+      "otherEntityRelationshipName": "alerteApproche",
+      "relationshipName": "alerteLigneArret",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "historiqueAlerte",
+      "otherEntityRelationshipName": "alerteApproche",
+      "relationshipName": "historiqueAlertes",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "utilisateur",
+      "relationshipName": "utilisateur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

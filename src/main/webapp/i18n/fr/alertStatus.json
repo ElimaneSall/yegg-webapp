@@ -1,0 +1,10 @@
+{
+  "yeggApp": {
+    "AlertStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "PAUSED": "PAUSED",
+      "DISABLED": "DISABLED"
+    }
+  }
+}

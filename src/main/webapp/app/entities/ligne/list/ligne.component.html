@@ -63,6 +63,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="couleur">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.ligne.couleur">Couleur</span>
@@ -84,9 +91,44 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="frequence">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.frequence">Frequence</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="statut">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.ligne.statut">Statut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="joursFeries">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.joursFeries">Jours Feries</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateDebut">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.dateDebut">Date Debut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateFin">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.dateFin">Date Fin</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="actif">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligne.actif">Actif</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -109,10 +151,22 @@
               <td>{{ ligne.numero }}</td>
               <td>{{ ligne.nom }}</td>
               <td>{{ ligne.direction }}</td>
+              <td>{{ ligne.description }}</td>
               <td>{{ ligne.couleur }}</td>
               <td>{{ ligne.distanceKm }}</td>
               <td>{{ ligne.dureeMoyenne }}</td>
-              <td>{{ ligne.statut }}</td>
+              <td>{{ ligne.frequence }}</td>
+              <td [jhiTranslate]="'yeggApp.LineStatus.' + (ligne.statut ?? 'null')">
+                {{
+                  { null: '', ACTIVE: 'ACTIVE', SUSPENDED: 'SUSPENDED', CLOSED: 'CLOSED', UNDER_CONSTRUCTION: 'UNDER_CONSTRUCTION' }[
+                    ligne.statut ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ ligne.joursFeries }}</td>
+              <td>{{ ligne.dateDebut | formatMediumDate }}</td>
+              <td>{{ ligne.dateFin | formatMediumDate }}</td>
+              <td>{{ ligne.actif }}</td>
               <td>
                 @if (ligne.operateur) {
                   <div>

@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (rapport(); as rapportRef) {
+      <div>
+        <h2 data-cy="rapportDetailsHeading"><span jhiTranslate="yeggApp.rapport.detail.title">Rapport</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ rapportRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.nom">Nom</span></dt>
+          <dd>
+            <span>{{ rapportRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.ReportType.' + (rapportRef.type ?? 'null')">{{
+              { null: '', MONTHLY: 'MONTHLY', WEEKLY: 'WEEKLY', CUSTOM: 'CUSTOM' }[rapportRef.type ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.periodeDebut">Periode Debut</span></dt>
+          <dd>
+            <span>{{ rapportRef.periodeDebut | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.periodeFin">Periode Fin</span></dt>
+          <dd>
+            <span>{{ rapportRef.periodeFin | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.format">Format</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.ReportFormat.' + (rapportRef.format ?? 'null')">{{
+              { null: '', PDF: 'PDF', EXCEL: 'EXCEL', CSV: 'CSV' }[rapportRef.format ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.contenu">Contenu</span></dt>
+          <dd>
+            <span>{{ rapportRef.contenu }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.dateGeneration">Date Generation</span></dt>
+          <dd>
+            <span>{{ rapportRef.dateGeneration | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.generePar">Genere Par</span></dt>
+          <dd>
+            <span>{{ rapportRef.generePar }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.operateur">Operateur</span></dt>
+          <dd>
+            @if (rapport()!.operateur) {
+              <div>
+                <a [routerLink]="['/operateur', rapport()!.operateur?.id, 'view']">{{ rapportRef.operateur?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.rapport.admin">Admin</span></dt>
+          <dd>
+            @if (rapport()!.admin) {
+              <div>
+                <a [routerLink]="['/utilisateur', rapport()!.admin?.id, 'view']">{{ rapportRef.admin?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/rapport', rapportRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

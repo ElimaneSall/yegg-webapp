@@ -30,6 +30,10 @@ public class LigneArretCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter distanceDepart;
 
+    private IntegerFilter tempsArretMoyen;
+
+    private BooleanFilter arretPhysique;
+
     private LongFilter ligneId;
 
     private LongFilter arretId;
@@ -43,6 +47,8 @@ public class LigneArretCriteria implements Serializable, Criteria {
         this.ordre = other.optionalOrdre().map(IntegerFilter::copy).orElse(null);
         this.tempsTrajetDepart = other.optionalTempsTrajetDepart().map(IntegerFilter::copy).orElse(null);
         this.distanceDepart = other.optionalDistanceDepart().map(BigDecimalFilter::copy).orElse(null);
+        this.tempsArretMoyen = other.optionalTempsArretMoyen().map(IntegerFilter::copy).orElse(null);
+        this.arretPhysique = other.optionalArretPhysique().map(BooleanFilter::copy).orElse(null);
         this.ligneId = other.optionalLigneId().map(LongFilter::copy).orElse(null);
         this.arretId = other.optionalArretId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -129,6 +135,44 @@ public class LigneArretCriteria implements Serializable, Criteria {
         this.distanceDepart = distanceDepart;
     }
 
+    public IntegerFilter getTempsArretMoyen() {
+        return tempsArretMoyen;
+    }
+
+    public Optional<IntegerFilter> optionalTempsArretMoyen() {
+        return Optional.ofNullable(tempsArretMoyen);
+    }
+
+    public IntegerFilter tempsArretMoyen() {
+        if (tempsArretMoyen == null) {
+            setTempsArretMoyen(new IntegerFilter());
+        }
+        return tempsArretMoyen;
+    }
+
+    public void setTempsArretMoyen(IntegerFilter tempsArretMoyen) {
+        this.tempsArretMoyen = tempsArretMoyen;
+    }
+
+    public BooleanFilter getArretPhysique() {
+        return arretPhysique;
+    }
+
+    public Optional<BooleanFilter> optionalArretPhysique() {
+        return Optional.ofNullable(arretPhysique);
+    }
+
+    public BooleanFilter arretPhysique() {
+        if (arretPhysique == null) {
+            setArretPhysique(new BooleanFilter());
+        }
+        return arretPhysique;
+    }
+
+    public void setArretPhysique(BooleanFilter arretPhysique) {
+        this.arretPhysique = arretPhysique;
+    }
+
     public LongFilter getLigneId() {
         return ligneId;
     }
@@ -200,6 +244,8 @@ public class LigneArretCriteria implements Serializable, Criteria {
             Objects.equals(ordre, that.ordre) &&
             Objects.equals(tempsTrajetDepart, that.tempsTrajetDepart) &&
             Objects.equals(distanceDepart, that.distanceDepart) &&
+            Objects.equals(tempsArretMoyen, that.tempsArretMoyen) &&
+            Objects.equals(arretPhysique, that.arretPhysique) &&
             Objects.equals(ligneId, that.ligneId) &&
             Objects.equals(arretId, that.arretId) &&
             Objects.equals(distinct, that.distinct)
@@ -208,7 +254,7 @@ public class LigneArretCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ordre, tempsTrajetDepart, distanceDepart, ligneId, arretId, distinct);
+        return Objects.hash(id, ordre, tempsTrajetDepart, distanceDepart, tempsArretMoyen, arretPhysique, ligneId, arretId, distinct);
     }
 
     // prettier-ignore
@@ -219,6 +265,8 @@ public class LigneArretCriteria implements Serializable, Criteria {
             optionalOrdre().map(f -> "ordre=" + f + ", ").orElse("") +
             optionalTempsTrajetDepart().map(f -> "tempsTrajetDepart=" + f + ", ").orElse("") +
             optionalDistanceDepart().map(f -> "distanceDepart=" + f + ", ").orElse("") +
+            optionalTempsArretMoyen().map(f -> "tempsArretMoyen=" + f + ", ").orElse("") +
+            optionalArretPhysique().map(f -> "arretPhysique=" + f + ", ").orElse("") +
             optionalLigneId().map(f -> "ligneId=" + f + ", ").orElse("") +
             optionalArretId().map(f -> "arretId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +

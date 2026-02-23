@@ -25,18 +25,6 @@ class BusTest {
     }
 
     @Test
-    void utilisateurTest() {
-        Bus bus = getBusRandomSampleGenerator();
-        Utilisateur utilisateurBack = getUtilisateurRandomSampleGenerator();
-
-        bus.setUtilisateur(utilisateurBack);
-        assertThat(bus.getUtilisateur()).isEqualTo(utilisateurBack);
-
-        bus.utilisateur(null);
-        assertThat(bus.getUtilisateur()).isNull();
-    }
-
-    @Test
     void ligneTest() {
         Bus bus = getBusRandomSampleGenerator();
         Ligne ligneBack = getLigneRandomSampleGenerator();
@@ -46,5 +34,17 @@ class BusTest {
 
         bus.ligne(null);
         assertThat(bus.getLigne()).isNull();
+    }
+
+    @Test
+    void chauffeurTest() {
+        Bus bus = getBusRandomSampleGenerator();
+        Utilisateur utilisateurBack = getUtilisateurRandomSampleGenerator();
+
+        bus.setChauffeur(utilisateurBack);
+        assertThat(bus.getChauffeur()).isEqualTo(utilisateurBack);
+
+        bus.chauffeur(null);
+        assertThat(bus.getChauffeur()).isNull();
     }
 }

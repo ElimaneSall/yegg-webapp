@@ -80,8 +80,12 @@ class ArretCriteriaTest {
         arretCriteria.code();
         arretCriteria.latitude();
         arretCriteria.longitude();
+        arretCriteria.altitude();
         arretCriteria.adresse();
+        arretCriteria.ville();
+        arretCriteria.codePostal();
         arretCriteria.zoneTarifaire();
+        arretCriteria.accessiblePMR();
         arretCriteria.actif();
         arretCriteria.ligneArretsId();
         arretCriteria.distinct();
@@ -95,8 +99,12 @@ class ArretCriteriaTest {
                 condition.apply(criteria.getCode()) &&
                 condition.apply(criteria.getLatitude()) &&
                 condition.apply(criteria.getLongitude()) &&
+                condition.apply(criteria.getAltitude()) &&
                 condition.apply(criteria.getAdresse()) &&
+                condition.apply(criteria.getVille()) &&
+                condition.apply(criteria.getCodePostal()) &&
                 condition.apply(criteria.getZoneTarifaire()) &&
+                condition.apply(criteria.getAccessiblePMR()) &&
                 condition.apply(criteria.getActif()) &&
                 condition.apply(criteria.getLigneArretsId()) &&
                 condition.apply(criteria.getDistinct()),
@@ -112,8 +120,12 @@ class ArretCriteriaTest {
                 condition.apply(criteria.getCode(), copy.getCode()) &&
                 condition.apply(criteria.getLatitude(), copy.getLatitude()) &&
                 condition.apply(criteria.getLongitude(), copy.getLongitude()) &&
+                condition.apply(criteria.getAltitude(), copy.getAltitude()) &&
                 condition.apply(criteria.getAdresse(), copy.getAdresse()) &&
+                condition.apply(criteria.getVille(), copy.getVille()) &&
+                condition.apply(criteria.getCodePostal(), copy.getCodePostal()) &&
                 condition.apply(criteria.getZoneTarifaire(), copy.getZoneTarifaire()) &&
+                condition.apply(criteria.getAccessiblePMR(), copy.getAccessiblePMR()) &&
                 condition.apply(criteria.getActif(), copy.getActif()) &&
                 condition.apply(criteria.getLigneArretsId(), copy.getLigneArretsId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),

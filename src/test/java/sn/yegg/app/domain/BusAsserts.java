@@ -51,8 +51,12 @@ public class BusAsserts {
             .satisfies(a -> assertThat(a.getNumeroVehicule()).as("check numeroVehicule").isEqualTo(expected.getNumeroVehicule()))
             .satisfies(a -> assertThat(a.getPlaque()).as("check plaque").isEqualTo(expected.getPlaque()))
             .satisfies(a -> assertThat(a.getModele()).as("check modele").isEqualTo(expected.getModele()))
+            .satisfies(a -> assertThat(a.getConstructeur()).as("check constructeur").isEqualTo(expected.getConstructeur()))
             .satisfies(a -> assertThat(a.getCapacite()).as("check capacite").isEqualTo(expected.getCapacite()))
+            .satisfies(a -> assertThat(a.getCapaciteDebout()).as("check capaciteDebout").isEqualTo(expected.getCapaciteDebout()))
             .satisfies(a -> assertThat(a.getAnneeFabrication()).as("check anneeFabrication").isEqualTo(expected.getAnneeFabrication()))
+            .satisfies(a -> assertThat(a.getEnergie()).as("check energie").isEqualTo(expected.getEnergie()))
+            .satisfies(a -> assertThat(a.getAutonomieKm()).as("check autonomieKm").isEqualTo(expected.getAutonomieKm()))
             .satisfies(a -> assertThat(a.getGpsDeviceId()).as("check gpsDeviceId").isEqualTo(expected.getGpsDeviceId()))
             .satisfies(a -> assertThat(a.getGpsStatus()).as("check gpsStatus").isEqualTo(expected.getGpsStatus()))
             .satisfies(a -> assertThat(a.getGpsLastPing()).as("check gpsLastPing").isEqualTo(expected.getGpsLastPing()))
@@ -77,7 +81,14 @@ public class BusAsserts {
             )
             .satisfies(a -> assertThat(a.getCurrentCap()).as("check currentCap").isEqualTo(expected.getCurrentCap()))
             .satisfies(a -> assertThat(a.getPositionUpdatedAt()).as("check positionUpdatedAt").isEqualTo(expected.getPositionUpdatedAt()))
-            .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()));
+            .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()))
+            .satisfies(a -> assertThat(a.getDateMiseEnService()).as("check dateMiseEnService").isEqualTo(expected.getDateMiseEnService()))
+            .satisfies(a ->
+                assertThat(a.getDateDernierEntretien()).as("check dateDernierEntretien").isEqualTo(expected.getDateDernierEntretien())
+            )
+            .satisfies(a ->
+                assertThat(a.getProchainEntretienKm()).as("check prochainEntretienKm").isEqualTo(expected.getProchainEntretienKm())
+            );
     }
 
     /**
@@ -89,7 +100,7 @@ public class BusAsserts {
     public static void assertBusUpdatableRelationshipsEquals(Bus expected, Bus actual) {
         assertThat(actual)
             .as("Verify Bus relationships")
-            .satisfies(a -> assertThat(a.getUtilisateur()).as("check utilisateur").isEqualTo(expected.getUtilisateur()))
-            .satisfies(a -> assertThat(a.getLigne()).as("check ligne").isEqualTo(expected.getLigne()));
+            .satisfies(a -> assertThat(a.getLigne()).as("check ligne").isEqualTo(expected.getLigne()))
+            .satisfies(a -> assertThat(a.getChauffeur()).as("check chauffeur").isEqualTo(expected.getChauffeur()));
     }
 }

@@ -58,8 +58,11 @@ public class TrackingAsserts {
                 assertThat(a.getVitesse()).as("check vitesse").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getVitesse())
             )
             .satisfies(a -> assertThat(a.getCap()).as("check cap").isEqualTo(expected.getCap()))
+            .satisfies(a -> assertThat(a.getPrecision()).as("check precision").isEqualTo(expected.getPrecision()))
             .satisfies(a -> assertThat(a.getTimestamp()).as("check timestamp").isEqualTo(expected.getTimestamp()))
-            .satisfies(a -> assertThat(a.getSource()).as("check source").isEqualTo(expected.getSource()));
+            .satisfies(a -> assertThat(a.getSource()).as("check source").isEqualTo(expected.getSource()))
+            .satisfies(a -> assertThat(a.getEvenement()).as("check evenement").isEqualTo(expected.getEvenement()))
+            .satisfies(a -> assertThat(a.getCommentaire()).as("check commentaire").isEqualTo(expected.getCommentaire()));
     }
 
     /**

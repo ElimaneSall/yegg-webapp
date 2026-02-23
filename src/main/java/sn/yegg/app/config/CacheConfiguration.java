@@ -63,6 +63,17 @@ public class CacheConfiguration {
             createCache(cm, sn.yegg.app.domain.Favori.class.getName());
             createCache(cm, sn.yegg.app.domain.Notification.class.getName());
             createCache(cm, sn.yegg.app.domain.LigneArret.class.getName());
+            createCache(cm, sn.yegg.app.domain.Utilisateur.class.getName() + ".favorises");
+            createCache(cm, sn.yegg.app.domain.Utilisateur.class.getName() + ".notifications");
+            createCache(cm, sn.yegg.app.domain.Utilisateur.class.getName() + ".feedbacks");
+            createCache(cm, sn.yegg.app.domain.Utilisateur.class.getName() + ".historiqueAlertes");
+            createCache(cm, sn.yegg.app.domain.AlerteApproche.class.getName());
+            createCache(cm, sn.yegg.app.domain.AlerteApproche.class.getName() + ".alerteLigneArrets");
+            createCache(cm, sn.yegg.app.domain.AlerteApproche.class.getName() + ".historiqueAlertes");
+            createCache(cm, sn.yegg.app.domain.AlerteLigneArret.class.getName());
+            createCache(cm, sn.yegg.app.domain.HistoriqueAlerte.class.getName());
+            createCache(cm, sn.yegg.app.domain.Feedback.class.getName());
+            createCache(cm, sn.yegg.app.domain.Rapport.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -25,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.IntegrationTest;
 import sn.yegg.app.domain.Notification;
 import sn.yegg.app.domain.Utilisateur;
+import sn.yegg.app.domain.enumeration.NotificationStatus;
+import sn.yegg.app.domain.enumeration.NotificationType;
+import sn.yegg.app.domain.enumeration.Priority;
 import sn.yegg.app.repository.NotificationRepository;
 import sn.yegg.app.service.dto.NotificationDTO;
 import sn.yegg.app.service.mapper.NotificationMapper;
@@ -37,8 +40,8 @@ import sn.yegg.app.service.mapper.NotificationMapper;
 @WithMockUser
 class NotificationResourceIT {
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final NotificationType DEFAULT_TYPE = NotificationType.BUS_APPROACHING;
+    private static final NotificationType UPDATED_TYPE = NotificationType.DELAY;
 
     private static final String DEFAULT_TITRE = "AAAAAAAAAA";
     private static final String UPDATED_TITRE = "BBBBBBBBBB";
@@ -49,11 +52,17 @@ class NotificationResourceIT {
     private static final String DEFAULT_DONNEES = "AAAAAAAAAA";
     private static final String UPDATED_DONNEES = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PRIORITE = "AAAAAAAAAA";
-    private static final String UPDATED_PRIORITE = "BBBBBBBBBB";
+    private static final Priority DEFAULT_PRIORITE = Priority.HIGH;
+    private static final Priority UPDATED_PRIORITE = Priority.MEDIUM;
 
-    private static final String DEFAULT_STATUT = "AAAAAAAAAA";
-    private static final String UPDATED_STATUT = "BBBBBBBBBB";
+    private static final NotificationStatus DEFAULT_STATUT = NotificationStatus.SENT;
+    private static final NotificationStatus UPDATED_STATUT = NotificationStatus.FAILED;
+
+    private static final Instant DEFAULT_DATE_CREATION = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATE_CREATION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_DATE_ENVOI = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATE_ENVOI = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Boolean DEFAULT_LU = false;
     private static final Boolean UPDATED_LU = true;
@@ -100,6 +109,8 @@ class NotificationResourceIT {
             .donnees(DEFAULT_DONNEES)
             .priorite(DEFAULT_PRIORITE)
             .statut(DEFAULT_STATUT)
+            .dateCreation(DEFAULT_DATE_CREATION)
+            .dateEnvoi(DEFAULT_DATE_ENVOI)
             .lu(DEFAULT_LU)
             .dateLecture(DEFAULT_DATE_LECTURE);
     }
@@ -118,6 +129,8 @@ class NotificationResourceIT {
             .donnees(UPDATED_DONNEES)
             .priorite(UPDATED_PRIORITE)
             .statut(UPDATED_STATUT)
+            .dateCreation(UPDATED_DATE_CREATION)
+            .dateEnvoi(UPDATED_DATE_ENVOI)
             .lu(UPDATED_LU)
             .dateLecture(UPDATED_DATE_LECTURE);
     }
@@ -179,10 +192,61 @@ class NotificationResourceIT {
 
     @Test
     @Transactional
+    void checkTypeIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        notification.setType(null);
+
+        // Create the Notification, which fails.
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
+
+        restNotificationMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(notificationDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void checkTitreIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
         notification.setTitre(null);
+
+        // Create the Notification, which fails.
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
+
+        restNotificationMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(notificationDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkStatutIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        notification.setStatut(null);
+
+        // Create the Notification, which fails.
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
+
+        restNotificationMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(notificationDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkDateCreationIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        notification.setDateCreation(null);
 
         // Create the Notification, which fails.
         NotificationDTO notificationDTO = notificationMapper.toDto(notification);
@@ -206,12 +270,14 @@ class NotificationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(notification.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].titre").value(hasItem(DEFAULT_TITRE)))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)))
             .andExpect(jsonPath("$.[*].donnees").value(hasItem(DEFAULT_DONNEES)))
-            .andExpect(jsonPath("$.[*].priorite").value(hasItem(DEFAULT_PRIORITE)))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)))
+            .andExpect(jsonPath("$.[*].priorite").value(hasItem(DEFAULT_PRIORITE.toString())))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].dateCreation").value(hasItem(DEFAULT_DATE_CREATION.toString())))
+            .andExpect(jsonPath("$.[*].dateEnvoi").value(hasItem(DEFAULT_DATE_ENVOI.toString())))
             .andExpect(jsonPath("$.[*].lu").value(hasItem(DEFAULT_LU)))
             .andExpect(jsonPath("$.[*].dateLecture").value(hasItem(DEFAULT_DATE_LECTURE.toString())));
     }
@@ -228,12 +294,14 @@ class NotificationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(notification.getId().intValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.titre").value(DEFAULT_TITRE))
             .andExpect(jsonPath("$.message").value(DEFAULT_MESSAGE))
             .andExpect(jsonPath("$.donnees").value(DEFAULT_DONNEES))
-            .andExpect(jsonPath("$.priorite").value(DEFAULT_PRIORITE))
-            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT))
+            .andExpect(jsonPath("$.priorite").value(DEFAULT_PRIORITE.toString()))
+            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
+            .andExpect(jsonPath("$.dateCreation").value(DEFAULT_DATE_CREATION.toString()))
+            .andExpect(jsonPath("$.dateEnvoi").value(DEFAULT_DATE_ENVOI.toString()))
             .andExpect(jsonPath("$.lu").value(DEFAULT_LU))
             .andExpect(jsonPath("$.dateLecture").value(DEFAULT_DATE_LECTURE.toString()));
     }
@@ -281,26 +349,6 @@ class NotificationResourceIT {
 
         // Get all the notificationList where type is not null
         defaultNotificationFiltering("type.specified=true", "type.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNotificationsByTypeContainsSomething() throws Exception {
-        // Initialize the database
-        insertedNotification = notificationRepository.saveAndFlush(notification);
-
-        // Get all the notificationList where type contains
-        defaultNotificationFiltering("type.contains=" + DEFAULT_TYPE, "type.contains=" + UPDATED_TYPE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNotificationsByTypeNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedNotification = notificationRepository.saveAndFlush(notification);
-
-        // Get all the notificationList where type does not contain
-        defaultNotificationFiltering("type.doesNotContain=" + UPDATED_TYPE, "type.doesNotContain=" + DEFAULT_TYPE);
     }
 
     @Test
@@ -385,26 +433,6 @@ class NotificationResourceIT {
 
     @Test
     @Transactional
-    void getAllNotificationsByPrioriteContainsSomething() throws Exception {
-        // Initialize the database
-        insertedNotification = notificationRepository.saveAndFlush(notification);
-
-        // Get all the notificationList where priorite contains
-        defaultNotificationFiltering("priorite.contains=" + DEFAULT_PRIORITE, "priorite.contains=" + UPDATED_PRIORITE);
-    }
-
-    @Test
-    @Transactional
-    void getAllNotificationsByPrioriteNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedNotification = notificationRepository.saveAndFlush(notification);
-
-        // Get all the notificationList where priorite does not contain
-        defaultNotificationFiltering("priorite.doesNotContain=" + UPDATED_PRIORITE, "priorite.doesNotContain=" + DEFAULT_PRIORITE);
-    }
-
-    @Test
-    @Transactional
     void getAllNotificationsByStatutIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedNotification = notificationRepository.saveAndFlush(notification);
@@ -435,22 +463,65 @@ class NotificationResourceIT {
 
     @Test
     @Transactional
-    void getAllNotificationsByStatutContainsSomething() throws Exception {
+    void getAllNotificationsByDateCreationIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedNotification = notificationRepository.saveAndFlush(notification);
 
-        // Get all the notificationList where statut contains
-        defaultNotificationFiltering("statut.contains=" + DEFAULT_STATUT, "statut.contains=" + UPDATED_STATUT);
+        // Get all the notificationList where dateCreation equals to
+        defaultNotificationFiltering("dateCreation.equals=" + DEFAULT_DATE_CREATION, "dateCreation.equals=" + UPDATED_DATE_CREATION);
     }
 
     @Test
     @Transactional
-    void getAllNotificationsByStatutNotContainsSomething() throws Exception {
+    void getAllNotificationsByDateCreationIsInShouldWork() throws Exception {
         // Initialize the database
         insertedNotification = notificationRepository.saveAndFlush(notification);
 
-        // Get all the notificationList where statut does not contain
-        defaultNotificationFiltering("statut.doesNotContain=" + UPDATED_STATUT, "statut.doesNotContain=" + DEFAULT_STATUT);
+        // Get all the notificationList where dateCreation in
+        defaultNotificationFiltering(
+            "dateCreation.in=" + DEFAULT_DATE_CREATION + "," + UPDATED_DATE_CREATION,
+            "dateCreation.in=" + UPDATED_DATE_CREATION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllNotificationsByDateCreationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedNotification = notificationRepository.saveAndFlush(notification);
+
+        // Get all the notificationList where dateCreation is not null
+        defaultNotificationFiltering("dateCreation.specified=true", "dateCreation.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNotificationsByDateEnvoiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNotification = notificationRepository.saveAndFlush(notification);
+
+        // Get all the notificationList where dateEnvoi equals to
+        defaultNotificationFiltering("dateEnvoi.equals=" + DEFAULT_DATE_ENVOI, "dateEnvoi.equals=" + UPDATED_DATE_ENVOI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNotificationsByDateEnvoiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedNotification = notificationRepository.saveAndFlush(notification);
+
+        // Get all the notificationList where dateEnvoi in
+        defaultNotificationFiltering("dateEnvoi.in=" + DEFAULT_DATE_ENVOI + "," + UPDATED_DATE_ENVOI, "dateEnvoi.in=" + UPDATED_DATE_ENVOI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNotificationsByDateEnvoiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedNotification = notificationRepository.saveAndFlush(notification);
+
+        // Get all the notificationList where dateEnvoi is not null
+        defaultNotificationFiltering("dateEnvoi.specified=true", "dateEnvoi.specified=false");
     }
 
     @Test
@@ -552,12 +623,14 @@ class NotificationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(notification.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].titre").value(hasItem(DEFAULT_TITRE)))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)))
             .andExpect(jsonPath("$.[*].donnees").value(hasItem(DEFAULT_DONNEES)))
-            .andExpect(jsonPath("$.[*].priorite").value(hasItem(DEFAULT_PRIORITE)))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)))
+            .andExpect(jsonPath("$.[*].priorite").value(hasItem(DEFAULT_PRIORITE.toString())))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].dateCreation").value(hasItem(DEFAULT_DATE_CREATION.toString())))
+            .andExpect(jsonPath("$.[*].dateEnvoi").value(hasItem(DEFAULT_DATE_ENVOI.toString())))
             .andExpect(jsonPath("$.[*].lu").value(hasItem(DEFAULT_LU)))
             .andExpect(jsonPath("$.[*].dateLecture").value(hasItem(DEFAULT_DATE_LECTURE.toString())));
 
@@ -614,6 +687,8 @@ class NotificationResourceIT {
             .donnees(UPDATED_DONNEES)
             .priorite(UPDATED_PRIORITE)
             .statut(UPDATED_STATUT)
+            .dateCreation(UPDATED_DATE_CREATION)
+            .dateEnvoi(UPDATED_DATE_ENVOI)
             .lu(UPDATED_LU)
             .dateLecture(UPDATED_DATE_LECTURE);
         NotificationDTO notificationDTO = notificationMapper.toDto(updatedNotification);
@@ -707,10 +782,10 @@ class NotificationResourceIT {
 
         partialUpdatedNotification
             .titre(UPDATED_TITRE)
-            .priorite(UPDATED_PRIORITE)
+            .message(UPDATED_MESSAGE)
+            .donnees(UPDATED_DONNEES)
             .statut(UPDATED_STATUT)
-            .lu(UPDATED_LU)
-            .dateLecture(UPDATED_DATE_LECTURE);
+            .dateCreation(UPDATED_DATE_CREATION);
 
         restNotificationMockMvc
             .perform(
@@ -748,6 +823,8 @@ class NotificationResourceIT {
             .donnees(UPDATED_DONNEES)
             .priorite(UPDATED_PRIORITE)
             .statut(UPDATED_STATUT)
+            .dateCreation(UPDATED_DATE_CREATION)
+            .dateEnvoi(UPDATED_DATE_ENVOI)
             .lu(UPDATED_LU)
             .dateLecture(UPDATED_DATE_LECTURE);
 

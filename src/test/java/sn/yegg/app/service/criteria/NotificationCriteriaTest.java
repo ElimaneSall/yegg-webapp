@@ -80,6 +80,8 @@ class NotificationCriteriaTest {
         notificationCriteria.titre();
         notificationCriteria.priorite();
         notificationCriteria.statut();
+        notificationCriteria.dateCreation();
+        notificationCriteria.dateEnvoi();
         notificationCriteria.lu();
         notificationCriteria.dateLecture();
         notificationCriteria.utilisateurId();
@@ -94,6 +96,8 @@ class NotificationCriteriaTest {
                 condition.apply(criteria.getTitre()) &&
                 condition.apply(criteria.getPriorite()) &&
                 condition.apply(criteria.getStatut()) &&
+                condition.apply(criteria.getDateCreation()) &&
+                condition.apply(criteria.getDateEnvoi()) &&
                 condition.apply(criteria.getLu()) &&
                 condition.apply(criteria.getDateLecture()) &&
                 condition.apply(criteria.getUtilisateurId()) &&
@@ -113,6 +117,8 @@ class NotificationCriteriaTest {
                 condition.apply(criteria.getTitre(), copy.getTitre()) &&
                 condition.apply(criteria.getPriorite(), copy.getPriorite()) &&
                 condition.apply(criteria.getStatut(), copy.getStatut()) &&
+                condition.apply(criteria.getDateCreation(), copy.getDateCreation()) &&
+                condition.apply(criteria.getDateEnvoi(), copy.getDateEnvoi()) &&
                 condition.apply(criteria.getLu(), copy.getLu()) &&
                 condition.apply(criteria.getDateLecture(), copy.getDateLecture()) &&
                 condition.apply(criteria.getUtilisateurId(), copy.getUtilisateurId()) &&

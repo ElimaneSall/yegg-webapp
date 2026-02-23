@@ -1,0 +1,30 @@
+{
+  "yeggApp": {
+    "feedback": {
+      "home": {
+        "title": "Feedbacks",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Feedback",
+        "createOrEditLabel": "Créer ou éditer un Feedback",
+        "notFound": "Aucun Feedback trouvé"
+      },
+      "created": "Un nouveau Feedback a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Feedback avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Feedback avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Feedback {{ id }} ?"
+      },
+      "detail": {
+        "title": "Feedback"
+      },
+      "id": "ID",
+      "note": "Note",
+      "commentaire": "Commentaire",
+      "typeObjet": "Type Objet",
+      "objetId": "Objet Id",
+      "dateCreation": "Date Creation",
+      "anonyme": "Anonyme",
+      "utilisateur": "Utilisateur"
+    }
+  }
+}

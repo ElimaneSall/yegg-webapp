@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import dayjs from 'dayjs/esm';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IFavori, NewFavori } from '../favori.model';
 
 /**
@@ -14,17 +16,29 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type FavoriFormGroupInput = IFavori | PartialWithRequiredKeyOf<NewFavori>;
 
-type FavoriFormDefaults = Pick<NewFavori, 'id' | 'alerteActive'>;
+/**
+ * Type that converts some properties for forms.
+ */
+type FormValueOf<T extends IFavori | NewFavori> = Omit<T, 'dateAjout' | 'dernierAcces'> & {
+  dateAjout?: string | null;
+  dernierAcces?: string | null;
+};
+
+type FavoriFormRawValue = FormValueOf<IFavori>;
+
+type NewFavoriFormRawValue = FormValueOf<NewFavori>;
+
+type FavoriFormDefaults = Pick<NewFavori, 'id' | 'dateAjout' | 'dernierAcces'>;
 
 type FavoriFormGroupContent = {
-  id: FormControl<IFavori['id'] | NewFavori['id']>;
-  type: FormControl<IFavori['type']>;
-  cibleId: FormControl<IFavori['cibleId']>;
-  nomPersonnalise: FormControl<IFavori['nomPersonnalise']>;
-  ordre: FormControl<IFavori['ordre']>;
-  alerteActive: FormControl<IFavori['alerteActive']>;
-  alerteSeuil: FormControl<IFavori['alerteSeuil']>;
-  utilisateur: FormControl<IFavori['utilisateur']>;
+  id: FormControl<FavoriFormRawValue['id'] | NewFavori['id']>;
+  type: FormControl<FavoriFormRawValue['type']>;
+  cibleId: FormControl<FavoriFormRawValue['cibleId']>;
+  nomPersonnalise: FormControl<FavoriFormRawValue['nomPersonnalise']>;
+  ordre: FormControl<FavoriFormRawValue['ordre']>;
+  dateAjout: FormControl<FavoriFormRawValue['dateAjout']>;
+  dernierAcces: FormControl<FavoriFormRawValue['dernierAcces']>;
+  utilisateur: FormControl<FavoriFormRawValue['utilisateur']>;
 };
 
 export type FavoriFormGroup = FormGroup<FavoriFormGroupContent>;
@@ -32,10 +46,10 @@ export type FavoriFormGroup = FormGroup<FavoriFormGroupContent>;
 @Injectable({ providedIn: 'root' })
 export class FavoriFormService {
   createFavoriFormGroup(favori: FavoriFormGroupInput = { id: null }): FavoriFormGroup {
-    const favoriRawValue = {
+    const favoriRawValue = this.convertFavoriToFavoriRawValue({
       ...this.getFormDefaults(),
       ...favori,
-    };
+    });
     return new FormGroup<FavoriFormGroupContent>({
       id: new FormControl(
         { value: favoriRawValue.id, disabled: true },
@@ -52,20 +66,20 @@ export class FavoriFormService {
       }),
       nomPersonnalise: new FormControl(favoriRawValue.nomPersonnalise),
       ordre: new FormControl(favoriRawValue.ordre),
-      alerteActive: new FormControl(favoriRawValue.alerteActive),
-      alerteSeuil: new FormControl(favoriRawValue.alerteSeuil, {
-        validators: [Validators.min(1), Validators.max(60)],
+      dateAjout: new FormControl(favoriRawValue.dateAjout, {
+        validators: [Validators.required],
       }),
+      dernierAcces: new FormControl(favoriRawValue.dernierAcces),
       utilisateur: new FormControl(favoriRawValue.utilisateur),
     });
   }
 
   getFavori(form: FavoriFormGroup): IFavori | NewFavori {
-    return form.getRawValue() as IFavori | NewFavori;
+    return this.convertFavoriRawValueToFavori(form.getRawValue() as FavoriFormRawValue | NewFavoriFormRawValue);
   }
 
   resetForm(form: FavoriFormGroup, favori: FavoriFormGroupInput): void {
-    const favoriRawValue = { ...this.getFormDefaults(), ...favori };
+    const favoriRawValue = this.convertFavoriToFavoriRawValue({ ...this.getFormDefaults(), ...favori });
     form.reset(
       {
         ...favoriRawValue,
@@ -75,9 +89,30 @@ export class FavoriFormService {
   }
 
   private getFormDefaults(): FavoriFormDefaults {
+    const currentTime = dayjs();
+
     return {
       id: null,
-      alerteActive: false,
+      dateAjout: currentTime,
+      dernierAcces: currentTime,
+    };
+  }
+
+  private convertFavoriRawValueToFavori(rawFavori: FavoriFormRawValue | NewFavoriFormRawValue): IFavori | NewFavori {
+    return {
+      ...rawFavori,
+      dateAjout: dayjs(rawFavori.dateAjout, DATE_TIME_FORMAT),
+      dernierAcces: dayjs(rawFavori.dernierAcces, DATE_TIME_FORMAT),
+    };
+  }
+
+  private convertFavoriToFavoriRawValue(
+    favori: IFavori | (Partial<NewFavori> & FavoriFormDefaults),
+  ): FavoriFormRawValue | PartialWithRequiredKeyOf<NewFavoriFormRawValue> {
+    return {
+      ...favori,
+      dateAjout: favori.dateAjout ? favori.dateAjout.format(DATE_TIME_FORMAT) : undefined,
+      dernierAcces: favori.dernierAcces ? favori.dernierAcces.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

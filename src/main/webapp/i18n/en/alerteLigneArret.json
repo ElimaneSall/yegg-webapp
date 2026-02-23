@@ -1,0 +1,28 @@
+{
+  "yeggApp": {
+    "alerteLigneArret": {
+      "home": {
+        "title": "Alerte Ligne Arrets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Alerte Ligne Arret",
+        "createOrEditLabel": "Create or edit a Alerte Ligne Arret",
+        "notFound": "No Alerte Ligne Arrets found"
+      },
+      "created": "A new Alerte Ligne Arret is created with identifier {{ param }}",
+      "updated": "A Alerte Ligne Arret is updated with identifier {{ param }}",
+      "deleted": "A Alerte Ligne Arret is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Alerte Ligne Arret {{ id }}?"
+      },
+      "detail": {
+        "title": "Alerte Ligne Arret"
+      },
+      "id": "ID",
+      "sens": "Sens",
+      "actif": "Actif",
+      "ligne": "Ligne",
+      "arret": "Arret",
+      "alerteApproche": "Alerte Approche"
+    }
+  }
+}

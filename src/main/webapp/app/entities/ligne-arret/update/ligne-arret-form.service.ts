@@ -14,13 +14,15 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type LigneArretFormGroupInput = ILigneArret | PartialWithRequiredKeyOf<NewLigneArret>;
 
-type LigneArretFormDefaults = Pick<NewLigneArret, 'id'>;
+type LigneArretFormDefaults = Pick<NewLigneArret, 'id' | 'arretPhysique'>;
 
 type LigneArretFormGroupContent = {
   id: FormControl<ILigneArret['id'] | NewLigneArret['id']>;
   ordre: FormControl<ILigneArret['ordre']>;
   tempsTrajetDepart: FormControl<ILigneArret['tempsTrajetDepart']>;
   distanceDepart: FormControl<ILigneArret['distanceDepart']>;
+  tempsArretMoyen: FormControl<ILigneArret['tempsArretMoyen']>;
+  arretPhysique: FormControl<ILigneArret['arretPhysique']>;
   ligne: FormControl<ILigneArret['ligne']>;
   arret: FormControl<ILigneArret['arret']>;
 };
@@ -47,6 +49,8 @@ export class LigneArretFormService {
       }),
       tempsTrajetDepart: new FormControl(ligneArretRawValue.tempsTrajetDepart),
       distanceDepart: new FormControl(ligneArretRawValue.distanceDepart),
+      tempsArretMoyen: new FormControl(ligneArretRawValue.tempsArretMoyen),
+      arretPhysique: new FormControl(ligneArretRawValue.arretPhysique),
       ligne: new FormControl(ligneArretRawValue.ligne),
       arret: new FormControl(ligneArretRawValue.arret),
     });
@@ -69,6 +73,7 @@ export class LigneArretFormService {
   private getFormDefaults(): LigneArretFormDefaults {
     return {
       id: null,
+      arretPhysique: false,
     };
   }
 }

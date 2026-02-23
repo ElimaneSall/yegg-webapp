@@ -1,0 +1,252 @@
+<div>
+  <h2 id="page-heading" data-cy="AlerteApprocheHeading">
+    <span jhiTranslate="yeggApp.alerteApproche.home.title">AlerteApproches</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.alerteApproche.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-alerte-approche"
+        [routerLink]="['/alerte-approche/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.alerteApproche.home.createLabel">Créer un nouveau Alerte Approche</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (alerteApproches().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.alerteApproche.home.notFound">Aucun Alerte Approche trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nom">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.nom">Nom</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="seuilDistance">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.seuilDistance">Seuil Distance</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="seuilTemps">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.seuilTemps">Seuil Temps</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="typeSeuil">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.typeSeuil">Type Seuil</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="joursActivation">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.joursActivation">Jours Activation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="heureDebut">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.heureDebut">Heure Debut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="heureFin">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.heureFin">Heure Fin</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="statut">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.statut">Statut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateCreation">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.dateCreation">Date Creation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateModification">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.dateModification">Date Modification</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dernierDeclenchement">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.dernierDeclenchement">Dernier Declenchement</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nombreDeclenchements">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.nombreDeclenchements">Nombre Declenchements</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="utilisateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.alerteApproche.utilisateur">Utilisateur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (alerteApproche of alerteApproches(); track trackId(alerteApproche)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/alerte-approche', alerteApproche.id, 'view']">{{ alerteApproche.id }}</a>
+              </td>
+              <td>{{ alerteApproche.nom }}</td>
+              <td>{{ alerteApproche.seuilDistance }}</td>
+              <td>{{ alerteApproche.seuilTemps }}</td>
+              <td [jhiTranslate]="'yeggApp.ThresholdType.' + (alerteApproche.typeSeuil ?? 'null')">
+                {{
+                  { null: '', DISTANCE: 'DISTANCE', TIME: 'TIME', OR_BOTH: 'OR_BOTH', AND_BOTH: 'AND_BOTH' }[
+                    alerteApproche.typeSeuil ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ alerteApproche.joursActivation }}</td>
+              <td>{{ alerteApproche.heureDebut }}</td>
+              <td>{{ alerteApproche.heureFin }}</td>
+              <td [jhiTranslate]="'yeggApp.AlertStatus.' + (alerteApproche.statut ?? 'null')">
+                {{ { null: '', ACTIVE: 'ACTIVE', PAUSED: 'PAUSED', DISABLED: 'DISABLED' }[alerteApproche.statut ?? 'null'] }}
+              </td>
+              <td>{{ alerteApproche.dateCreation | formatMediumDatetime }}</td>
+              <td>{{ alerteApproche.dateModification | formatMediumDatetime }}</td>
+              <td>{{ alerteApproche.dernierDeclenchement | formatMediumDatetime }}</td>
+              <td>{{ alerteApproche.nombreDeclenchements }}</td>
+              <td>
+                @if (alerteApproche.utilisateur) {
+                  <div>
+                    <a [routerLink]="['/utilisateur', alerteApproche.utilisateur.id, 'view']">{{ alerteApproche.utilisateur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/alerte-ligne-arret']"
+                    [queryParams]="{ 'filter[alerteApprocheId.in]': alerteApproche.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.alerteApproche.alerteLigneArret' | translate) }"
+                      >Show Alerte Ligne Arret</span
+                    >
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/historique-alerte']"
+                    [queryParams]="{ 'filter[alerteApprocheId.in]': alerteApproche.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.alerteApproche.historiqueAlertes' | translate) }"
+                      >Show Historique Alertes</span
+                    >
+                  </button>
+                  <a
+                    [routerLink]="['/alerte-approche', alerteApproche.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/alerte-approche', alerteApproche.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(alerteApproche)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (alerteApproches().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

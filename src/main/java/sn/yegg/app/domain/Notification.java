@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.time.Instant;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import sn.yegg.app.domain.enumeration.NotificationStatus;
+import sn.yegg.app.domain.enumeration.NotificationType;
+import sn.yegg.app.domain.enumeration.Priority;
 
 /**
  * A Notification.
@@ -24,8 +27,10 @@ public class Notification implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "type")
-    private String type;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private NotificationType type;
 
     @NotNull
     @Column(name = "titre", nullable = false)
@@ -39,11 +44,21 @@ public class Notification implements Serializable {
     @Column(name = "donnees")
     private String donnees;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priorite")
-    private String priorite;
+    private Priority priorite;
 
-    @Column(name = "statut")
-    private String statut;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut", nullable = false)
+    private NotificationStatus statut;
+
+    @NotNull
+    @Column(name = "date_creation", nullable = false)
+    private Instant dateCreation;
+
+    @Column(name = "date_envoi")
+    private Instant dateEnvoi;
 
     @Column(name = "lu")
     private Boolean lu;
@@ -52,7 +67,7 @@ public class Notification implements Serializable {
     private Instant dateLecture;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "bus" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "favorises", "notifications", "feedbacks", "historiqueAlertes" }, allowSetters = true)
     private Utilisateur utilisateur;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -70,16 +85,16 @@ public class Notification implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return this.type;
     }
 
-    public Notification type(String type) {
+    public Notification type(NotificationType type) {
         this.setType(type);
         return this;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 
@@ -122,30 +137,56 @@ public class Notification implements Serializable {
         this.donnees = donnees;
     }
 
-    public String getPriorite() {
+    public Priority getPriorite() {
         return this.priorite;
     }
 
-    public Notification priorite(String priorite) {
+    public Notification priorite(Priority priorite) {
         this.setPriorite(priorite);
         return this;
     }
 
-    public void setPriorite(String priorite) {
+    public void setPriorite(Priority priorite) {
         this.priorite = priorite;
     }
 
-    public String getStatut() {
+    public NotificationStatus getStatut() {
         return this.statut;
     }
 
-    public Notification statut(String statut) {
+    public Notification statut(NotificationStatus statut) {
         this.setStatut(statut);
         return this;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(NotificationStatus statut) {
         this.statut = statut;
+    }
+
+    public Instant getDateCreation() {
+        return this.dateCreation;
+    }
+
+    public Notification dateCreation(Instant dateCreation) {
+        this.setDateCreation(dateCreation);
+        return this;
+    }
+
+    public void setDateCreation(Instant dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Instant getDateEnvoi() {
+        return this.dateEnvoi;
+    }
+
+    public Notification dateEnvoi(Instant dateEnvoi) {
+        this.setDateEnvoi(dateEnvoi);
+        return this;
+    }
+
+    public void setDateEnvoi(Instant dateEnvoi) {
+        this.dateEnvoi = dateEnvoi;
     }
 
     public Boolean getLu() {
@@ -217,6 +258,8 @@ public class Notification implements Serializable {
             ", donnees='" + getDonnees() + "'" +
             ", priorite='" + getPriorite() + "'" +
             ", statut='" + getStatut() + "'" +
+            ", dateCreation='" + getDateCreation() + "'" +
+            ", dateEnvoi='" + getDateEnvoi() + "'" +
             ", lu='" + getLu() + "'" +
             ", dateLecture='" + getDateLecture() + "'" +
             "}";

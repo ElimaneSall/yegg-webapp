@@ -9,8 +9,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
 import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
-import { IFavori } from '../favori.model';
+import { FavoriteType } from 'app/entities/enumerations/favorite-type.model';
 import { FavoriService } from '../service/favori.service';
+import { IFavori } from '../favori.model';
 import { FavoriFormGroup, FavoriFormService } from './favori-form.service';
 
 @Component({
@@ -21,6 +22,7 @@ import { FavoriFormGroup, FavoriFormService } from './favori-form.service';
 export class FavoriUpdateComponent implements OnInit {
   isSaving = false;
   favori: IFavori | null = null;
+  favoriteTypeValues = Object.keys(FavoriteType);
 
   utilisateursSharedCollection: IUtilisateur[] = [];
 

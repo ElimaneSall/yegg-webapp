@@ -1,0 +1,10 @@
+{
+  "yeggApp": {
+    "NotificationStatus": {
+      "null": "",
+      "SENT": "SENT",
+      "FAILED": "FAILED",
+      "PENDING": "PENDING"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "yeggApp": {
+    "ReportType": {
+      "null": "",
+      "MONTHLY": "MONTHLY",
+      "WEEKLY": "WEEKLY",
+      "CUSTOM": "CUSTOM"
+    }
+  }
+}

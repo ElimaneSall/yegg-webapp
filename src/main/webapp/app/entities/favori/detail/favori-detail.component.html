@@ -17,7 +17,9 @@
           </dd>
           <dt><span jhiTranslate="yeggApp.favori.type">Type</span></dt>
           <dd>
-            <span>{{ favoriRef.type }}</span>
+            <span [jhiTranslate]="'yeggApp.FavoriteType.' + (favoriRef.type ?? 'null')">{{
+              { null: '', LINE: 'LINE', STOP: 'STOP', ROUTE: 'ROUTE' }[favoriRef.type ?? 'null']
+            }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.favori.cibleId">Cible Id</span></dt>
           <dd>
@@ -31,13 +33,13 @@
           <dd>
             <span>{{ favoriRef.ordre }}</span>
           </dd>
-          <dt><span jhiTranslate="yeggApp.favori.alerteActive">Alerte Active</span></dt>
+          <dt><span jhiTranslate="yeggApp.favori.dateAjout">Date Ajout</span></dt>
           <dd>
-            <span>{{ favoriRef.alerteActive }}</span>
+            <span>{{ favoriRef.dateAjout | formatMediumDatetime }}</span>
           </dd>
-          <dt><span jhiTranslate="yeggApp.favori.alerteSeuil">Alerte Seuil</span></dt>
+          <dt><span jhiTranslate="yeggApp.favori.dernierAcces">Dernier Acces</span></dt>
           <dd>
-            <span>{{ favoriRef.alerteSeuil }}</span>
+            <span>{{ favoriRef.dernierAcces | formatMediumDatetime }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.favori.utilisateur">Utilisateur</span></dt>
           <dd>

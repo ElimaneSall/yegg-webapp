@@ -77,9 +77,17 @@
                 <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
                 <span jhiTranslate="global.menu.entities.utilisateur">Utilisateurs</span>
               </a>
-              <a class="dropdown-item" routerLink="/alerte" routerLinkActive="active" (click)="collapseNavbar()">
+              <a class="dropdown-item" routerLink="/alerte-approche" routerLinkActive="active" (click)="collapseNavbar()">
                 <fa-icon icon="bell" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.alerte">Alertes</span>
+                <span>Alertes Approche</span>
+              </a>
+              <a class="dropdown-item" routerLink="/alerte-ligne-arret" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="bell" [fixedWidth]="true"></fa-icon>
+                <span>Alertes Ligne-Arrêt</span>
+              </a>
+              <a class="dropdown-item" routerLink="/historique-alerte" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="history" [fixedWidth]="true"></fa-icon>
+                <span>Historique Alertes</span>
               </a>
               <a class="dropdown-item" routerLink="/notification" routerLinkActive="active" (click)="collapseNavbar()">
                 <fa-icon icon="envelope" [fixedWidth]="true"></fa-icon>
@@ -89,6 +97,33 @@
                 <fa-icon icon="star" [fixedWidth]="true"></fa-icon>
                 <span jhiTranslate="global.menu.entities.favori">Favoris</span>
               </a>
+
+              <!-- JHipster needle pour ajouter automatiquement les entités -->
+              <li>
+                <a
+                  class="dropdown-item"
+                  routerLink="/feedback"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.entities.feedback">Feedback</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  routerLink="/rapport"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.entities.rapport">Rapport</span>
+                </a>
+              </li>
+              <!-- jhipster-needle-add-entity-to-menu -->
             </div>
           </li>
         }

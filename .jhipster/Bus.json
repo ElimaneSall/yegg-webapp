@@ -20,6 +20,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "constructeur",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "capacite",
       "fieldType": "Integer",
       "fieldValidateRules": ["required", "min", "max"],
@@ -27,7 +31,26 @@
       "fieldValidateRulesMin": "1"
     },
     {
+      "fieldName": "capaciteDebout",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "100",
+      "fieldValidateRulesMin": "0"
+    },
+    {
       "fieldName": "anneeFabrication",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "2100",
+      "fieldValidateRulesMin": "1990"
+    },
+    {
+      "fieldName": "energie",
+      "fieldType": "EnergyType",
+      "fieldValues": "DIESEL,ELECTRIC,HYBRID,CNG"
+    },
+    {
+      "fieldName": "autonomieKm",
       "fieldType": "Integer"
     },
     {
@@ -75,8 +98,21 @@
     },
     {
       "fieldName": "statut",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldType": "BusStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "IN_SERVICE,OUT_OF_SERVICE,BROKEN_DOWN,UNDER_MAINTENANCE,ON_BREAK"
+    },
+    {
+      "fieldName": "dateMiseEnService",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateDernierEntretien",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "prochainEntretienKm",
+      "fieldType": "Integer"
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -84,15 +120,14 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "utilisateur",
-      "otherEntityRelationshipName": "bus",
-      "relationshipName": "utilisateur",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one"
-    },
-    {
       "otherEntityName": "ligne",
       "relationshipName": "ligne",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "utilisateur",
+      "relationshipName": "chauffeur",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     }

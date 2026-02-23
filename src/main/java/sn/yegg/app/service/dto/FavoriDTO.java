@@ -2,7 +2,9 @@ package sn.yegg.app.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.FavoriteType;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Favori} entity.
@@ -13,7 +15,7 @@ public class FavoriDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String type;
+    private FavoriteType type;
 
     @NotNull
     private Long cibleId;
@@ -22,11 +24,10 @@ public class FavoriDTO implements Serializable {
 
     private Integer ordre;
 
-    private Boolean alerteActive;
+    @NotNull
+    private Instant dateAjout;
 
-    @Min(value = 1)
-    @Max(value = 60)
-    private Integer alerteSeuil;
+    private Instant dernierAcces;
 
     private UtilisateurDTO utilisateur;
 
@@ -38,11 +39,11 @@ public class FavoriDTO implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public FavoriteType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(FavoriteType type) {
         this.type = type;
     }
 
@@ -70,20 +71,20 @@ public class FavoriDTO implements Serializable {
         this.ordre = ordre;
     }
 
-    public Boolean getAlerteActive() {
-        return alerteActive;
+    public Instant getDateAjout() {
+        return dateAjout;
     }
 
-    public void setAlerteActive(Boolean alerteActive) {
-        this.alerteActive = alerteActive;
+    public void setDateAjout(Instant dateAjout) {
+        this.dateAjout = dateAjout;
     }
 
-    public Integer getAlerteSeuil() {
-        return alerteSeuil;
+    public Instant getDernierAcces() {
+        return dernierAcces;
     }
 
-    public void setAlerteSeuil(Integer alerteSeuil) {
-        this.alerteSeuil = alerteSeuil;
+    public void setDernierAcces(Instant dernierAcces) {
+        this.dernierAcces = dernierAcces;
     }
 
     public UtilisateurDTO getUtilisateur() {
@@ -124,8 +125,8 @@ public class FavoriDTO implements Serializable {
             ", cibleId=" + getCibleId() +
             ", nomPersonnalise='" + getNomPersonnalise() + "'" +
             ", ordre=" + getOrdre() +
-            ", alerteActive='" + getAlerteActive() + "'" +
-            ", alerteSeuil=" + getAlerteSeuil() +
+            ", dateAjout='" + getDateAjout() + "'" +
+            ", dernierAcces='" + getDernierAcces() + "'" +
             ", utilisateur=" + getUtilisateur() +
             "}";
     }

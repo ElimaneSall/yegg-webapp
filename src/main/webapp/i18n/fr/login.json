@@ -1,13 +1,7 @@
 {
   "login": {
     "title": "Authentification",
-    "title": {
-      "welcome": "Bienvenue sur Yegg!"
-    },
-    "subtitle": "Connectez-vous pour continuer",
     "form": {
-      "username": "Nom d'utilisateur",
-      "username.placeholder": "Votre nom d'utilisateur",
       "password": "Mot de passe",
       "password.placeholder": "Votre mot de passe",
       "rememberme": "Garder la session ouverte",
@@ -20,25 +14,6 @@
     },
     "password": {
       "forgot": "Avez-vous oublié votre mot de passe ?"
-    }
-  },
-  "global": {
-    "form": {
-      "username": {
-        "label": "Nom d'utilisateur",
-        "placeholder": "Votre nom d'utilisateur"
-      }
-    },
-    "messages": {
-      "info": {
-        "register": {
-          "noaccount": "Vous n'avez pas encore de compte ?",
-          "link": "Créer un compte"
-        }
-      },
-      "validate": {
-        "required": "Ce champ est obligatoire."
-      }
     }
   }
 }

@@ -1,0 +1,288 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-alerte-approche-heading"
+        data-cy="AlerteApprocheCreateUpdateHeading"
+        jhiTranslate="yeggApp.alerteApproche.home.createOrEditLabel"
+      >
+        Créer ou éditer un Alerte Approche
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.alerteApproche.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nom" jhiTranslate="yeggApp.alerteApproche.nom">Nom</label>
+          <input type="text" class="form-control" name="nom" id="field_nom" data-cy="nom" formControlName="nom" />
+        </div>
+
+        @let seuilDistanceRef = editForm.get('seuilDistance')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_seuilDistance" jhiTranslate="yeggApp.alerteApproche.seuilDistance">Seuil Distance</label>
+          <input
+            type="number"
+            class="form-control"
+            name="seuilDistance"
+            id="field_seuilDistance"
+            data-cy="seuilDistance"
+            formControlName="seuilDistance"
+          />
+          @if (seuilDistanceRef.invalid && (seuilDistanceRef.dirty || seuilDistanceRef.touched)) {
+            <div>
+              @if (editForm.get('seuilDistance')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '50' }"
+                  >Ce champ doit être supérieur à 50.</small
+                >
+              }
+              @if (editForm.get('seuilDistance')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '1000' }"
+                  >Ce champ doit être inférieur à 1000.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('seuilDistance')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let seuilTempsRef = editForm.get('seuilTemps')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_seuilTemps" jhiTranslate="yeggApp.alerteApproche.seuilTemps">Seuil Temps</label>
+          <input
+            type="number"
+            class="form-control"
+            name="seuilTemps"
+            id="field_seuilTemps"
+            data-cy="seuilTemps"
+            formControlName="seuilTemps"
+          />
+          @if (seuilTempsRef.invalid && (seuilTempsRef.dirty || seuilTempsRef.touched)) {
+            <div>
+              @if (editForm.get('seuilTemps')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Ce champ doit être supérieur à 1.</small
+                >
+              }
+              @if (editForm.get('seuilTemps')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '60' }"
+                  >Ce champ doit être inférieur à 60.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('seuilTemps')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let typeSeuilRef = editForm.get('typeSeuil')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_typeSeuil" jhiTranslate="yeggApp.alerteApproche.typeSeuil">Type Seuil</label>
+          <select class="form-control" name="typeSeuil" formControlName="typeSeuil" id="field_typeSeuil" data-cy="typeSeuil">
+            <option [ngValue]="null">{{ 'yeggApp.ThresholdType.null' | translate }}</option>
+            @for (thresholdType of thresholdTypeValues; track $index) {
+              <option [value]="thresholdType">{{ 'yeggApp.ThresholdType.' + thresholdType | translate }}</option>
+            }
+          </select>
+          @if (typeSeuilRef.invalid && (typeSeuilRef.dirty || typeSeuilRef.touched)) {
+            <div>
+              @if (editForm.get('typeSeuil')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_joursActivation" jhiTranslate="yeggApp.alerteApproche.joursActivation"
+            >Jours Activation</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="joursActivation"
+            id="field_joursActivation"
+            data-cy="joursActivation"
+            formControlName="joursActivation"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_heureDebut" jhiTranslate="yeggApp.alerteApproche.heureDebut">Heure Debut</label>
+          <input
+            type="text"
+            class="form-control"
+            name="heureDebut"
+            id="field_heureDebut"
+            data-cy="heureDebut"
+            formControlName="heureDebut"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_heureFin" jhiTranslate="yeggApp.alerteApproche.heureFin">Heure Fin</label>
+          <input type="text" class="form-control" name="heureFin" id="field_heureFin" data-cy="heureFin" formControlName="heureFin" />
+        </div>
+
+        @let statutRef = editForm.get('statut')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_statut" jhiTranslate="yeggApp.alerteApproche.statut">Statut</label>
+          <select class="form-control" name="statut" formControlName="statut" id="field_statut" data-cy="statut">
+            <option [ngValue]="null">{{ 'yeggApp.AlertStatus.null' | translate }}</option>
+            @for (alertStatus of alertStatusValues; track $index) {
+              <option [value]="alertStatus">{{ 'yeggApp.AlertStatus.' + alertStatus | translate }}</option>
+            }
+          </select>
+          @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
+            <div>
+              @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dateCreationRef = editForm.get('dateCreation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateCreation" jhiTranslate="yeggApp.alerteApproche.dateCreation">Date Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateCreation"
+              data-cy="dateCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateCreation"
+              formControlName="dateCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateCreationRef.invalid && (dateCreationRef.dirty || dateCreationRef.touched)) {
+            <div>
+              @if (editForm.get('dateCreation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dateCreation')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateModification" jhiTranslate="yeggApp.alerteApproche.dateModification"
+            >Date Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateModification"
+              data-cy="dateModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateModification"
+              formControlName="dateModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dernierDeclenchement" jhiTranslate="yeggApp.alerteApproche.dernierDeclenchement"
+            >Dernier Declenchement</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dernierDeclenchement"
+              data-cy="dernierDeclenchement"
+              type="datetime-local"
+              class="form-control"
+              name="dernierDeclenchement"
+              formControlName="dernierDeclenchement"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        @let nombreDeclenchementsRef = editForm.get('nombreDeclenchements')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nombreDeclenchements" jhiTranslate="yeggApp.alerteApproche.nombreDeclenchements"
+            >Nombre Declenchements</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="nombreDeclenchements"
+            id="field_nombreDeclenchements"
+            data-cy="nombreDeclenchements"
+            formControlName="nombreDeclenchements"
+          />
+          @if (nombreDeclenchementsRef.invalid && (nombreDeclenchementsRef.dirty || nombreDeclenchementsRef.touched)) {
+            <div>
+              @if (editForm.get('nombreDeclenchements')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('nombreDeclenchements')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_utilisateur" jhiTranslate="yeggApp.alerteApproche.utilisateur">Utilisateur</label>
+          <select
+            class="form-control"
+            id="field_utilisateur"
+            data-cy="utilisateur"
+            name="utilisateur"
+            formControlName="utilisateur"
+            [compareWith]="compareUtilisateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (utilisateurOption of utilisateursSharedCollection; track $index) {
+              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -53,6 +53,9 @@ public class OperateurAsserts {
             .satisfies(a -> assertThat(a.getAdresse()).as("check adresse").isEqualTo(expected.getAdresse()))
             .satisfies(a -> assertThat(a.getLogo()).as("check logo").isEqualTo(expected.getLogo()))
             .satisfies(a -> assertThat(a.getLogoContentType()).as("check logo contenty type").isEqualTo(expected.getLogoContentType()))
+            .satisfies(a -> assertThat(a.getSiteWeb()).as("check siteWeb").isEqualTo(expected.getSiteWeb()))
+            .satisfies(a -> assertThat(a.getSiret()).as("check siret").isEqualTo(expected.getSiret()))
+            .satisfies(a -> assertThat(a.getDateCreation()).as("check dateCreation").isEqualTo(expected.getDateCreation()))
             .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
     }
 

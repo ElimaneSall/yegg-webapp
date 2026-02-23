@@ -15,7 +15,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="type" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="titre" type="varchar(255)">
                 <constraints nullable="false" />
@@ -30,6 +30,12 @@
                 <constraints nullable="true" />
             </column>
             <column name="statut" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_creation" type="${datetimeType}">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_envoi" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
             <column name="lu" type="boolean">
@@ -43,6 +49,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+        <dropDefaultValue tableName="notification" columnName="date_creation" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="notification" columnName="date_envoi" columnDataType="${datetimeType}"/>
         <dropDefaultValue tableName="notification" columnName="date_lecture" columnDataType="${datetimeType}"/>
     </changeSet>
 
@@ -69,6 +77,8 @@
             <column name="donnees" type="clob"/>
             <column name="priorite" type="string"/>
             <column name="statut" type="string"/>
+            <column name="date_creation" type="date"/>
+            <column name="date_envoi" type="date"/>
             <column name="lu" type="boolean"/>
             <column name="date_lecture" type="date"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

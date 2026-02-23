@@ -19,9 +19,22 @@
           </div>
         }
 
+        @let typeRef = editForm.get('type')!;
         <div class="mb-3">
           <label class="form-label" for="field_type" jhiTranslate="yeggApp.notification.type">Type</label>
-          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'yeggApp.NotificationType.null' | translate }}</option>
+            @for (notificationType of notificationTypeValues; track $index) {
+              <option [value]="notificationType">{{ 'yeggApp.NotificationType.' + notificationType | translate }}</option>
+            }
+          </select>
+          @if (typeRef.invalid && (typeRef.dirty || typeRef.touched)) {
+            <div>
+              @if (editForm.get('type')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
         </div>
 
         @let titreRef = editForm.get('titre')!;
@@ -57,12 +70,74 @@
 
         <div class="mb-3">
           <label class="form-label" for="field_priorite" jhiTranslate="yeggApp.notification.priorite">Priorite</label>
-          <input type="text" class="form-control" name="priorite" id="field_priorite" data-cy="priorite" formControlName="priorite" />
+          <select class="form-control" name="priorite" formControlName="priorite" id="field_priorite" data-cy="priorite">
+            <option [ngValue]="null">{{ 'yeggApp.Priority.null' | translate }}</option>
+            @for (priority of priorityValues; track $index) {
+              <option [value]="priority">{{ 'yeggApp.Priority.' + priority | translate }}</option>
+            }
+          </select>
+        </div>
+
+        @let statutRef = editForm.get('statut')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_statut" jhiTranslate="yeggApp.notification.statut">Statut</label>
+          <select class="form-control" name="statut" formControlName="statut" id="field_statut" data-cy="statut">
+            <option [ngValue]="null">{{ 'yeggApp.NotificationStatus.null' | translate }}</option>
+            @for (notificationStatus of notificationStatusValues; track $index) {
+              <option [value]="notificationStatus">{{ 'yeggApp.NotificationStatus.' + notificationStatus | translate }}</option>
+            }
+          </select>
+          @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
+            <div>
+              @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dateCreationRef = editForm.get('dateCreation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateCreation" jhiTranslate="yeggApp.notification.dateCreation">Date Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateCreation"
+              data-cy="dateCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateCreation"
+              formControlName="dateCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateCreationRef.invalid && (dateCreationRef.dirty || dateCreationRef.touched)) {
+            <div>
+              @if (editForm.get('dateCreation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dateCreation')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_statut" jhiTranslate="yeggApp.notification.statut">Statut</label>
-          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          <label class="form-label" for="field_dateEnvoi" jhiTranslate="yeggApp.notification.dateEnvoi">Date Envoi</label>
+          <div class="d-flex">
+            <input
+              id="field_dateEnvoi"
+              data-cy="dateEnvoi"
+              type="datetime-local"
+              class="form-control"
+              name="dateEnvoi"
+              formControlName="dateEnvoi"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
         </div>
 
         <div class="mb-3">

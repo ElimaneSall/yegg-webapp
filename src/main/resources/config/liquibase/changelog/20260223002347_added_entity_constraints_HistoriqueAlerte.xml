@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity HistoriqueAlerte.
+    -->
+    <changeSet id="20260223002347-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bus_id"
+                                 baseTableName="historique_alerte"
+                                 constraintName="fk_historique_alerte__bus_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bus"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="alerte_approche_id"
+                                 baseTableName="historique_alerte"
+                                 constraintName="fk_historique_alerte__alerte_approche_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="alerte_approche"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="utilisateur_id"
+                                 baseTableName="historique_alerte"
+                                 constraintName="fk_historique_alerte__utilisateur_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="utilisateur"
+                                 />
+    </changeSet>
+</databaseChangeLog>

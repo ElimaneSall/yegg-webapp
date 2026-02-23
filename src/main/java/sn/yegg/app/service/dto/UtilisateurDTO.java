@@ -1,9 +1,12 @@
 package sn.yegg.app.service.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.UserRole;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Utilisateur} entity.
@@ -13,16 +16,41 @@ public class UtilisateurDTO implements Serializable {
 
     private Long id;
 
-    private String matricule;
+    private String prenom;
 
-    @Pattern(regexp = "^[0-9]{9,15}$")
+    private String nom;
+
+    private String email;
+
     private String telephone;
+
+    private String motDePasse;
+
+    @NotNull
+    private UserRole role;
+
+    private String matricule;
 
     private String fcmToken;
 
     private Boolean notificationsPush;
 
+    private Boolean notificationsSms;
+
     private String langue;
+
+    @Lob
+    private byte[] photo;
+
+    private String photoContentType;
+
+    @NotNull
+    private Instant dateCreation;
+
+    private Instant derniereConnexion;
+
+    @NotNull
+    private Boolean actif;
 
     private LocalDate dateEmbauche;
 
@@ -36,12 +64,28 @@ public class UtilisateurDTO implements Serializable {
         this.id = id;
     }
 
-    public String getMatricule() {
-        return matricule;
+    public String getPrenom() {
+        return prenom;
     }
 
-    public void setMatricule(String matricule) {
-        this.matricule = matricule;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelephone() {
@@ -50,6 +94,30 @@ public class UtilisateurDTO implements Serializable {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getMotDePasse() {
+        return motDePasse;
+    }
+
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
     }
 
     public String getFcmToken() {
@@ -68,12 +136,60 @@ public class UtilisateurDTO implements Serializable {
         this.notificationsPush = notificationsPush;
     }
 
+    public Boolean getNotificationsSms() {
+        return notificationsSms;
+    }
+
+    public void setNotificationsSms(Boolean notificationsSms) {
+        this.notificationsSms = notificationsSms;
+    }
+
     public String getLangue() {
         return langue;
     }
 
     public void setLangue(String langue) {
         this.langue = langue;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+    }
+
+    public Instant getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Instant dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Instant getDerniereConnexion() {
+        return derniereConnexion;
+    }
+
+    public void setDerniereConnexion(Instant derniereConnexion) {
+        this.derniereConnexion = derniereConnexion;
+    }
+
+    public Boolean getActif() {
+        return actif;
+    }
+
+    public void setActif(Boolean actif) {
+        this.actif = actif;
     }
 
     public LocalDate getDateEmbauche() {
@@ -118,11 +234,21 @@ public class UtilisateurDTO implements Serializable {
     public String toString() {
         return "UtilisateurDTO{" +
             "id=" + getId() +
-            ", matricule='" + getMatricule() + "'" +
+            ", prenom='" + getPrenom() + "'" +
+            ", nom='" + getNom() + "'" +
+            ", email='" + getEmail() + "'" +
             ", telephone='" + getTelephone() + "'" +
+            ", motDePasse='" + getMotDePasse() + "'" +
+            ", role='" + getRole() + "'" +
+            ", matricule='" + getMatricule() + "'" +
             ", fcmToken='" + getFcmToken() + "'" +
             ", notificationsPush='" + getNotificationsPush() + "'" +
+            ", notificationsSms='" + getNotificationsSms() + "'" +
             ", langue='" + getLangue() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", dateCreation='" + getDateCreation() + "'" +
+            ", derniereConnexion='" + getDerniereConnexion() + "'" +
+            ", actif='" + getActif() + "'" +
             ", dateEmbauche='" + getDateEmbauche() + "'" +
             ", numeroPermis='" + getNumeroPermis() + "'" +
             "}";

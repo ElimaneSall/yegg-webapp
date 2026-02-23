@@ -25,6 +25,9 @@ describe('Operateur Form Service', () => {
             telephone: expect.any(Object),
             adresse: expect.any(Object),
             logo: expect.any(Object),
+            siteWeb: expect.any(Object),
+            siret: expect.any(Object),
+            dateCreation: expect.any(Object),
             actif: expect.any(Object),
           }),
         );
@@ -41,6 +44,9 @@ describe('Operateur Form Service', () => {
             telephone: expect.any(Object),
             adresse: expect.any(Object),
             logo: expect.any(Object),
+            siteWeb: expect.any(Object),
+            siret: expect.any(Object),
+            dateCreation: expect.any(Object),
             actif: expect.any(Object),
           }),
         );

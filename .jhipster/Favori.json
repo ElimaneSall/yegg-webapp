@@ -7,8 +7,9 @@
   "fields": [
     {
       "fieldName": "type",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldType": "FavoriteType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LINE,STOP,ROUTE"
     },
     {
       "fieldName": "cibleId",
@@ -24,15 +25,13 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "alerteActive",
-      "fieldType": "Boolean"
+      "fieldName": "dateAjout",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "alerteSeuil",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["min", "max"],
-      "fieldValidateRulesMax": "60",
-      "fieldValidateRulesMin": "1"
+      "fieldName": "dernierAcces",
+      "fieldType": "Instant"
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -41,8 +40,9 @@
   "relationships": [
     {
       "otherEntityName": "utilisateur",
+      "otherEntityRelationshipName": "favoris",
       "relationshipName": "utilisateur",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],

@@ -1,116 +1,274 @@
 // ================================================
-// JDL pour Application de Gestion de Flotte de Bus
+// JDL - Application Gestion de Flotte de Bus
+// Version avec syntaxe correcte
 // ================================================
+
 // ================================================
-// ENTITÉS
+// ENUMS
+// ================================================
+
+enum ActionType {
+  READ, ADD, UPDATE, DELETE
+}
+
+enum Priority {
+  HIGH, MEDIUM, LOW
+}
+
+enum LineStatus {
+  ACTIVE, SUSPENDED, CLOSED, UNDER_CONSTRUCTION
+}
+
+enum BusStatus {
+  IN_SERVICE, OUT_OF_SERVICE, BROKEN_DOWN, UNDER_MAINTENANCE, ON_BREAK
+}
+
+enum AlertStatus {
+  ACTIVE, PAUSED, DISABLED
+}
+
+enum ThresholdType {
+  DISTANCE,
+  TIME,
+  OR_BOTH,
+  AND_BOTH
+}
+
+enum NotificationType {
+  BUS_APPROACHING, DELAY, INCIDENT, BREAKDOWN, INFORMATION
+}
+
+enum NotificationStatus {
+  SENT, FAILED, PENDING
+}
+
+enum UserRole {
+  PASSENGER, TOURIST, DRIVER, OPERATOR, ADMIN
+}
+
+enum FavoriteType {
+  LINE, STOP, ROUTE
+}
+
+enum TrackingSource {
+  ONBOARD_GPS, DRIVER_APP, MANUAL
+}
+
+enum ReportType {
+  MONTHLY, WEEKLY, CUSTOM
+}
+
+enum ReportFormat {
+  PDF, EXCEL, CSV
+}
+
+enum EnergyType {
+  DIESEL, ELECTRIC, HYBRID, CNG
+}
+
+// ================================================
+// ENTITÉS PRINCIPALES
 // ================================================
 
 entity Operateur {
-    nom        String required
-    email      String required unique
-    telephone  String pattern(/^[0-9]{9,15}$/)
-    adresse    TextBlob
-    logo       Blob
-    actif      Boolean required
+  Nom             String required
+  Email           String required unique
+  Telephone       String
+  Adresse         TextBlob
+  Logo            Blob
+  SiteWeb         String
+  Siret           String unique
+  DateCreation    Instant required
+  Actif           Boolean required
 }
 
 entity Ligne {
-    numero          String required minlength(1) maxlength(10)
-    nom             String required
-    direction       String required
-    couleur         String pattern(/^#[0-9A-Fa-f]{6}$/)
-    distanceKm      BigDecimal
-    dureeMoyenne    Integer
-    statut          String required
+  Numero          String required minlength(1) maxlength(10) unique
+  Nom             String required
+  Direction       String required
+  Description     TextBlob
+  Couleur         String
+  DistanceKm      BigDecimal min(0)
+  DureeMoyenne    Integer min(0)
+  Frequence       Integer min(1) max(60)
+  Statut          LineStatus required
+  JoursFeries     TextBlob
+  DateDebut       LocalDate
+  DateFin         LocalDate
+  Actif           Boolean required
 }
 
 entity Arret {
-    nom           String required
-    code          String required unique
-    latitude      BigDecimal required min(-90) max(90)
-    longitude     BigDecimal required min(-180) max(180)
-    adresse       String
-    zoneTarifaire String
-    equipements   TextBlob
-    actif         Boolean required
+  Nom             String required
+  Code            String required unique
+  Latitude        BigDecimal required min(-90) max(90)
+  Longitude       BigDecimal required min(-180) max(180)
+  Altitude        Integer
+  Adresse         String
+  Ville           String
+  CodePostal      String
+  ZoneTarifaire   String
+  Equipements     TextBlob
+  Photo           Blob
+  AccessiblePMR   Boolean
+  Actif           Boolean required
 }
 
 entity Bus {
-    numeroVehicule    String required unique
-    plaque            String required unique
-    modele            String
-    capacite          Integer required min(1) max(200)
-    anneeFabrication  Integer
-    gpsDeviceId       String unique
-    gpsStatus         String
-    gpsLastPing       Instant
-    gpsBatteryLevel   Integer min(0) max(100)
-    currentLatitude   BigDecimal
-    currentLongitude  BigDecimal
-    currentVitesse    BigDecimal
-    currentCap        Integer min(0) max(359)
-    positionUpdatedAt Instant
-    statut            String required
+  NumeroVehicule  String required unique
+  Plaque          String required unique
+  Modele          String
+  Constructeur    String
+  Capacite        Integer required min(1) max(200)
+  CapaciteDebout  Integer min(0) max(100)
+  AnneeFabrication Integer min(1990) max(2100)
+  Energie         EnergyType
+  AutonomieKm     Integer
+  GpsDeviceId     String unique
+  GpsStatus       String
+  GpsLastPing     Instant
+  GpsBatteryLevel Integer min(0) max(100)
+  CurrentLatitude BigDecimal
+  CurrentLongitude BigDecimal
+  CurrentVitesse  BigDecimal
+  CurrentCap      Integer min(0) max(359)
+  PositionUpdatedAt Instant
+  Statut          BusStatus required
+  DateMiseEnService LocalDate
+  DateDernierEntretien LocalDate
+  ProchainEntretienKm Integer
 }
 
 entity Utilisateur {
-    matricule         String unique
-    telephone         String pattern(/^[0-9]{9,15}$/)
-    fcmToken          String
-    notificationsPush Boolean
-    langue            String
-    dateEmbauche      LocalDate
-    numeroPermis      String
+  Prenom          String
+  Nom             String
+  Email           String unique
+  Telephone       String
+  MotDePasse      String
+  Role            UserRole required
+  Matricule       String unique
+  FcmToken        String
+  NotificationsPush Boolean
+  NotificationsSms Boolean
+  Langue          String
+  Photo           Blob
+  DateCreation    Instant required
+  DerniereConnexion Instant
+  Actif           Boolean required
+  DateEmbauche    LocalDate
+  NumeroPermis    String unique
 }
+
+// ================================================
+// RELATION LIGNE - ARRET
+// ================================================
+
+entity LigneArret {
+  Ordre               Integer required
+  TempsTrajetDepart   Integer
+  DistanceDepart      BigDecimal
+  TempsArretMoyen     Integer
+  ArretPhysique       Boolean
+}
+
+// ================================================
+// TRACKING
+// ================================================
 
 entity Tracking {
-    latitude   BigDecimal required
-    longitude  BigDecimal required
-    vitesse    BigDecimal
-    cap        Integer min(0) max(359)
-    timestamp  Instant required
-    source     String
+  Latitude        BigDecimal required
+  Longitude       BigDecimal required
+  Vitesse         BigDecimal
+  Cap             Integer min(0) max(359)
+  Precision       Integer
+  Timestamp       Instant required
+  Source          TrackingSource required
+  Evenement       String
+  Commentaire     TextBlob
 }
 
-entity Alerte {
-    typeCible              String required
-    cibleId                Long required
-    seuilMinutes           Integer required min(1) max(60)
-    joursActivation        String
-    heureDebut             Instant
-    heureFin               Instant
-    statut                 String required
-    dernierDeclenchement   Instant
-    nombreDeclenchements   Integer
-    // SUPPRIMEZ: utilisateurId Long
+// ================================================
+// ALERTES
+// ================================================
+
+entity AlerteApproche {
+  Nom                 String
+  SeuilDistance       Integer min(50) max(1000)
+  SeuilTemps          Integer min(1) max(60)
+  TypeSeuil           ThresholdType required
+  JoursActivation     String
+  HeureDebut          String
+  HeureFin            String
+  Statut              AlertStatus required
+  DateCreation        Instant required
+  DateModification    Instant
+  DernierDeclenchement Instant
+  NombreDeclenchements Integer min(0)
 }
+
+entity AlerteLigneArret {
+  Sens                String
+  Actif               Boolean
+}
+
+entity HistoriqueAlerte {
+  DateDeclenchement   Instant required
+  BusNumero           String
+  DistanceReelle      Integer
+  TempsReel           Integer
+  TypeDeclenchement   ThresholdType
+  NotificationEnvoyee Boolean required
+  DateLecture         Instant
+}
+
+// ================================================
+// UTILISATEUR & NOTIFICATIONS
+// ================================================
 
 entity Favori {
-    type            String required
-    cibleId         Long required
-    nomPersonnalise String
-    ordre           Integer
-    alerteActive    Boolean
-    alerteSeuil     Integer min(1) max(60)
-    // SUPPRIMEZ: utilisateurId Long
+  Type                FavoriteType required
+  CibleId             Long required
+  NomPersonnalise     String
+  Ordre               Integer
+  DateAjout           Instant required
+  DernierAcces        Instant
 }
 
 entity Notification {
-    type        String
-    titre       String required
-    message     TextBlob required
-    donnees     TextBlob
-    priorite    String
-    statut      String
-    lu          Boolean
-    dateLecture Instant
-    // SUPPRIMEZ: utilisateurId Long
+  Type                NotificationType required
+  Titre               String required
+  Message             TextBlob required
+  Donnees             TextBlob
+  Priorite            Priority
+  Statut              NotificationStatus required
+  DateCreation        Instant required
+  DateEnvoi           Instant
+  Lu                  Boolean
+  DateLecture         Instant
 }
 
-entity LigneArret {
-    ordre             Integer required
-    tempsTrajetDepart Integer
-    distanceDepart    BigDecimal
+// ================================================
+// FEEDBACK & RAPPORTS
+// ================================================
+
+entity Feedback {
+  Note                Integer required min(1) max(5)
+  Commentaire         TextBlob
+  TypeObjet           String required
+  ObjetId             Long required
+  DateCreation        Instant required
+  Anonyme             Boolean
+}
+
+entity Rapport {
+  Nom                 String required
+  Type                ReportType required
+  PeriodeDebut        LocalDate required
+  PeriodeFin          LocalDate required
+  Format              ReportFormat
+  Contenu             TextBlob
+  DateGeneration      Instant required
+  GenerePar           String
 }
 
 // ================================================
@@ -118,43 +276,61 @@ entity LigneArret {
 // ================================================
 
 relationship OneToMany {
-    Operateur{lignes} to Ligne{operateur}
+  Operateur{Lignes} to Ligne{Operateur}
 }
 
 relationship OneToMany {
-    Ligne{ligneArrets} to LigneArret{ligne}
+  Ligne{LigneArrets} to LigneArret{Ligne}
+  Arret{LigneArrets} to LigneArret{Arret}
+}
+
+relationship ManyToOne {
+  Bus{Ligne} to Ligne
+  Bus{Chauffeur} to Utilisateur
+}
+
+relationship ManyToOne {
+  Tracking{Bus} to Bus
+}
+
+relationship ManyToOne {
+  AlerteApproche{Utilisateur} to Utilisateur
 }
 
 relationship OneToMany {
-    Arret{ligneArrets} to LigneArret{arret}
+  AlerteApproche{AlerteLigneArret} to AlerteLigneArret{AlerteApproche}
 }
 
 relationship ManyToOne {
-    Bus{ligne} to Ligne
+  AlerteLigneArret{Ligne} to Ligne
+  AlerteLigneArret{Arret} to Arret
 }
 
-relationship OneToOne {
-    Bus to Utilisateur
-}
-
-relationship ManyToOne {
-    Tracking{bus} to Bus
+relationship OneToMany {
+  AlerteApproche{HistoriqueAlertes} to HistoriqueAlerte{AlerteApproche}
 }
 
 relationship ManyToOne {
-    Alerte{utilisateur} to Utilisateur
+  HistoriqueAlerte{Bus} to Bus
+}
+
+relationship OneToMany {
+  Utilisateur{Favoris} to Favori{Utilisateur}
+  Utilisateur{Notifications} to Notification{Utilisateur}
+  Utilisateur{Feedbacks} to Feedback{Utilisateur}
+  Utilisateur{HistoriqueAlertes} to HistoriqueAlerte{Utilisateur}
 }
 
 relationship ManyToOne {
-    Favori{utilisateur} to Utilisateur
+  Rapport{Operateur} to Operateur
+  Rapport{Admin} to Utilisateur
 }
 
-relationship ManyToOne {
-    Notification{utilisateur} to Utilisateur
-}
+// ================================================
+// OPTIONS JHIPSTER
+// ================================================
 
-// Options
+dto * with mapstruct
 service * with serviceImpl
 paginate * with pagination
-dto * with mapstruct
 filter *

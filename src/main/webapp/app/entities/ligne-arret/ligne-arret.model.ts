@@ -6,6 +6,8 @@ export interface ILigneArret {
   ordre?: number | null;
   tempsTrajetDepart?: number | null;
   distanceDepart?: number | null;
+  tempsArretMoyen?: number | null;
+  arretPhysique?: boolean | null;
   ligne?: Pick<ILigne, 'id'> | null;
   arret?: Pick<IArret, 'id'> | null;
 }

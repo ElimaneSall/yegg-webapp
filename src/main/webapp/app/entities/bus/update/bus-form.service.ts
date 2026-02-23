@@ -35,8 +35,12 @@ type BusFormGroupContent = {
   numeroVehicule: FormControl<BusFormRawValue['numeroVehicule']>;
   plaque: FormControl<BusFormRawValue['plaque']>;
   modele: FormControl<BusFormRawValue['modele']>;
+  constructeur: FormControl<BusFormRawValue['constructeur']>;
   capacite: FormControl<BusFormRawValue['capacite']>;
+  capaciteDebout: FormControl<BusFormRawValue['capaciteDebout']>;
   anneeFabrication: FormControl<BusFormRawValue['anneeFabrication']>;
+  energie: FormControl<BusFormRawValue['energie']>;
+  autonomieKm: FormControl<BusFormRawValue['autonomieKm']>;
   gpsDeviceId: FormControl<BusFormRawValue['gpsDeviceId']>;
   gpsStatus: FormControl<BusFormRawValue['gpsStatus']>;
   gpsLastPing: FormControl<BusFormRawValue['gpsLastPing']>;
@@ -47,8 +51,11 @@ type BusFormGroupContent = {
   currentCap: FormControl<BusFormRawValue['currentCap']>;
   positionUpdatedAt: FormControl<BusFormRawValue['positionUpdatedAt']>;
   statut: FormControl<BusFormRawValue['statut']>;
-  utilisateur: FormControl<BusFormRawValue['utilisateur']>;
+  dateMiseEnService: FormControl<BusFormRawValue['dateMiseEnService']>;
+  dateDernierEntretien: FormControl<BusFormRawValue['dateDernierEntretien']>;
+  prochainEntretienKm: FormControl<BusFormRawValue['prochainEntretienKm']>;
   ligne: FormControl<BusFormRawValue['ligne']>;
+  chauffeur: FormControl<BusFormRawValue['chauffeur']>;
 };
 
 export type BusFormGroup = FormGroup<BusFormGroupContent>;
@@ -75,10 +82,18 @@ export class BusFormService {
         validators: [Validators.required],
       }),
       modele: new FormControl(busRawValue.modele),
+      constructeur: new FormControl(busRawValue.constructeur),
       capacite: new FormControl(busRawValue.capacite, {
         validators: [Validators.required, Validators.min(1), Validators.max(200)],
       }),
-      anneeFabrication: new FormControl(busRawValue.anneeFabrication),
+      capaciteDebout: new FormControl(busRawValue.capaciteDebout, {
+        validators: [Validators.min(0), Validators.max(100)],
+      }),
+      anneeFabrication: new FormControl(busRawValue.anneeFabrication, {
+        validators: [Validators.min(1990), Validators.max(2100)],
+      }),
+      energie: new FormControl(busRawValue.energie),
+      autonomieKm: new FormControl(busRawValue.autonomieKm),
       gpsDeviceId: new FormControl(busRawValue.gpsDeviceId),
       gpsStatus: new FormControl(busRawValue.gpsStatus),
       gpsLastPing: new FormControl(busRawValue.gpsLastPing),
@@ -95,8 +110,11 @@ export class BusFormService {
       statut: new FormControl(busRawValue.statut, {
         validators: [Validators.required],
       }),
-      utilisateur: new FormControl(busRawValue.utilisateur),
+      dateMiseEnService: new FormControl(busRawValue.dateMiseEnService),
+      dateDernierEntretien: new FormControl(busRawValue.dateDernierEntretien),
+      prochainEntretienKm: new FormControl(busRawValue.prochainEntretienKm),
       ligne: new FormControl(busRawValue.ligne),
+      chauffeur: new FormControl(busRawValue.chauffeur),
     });
   }
 

@@ -30,7 +30,19 @@
       "fieldValidateRulesMin": "-180"
     },
     {
+      "fieldName": "altitude",
+      "fieldType": "Integer"
+    },
+    {
       "fieldName": "adresse",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ville",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "codePostal",
       "fieldType": "String"
     },
     {
@@ -40,6 +52,14 @@
     {
       "fieldName": "equipements",
       "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "photo",
+      "fieldType": "Blob"
+    },
+    {
+      "fieldName": "accessiblePMR",
+      "fieldType": "Boolean"
     },
     {
       "fieldName": "actif",

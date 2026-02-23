@@ -1,0 +1,10 @@
+{
+  "yeggApp": {
+    "FavoriteType": {
+      "null": "",
+      "LINE": "LINE",
+      "STOP": "STOP",
+      "ROUTE": "ROUTE"
+    }
+  }
+}

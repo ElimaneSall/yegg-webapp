@@ -1,0 +1,208 @@
+<div>
+  <h2 id="page-heading" data-cy="HistoriqueAlerteHeading">
+    <span jhiTranslate="yeggApp.historiqueAlerte.home.title">HistoriqueAlertes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.historiqueAlerte.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-historique-alerte"
+        [routerLink]="['/historique-alerte/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.historiqueAlerte.home.createLabel">Créer un nouveau Historique Alerte</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (historiqueAlertes().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.historiqueAlerte.home.notFound">Aucun Historique Alerte trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateDeclenchement">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.dateDeclenchement">Date Declenchement</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="busNumero">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.busNumero">Bus Numero</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="distanceReelle">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.distanceReelle">Distance Reelle</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tempsReel">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.tempsReel">Temps Reel</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="typeDeclenchement">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.typeDeclenchement">Type Declenchement</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="notificationEnvoyee">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.notificationEnvoyee">Notification Envoyee</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateLecture">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.dateLecture">Date Lecture</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bus.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.bus">Bus</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="alerteApproche.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.alerteApproche">Alerte Approche</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="utilisateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.historiqueAlerte.utilisateur">Utilisateur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (historiqueAlerte of historiqueAlertes(); track trackId(historiqueAlerte)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/historique-alerte', historiqueAlerte.id, 'view']">{{ historiqueAlerte.id }}</a>
+              </td>
+              <td>{{ historiqueAlerte.dateDeclenchement | formatMediumDatetime }}</td>
+              <td>{{ historiqueAlerte.busNumero }}</td>
+              <td>{{ historiqueAlerte.distanceReelle }}</td>
+              <td>{{ historiqueAlerte.tempsReel }}</td>
+              <td [jhiTranslate]="'yeggApp.ThresholdType.' + (historiqueAlerte.typeDeclenchement ?? 'null')">
+                {{
+                  { null: '', DISTANCE: 'DISTANCE', TIME: 'TIME', OR_BOTH: 'OR_BOTH', AND_BOTH: 'AND_BOTH' }[
+                    historiqueAlerte.typeDeclenchement ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ historiqueAlerte.notificationEnvoyee }}</td>
+              <td>{{ historiqueAlerte.dateLecture | formatMediumDatetime }}</td>
+              <td>
+                @if (historiqueAlerte.bus) {
+                  <div>
+                    <a [routerLink]="['/bus', historiqueAlerte.bus.id, 'view']">{{ historiqueAlerte.bus.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (historiqueAlerte.alerteApproche) {
+                  <div>
+                    <a [routerLink]="['/alerte-approche', historiqueAlerte.alerteApproche.id, 'view']">{{
+                      historiqueAlerte.alerteApproche.id
+                    }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (historiqueAlerte.utilisateur) {
+                  <div>
+                    <a [routerLink]="['/utilisateur', historiqueAlerte.utilisateur.id, 'view']">{{ historiqueAlerte.utilisateur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/historique-alerte', historiqueAlerte.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/historique-alerte', historiqueAlerte.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(historiqueAlerte)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (historiqueAlertes().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

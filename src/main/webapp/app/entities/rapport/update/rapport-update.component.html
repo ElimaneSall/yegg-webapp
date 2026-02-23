@@ -1,0 +1,202 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-rapport-heading" data-cy="RapportCreateUpdateHeading" jhiTranslate="yeggApp.rapport.home.createOrEditLabel">
+        Créer ou éditer un Rapport
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.rapport.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let nomRef = editForm.get('nom')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nom" jhiTranslate="yeggApp.rapport.nom">Nom</label>
+          <input type="text" class="form-control" name="nom" id="field_nom" data-cy="nom" formControlName="nom" />
+          @if (nomRef.invalid && (nomRef.dirty || nomRef.touched)) {
+            <div>
+              @if (editForm.get('nom')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let typeRef = editForm.get('type')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_type" jhiTranslate="yeggApp.rapport.type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'yeggApp.ReportType.null' | translate }}</option>
+            @for (reportType of reportTypeValues; track $index) {
+              <option [value]="reportType">{{ 'yeggApp.ReportType.' + reportType | translate }}</option>
+            }
+          </select>
+          @if (typeRef.invalid && (typeRef.dirty || typeRef.touched)) {
+            <div>
+              @if (editForm.get('type')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let periodeDebutRef = editForm.get('periodeDebut')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_periodeDebut" jhiTranslate="yeggApp.rapport.periodeDebut">Periode Debut</label>
+          <div class="input-group">
+            <input
+              id="field_periodeDebut"
+              data-cy="periodeDebut"
+              type="text"
+              class="form-control"
+              name="periodeDebut"
+              ngbDatepicker
+              #periodeDebutDp="ngbDatepicker"
+              formControlName="periodeDebut"
+            />
+            <button type="button" class="btn btn-secondary" (click)="periodeDebutDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (periodeDebutRef.invalid && (periodeDebutRef.dirty || periodeDebutRef.touched)) {
+            <div>
+              @if (editForm.get('periodeDebut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let periodeFinRef = editForm.get('periodeFin')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_periodeFin" jhiTranslate="yeggApp.rapport.periodeFin">Periode Fin</label>
+          <div class="input-group">
+            <input
+              id="field_periodeFin"
+              data-cy="periodeFin"
+              type="text"
+              class="form-control"
+              name="periodeFin"
+              ngbDatepicker
+              #periodeFinDp="ngbDatepicker"
+              formControlName="periodeFin"
+            />
+            <button type="button" class="btn btn-secondary" (click)="periodeFinDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          @if (periodeFinRef.invalid && (periodeFinRef.dirty || periodeFinRef.touched)) {
+            <div>
+              @if (editForm.get('periodeFin')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_format" jhiTranslate="yeggApp.rapport.format">Format</label>
+          <select class="form-control" name="format" formControlName="format" id="field_format" data-cy="format">
+            <option [ngValue]="null">{{ 'yeggApp.ReportFormat.null' | translate }}</option>
+            @for (reportFormat of reportFormatValues; track $index) {
+              <option [value]="reportFormat">{{ 'yeggApp.ReportFormat.' + reportFormat | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_contenu" jhiTranslate="yeggApp.rapport.contenu">Contenu</label>
+          <textarea class="form-control" name="contenu" id="field_contenu" data-cy="contenu" formControlName="contenu"></textarea>
+        </div>
+
+        @let dateGenerationRef = editForm.get('dateGeneration')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateGeneration" jhiTranslate="yeggApp.rapport.dateGeneration">Date Generation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateGeneration"
+              data-cy="dateGeneration"
+              type="datetime-local"
+              class="form-control"
+              name="dateGeneration"
+              formControlName="dateGeneration"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateGenerationRef.invalid && (dateGenerationRef.dirty || dateGenerationRef.touched)) {
+            <div>
+              @if (editForm.get('dateGeneration')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dateGeneration')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_generePar" jhiTranslate="yeggApp.rapport.generePar">Genere Par</label>
+          <input type="text" class="form-control" name="generePar" id="field_generePar" data-cy="generePar" formControlName="generePar" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_operateur" jhiTranslate="yeggApp.rapport.operateur">Operateur</label>
+          <select
+            class="form-control"
+            id="field_operateur"
+            data-cy="operateur"
+            name="operateur"
+            formControlName="operateur"
+            [compareWith]="compareOperateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (operateurOption of operateursSharedCollection; track $index) {
+              <option [ngValue]="operateurOption">{{ operateurOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_admin" jhiTranslate="yeggApp.rapport.admin">Admin</label>
+          <select
+            class="form-control"
+            id="field_admin"
+            data-cy="admin"
+            name="admin"
+            formControlName="admin"
+            [compareWith]="compareUtilisateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (utilisateurOption of utilisateursSharedCollection; track $index) {
+              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

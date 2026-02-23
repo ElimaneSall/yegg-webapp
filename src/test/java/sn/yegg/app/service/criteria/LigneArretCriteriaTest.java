@@ -79,6 +79,8 @@ class LigneArretCriteriaTest {
         ligneArretCriteria.ordre();
         ligneArretCriteria.tempsTrajetDepart();
         ligneArretCriteria.distanceDepart();
+        ligneArretCriteria.tempsArretMoyen();
+        ligneArretCriteria.arretPhysique();
         ligneArretCriteria.ligneId();
         ligneArretCriteria.arretId();
         ligneArretCriteria.distinct();
@@ -91,6 +93,8 @@ class LigneArretCriteriaTest {
                 condition.apply(criteria.getOrdre()) &&
                 condition.apply(criteria.getTempsTrajetDepart()) &&
                 condition.apply(criteria.getDistanceDepart()) &&
+                condition.apply(criteria.getTempsArretMoyen()) &&
+                condition.apply(criteria.getArretPhysique()) &&
                 condition.apply(criteria.getLigneId()) &&
                 condition.apply(criteria.getArretId()) &&
                 condition.apply(criteria.getDistinct()),
@@ -105,6 +109,8 @@ class LigneArretCriteriaTest {
                 condition.apply(criteria.getOrdre(), copy.getOrdre()) &&
                 condition.apply(criteria.getTempsTrajetDepart(), copy.getTempsTrajetDepart()) &&
                 condition.apply(criteria.getDistanceDepart(), copy.getDistanceDepart()) &&
+                condition.apply(criteria.getTempsArretMoyen(), copy.getTempsArretMoyen()) &&
+                condition.apply(criteria.getArretPhysique(), copy.getArretPhysique()) &&
                 condition.apply(criteria.getLigneId(), copy.getLigneId()) &&
                 condition.apply(criteria.getArretId(), copy.getArretId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),

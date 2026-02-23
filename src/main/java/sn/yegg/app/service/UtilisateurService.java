@@ -1,6 +1,5 @@
 package sn.yegg.app.service;
 
-import java.util.List;
 import java.util.Optional;
 import sn.yegg.app.service.dto.UtilisateurDTO;
 
@@ -31,13 +30,6 @@ public interface UtilisateurService {
      * @return the persisted entity.
      */
     Optional<UtilisateurDTO> partialUpdate(UtilisateurDTO utilisateurDTO);
-
-    /**
-     * Get all the UtilisateurDTO where Bus is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<UtilisateurDTO> findAllWhereBusIsNull();
 
     /**
      * Get the "id" utilisateur.

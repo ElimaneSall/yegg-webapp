@@ -15,27 +15,66 @@
           </div>
         }
 
+        <div class="mb-3">
+          <label class="form-label" for="field_prenom" jhiTranslate="yeggApp.utilisateur.prenom">Prenom</label>
+          <input type="text" class="form-control" name="prenom" id="field_prenom" data-cy="prenom" formControlName="prenom" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nom" jhiTranslate="yeggApp.utilisateur.nom">Nom</label>
+          <input type="text" class="form-control" name="nom" id="field_nom" data-cy="nom" formControlName="nom" />
+        </div>
+
+        @let emailRef = editForm.get('email')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_email" jhiTranslate="yeggApp.utilisateur.email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+            <div></div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_telephone" jhiTranslate="yeggApp.utilisateur.telephone">Telephone</label>
+          <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_motDePasse" jhiTranslate="yeggApp.utilisateur.motDePasse">Mot De Passe</label>
+          <input
+            type="text"
+            class="form-control"
+            name="motDePasse"
+            id="field_motDePasse"
+            data-cy="motDePasse"
+            formControlName="motDePasse"
+          />
+        </div>
+
+        @let roleRef = editForm.get('role')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_role" jhiTranslate="yeggApp.utilisateur.role">Role</label>
+          <select class="form-control" name="role" formControlName="role" id="field_role" data-cy="role">
+            <option [ngValue]="null">{{ 'yeggApp.UserRole.null' | translate }}</option>
+            @for (userRole of userRoleValues; track $index) {
+              <option [value]="userRole">{{ 'yeggApp.UserRole.' + userRole | translate }}</option>
+            }
+          </select>
+          @if (roleRef.invalid && (roleRef.dirty || roleRef.touched)) {
+            <div>
+              @if (editForm.get('role')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
         @let matriculeRef = editForm.get('matricule')!;
         <div class="mb-3">
           <label class="form-label" for="field_matricule" jhiTranslate="yeggApp.utilisateur.matricule">Matricule</label>
           <input type="text" class="form-control" name="matricule" id="field_matricule" data-cy="matricule" formControlName="matricule" />
           @if (matriculeRef.invalid && (matriculeRef.dirty || matriculeRef.touched)) {
             <div></div>
-          }
-        </div>
-
-        @let telephoneRef = editForm.get('telephone')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_telephone" jhiTranslate="yeggApp.utilisateur.telephone">Telephone</label>
-          <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
-          @if (telephoneRef.invalid && (telephoneRef.dirty || telephoneRef.touched)) {
-            <div>
-              @if (editForm.get('telephone')?.errors?.pattern) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Telephone' }"
-                  >Ce champ doit suivre l&apos;expression régulière Telephone.</small
-                >
-              }
-            </div>
           }
         </div>
 
@@ -59,8 +98,115 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_notificationsSms" jhiTranslate="yeggApp.utilisateur.notificationsSms"
+            >Notifications Sms</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="notificationsSms"
+            id="field_notificationsSms"
+            data-cy="notificationsSms"
+            formControlName="notificationsSms"
+          />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="field_langue" jhiTranslate="yeggApp.utilisateur.langue">Langue</label>
           <input type="text" class="form-control" name="langue" id="field_langue" data-cy="langue" formControlName="langue" />
+        </div>
+
+        @let photoRef = editForm.get('photo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_photo" jhiTranslate="yeggApp.utilisateur.photo">Photo</label>
+          <div>
+            @if (photoRef.value) {
+              <div class="form-text text-danger clearfix">
+                <span class="pull-start">{{ editForm.get('photoContentType')!.value }}, {{ byteSize(photoRef.value!) }}</span>
+                <button
+                  type="button"
+                  (click)="editForm.patchValue({ photo: undefined, photoContentType: undefined })"
+                  class="btn btn-secondary btn-xs pull-end"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                </button>
+              </div>
+            }
+            <input
+              type="file"
+              id="file_photo"
+              data-cy="photo"
+              (change)="setFileData($event, 'photo', false)"
+              jhiTranslate="entity.action.addblob"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="photoContentType"
+            id="field_photoContentType"
+            formControlName="photoContentType"
+          />
+        </div>
+
+        @let dateCreationRef = editForm.get('dateCreation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateCreation" jhiTranslate="yeggApp.utilisateur.dateCreation">Date Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateCreation"
+              data-cy="dateCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateCreation"
+              formControlName="dateCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateCreationRef.invalid && (dateCreationRef.dirty || dateCreationRef.touched)) {
+            <div>
+              @if (editForm.get('dateCreation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dateCreation')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_derniereConnexion" jhiTranslate="yeggApp.utilisateur.derniereConnexion"
+            >Derniere Connexion</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_derniereConnexion"
+              data-cy="derniereConnexion"
+              type="datetime-local"
+              class="form-control"
+              name="derniereConnexion"
+              formControlName="derniereConnexion"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        @let actifRef = editForm.get('actif')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="yeggApp.utilisateur.actif">Actif</label>
+          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
+          @if (actifRef.invalid && (actifRef.dirty || actifRef.touched)) {
+            <div>
+              @if (editForm.get('actif')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">
@@ -82,6 +228,7 @@
           </div>
         </div>
 
+        @let numeroPermisRef = editForm.get('numeroPermis')!;
         <div class="mb-3">
           <label class="form-label" for="field_numeroPermis" jhiTranslate="yeggApp.utilisateur.numeroPermis">Numero Permis</label>
           <input
@@ -92,6 +239,9 @@
             data-cy="numeroPermis"
             formControlName="numeroPermis"
           />
+          @if (numeroPermisRef.invalid && (numeroPermisRef.dirty || numeroPermisRef.touched)) {
+            <div></div>
+          }
         </div>
       </div>
 

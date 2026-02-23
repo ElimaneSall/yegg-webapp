@@ -1,10 +1,11 @@
-id;nom;email;telephone;adresse;actif
-1;Dakar Dem Dikk;contact@dakardemdikk.sn;338890101;Route de Ouakam, BP 27528, Dakar;true
-2;Aftu;aftu.dakar@aftu.sn;338210202;Gare Routière de Pompier, Colobane, Dakar;true
-3;Bus Rapid Transit Dakar;contact@brtdakar.sn;338450303;VDN, Immeuble FARA, Dakar;true
-4;Transac;commercial@transac.sn;338670404;Rue 9, Zone Industrielle, Diamniadio;true
-5;Dakar Horizon;info@dakarhorizon.sn;338820505;Gare Routière de Petersen, Dakar;true
-6;Sakho Transport;contact@sakho.sn;773330606;Parcelles Assainies, Unité 15, Dakar;true
-7;Senbus;info@senbus.sn;765440707;Rufisque, Cité Alizé;false
-8;Petit Car Rapide;carrapide.senegal@gmail.com;774550808;Thiaroye, Marché;true
-9;Zone de Dakar;contact@zonedakar.sn;338660909;Liberté 6, Extension;false
+id;nom;email;telephone;adresse;logo;logo_content_type;site_web;siret;date_creation;actif
+1;au défaut de mal propre;Agnes.Blanc73@hotmail.fr;0552994037;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;sauf;lectorat vaste;2026-02-21T19:52:02;true
+2;rectorat;Bruno98@yahoo.fr;+33 561382660;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;hirsute meuh malade;diablement triangulaire;2026-02-21T12:47:47;false
+3;ha au cas où du côté de;Philomene7@gmail.com;0431932777;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;étaler lunatique;mériter porte-parole;2026-02-21T07:41:34;false
+4;triathlète;Genevieve97@hotmail.fr;0374019109;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;assez;toc sombrer;2026-02-21T05:42:29;true
+5;dans près;Turold67@gmail.com;0460200771;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;gai;rectangulaire cueillir;2026-02-20T23:57:18;false
+6;dominer;Adolphe8@hotmail.fr;+33 262151799;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;ferme glouglou;résigner;2026-02-21T13:16:48;true
+7;à même ouch perplexe;Iseult_Renard@yahoo.fr;0153748073;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;serviable avant que;élargir blablabla;2026-02-21T08:13:00;true
+8;grrr tard;Maureen66@hotmail.fr;0509490467;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;à l'exception de;émettre antique;2026-02-21T04:25:52;true
+9;toc du moment que de manière à ce que;Fabrice_Richard@gmail.com;+33 768842778;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;éveiller magnifique adversaire;revivre par rapport à jeune enfant;2026-02-21T12:57:30;true
+10;communauté étudiante;Gondebaud_Lemaire@hotmail.fr;+33 682965928;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;à peine;hé dring assez;2026-02-21T05:34:58;false

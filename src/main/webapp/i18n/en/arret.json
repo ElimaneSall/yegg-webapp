@@ -22,9 +22,14 @@
       "code": "Code",
       "latitude": "Latitude",
       "longitude": "Longitude",
+      "altitude": "Altitude",
       "adresse": "Adresse",
+      "ville": "Ville",
+      "codePostal": "Code Postal",
       "zoneTarifaire": "Zone Tarifaire",
       "equipements": "Equipements",
+      "photo": "Photo",
+      "accessiblePMR": "Accessible PMR",
       "actif": "Actif",
       "ligneArrets": "Ligne Arrets"
     }

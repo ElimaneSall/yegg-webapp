@@ -1,0 +1,38 @@
+{
+  "yeggApp": {
+    "alerteApproche": {
+      "home": {
+        "title": "AlerteApproches",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Alerte Approche",
+        "createOrEditLabel": "Créer ou éditer un Alerte Approche",
+        "notFound": "Aucun Alerte Approche trouvé"
+      },
+      "created": "Un nouveau Alerte Approche a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Alerte Approche avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Alerte Approche avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Alerte Approche {{ id }} ?"
+      },
+      "detail": {
+        "title": "Alerte Approche"
+      },
+      "id": "ID",
+      "nom": "Nom",
+      "seuilDistance": "Seuil Distance",
+      "seuilTemps": "Seuil Temps",
+      "typeSeuil": "Type Seuil",
+      "joursActivation": "Jours Activation",
+      "heureDebut": "Heure Debut",
+      "heureFin": "Heure Fin",
+      "statut": "Statut",
+      "dateCreation": "Date Creation",
+      "dateModification": "Date Modification",
+      "dernierDeclenchement": "Dernier Declenchement",
+      "nombreDeclenchements": "Nombre Declenchements",
+      "alerteLigneArret": "Alerte Ligne Arret",
+      "historiqueAlertes": "Historique Alertes",
+      "utilisateur": "Utilisateur"
+    }
+  }
+}

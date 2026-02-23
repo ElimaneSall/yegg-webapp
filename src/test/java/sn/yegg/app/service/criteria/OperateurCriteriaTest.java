@@ -79,6 +79,9 @@ class OperateurCriteriaTest {
         operateurCriteria.nom();
         operateurCriteria.email();
         operateurCriteria.telephone();
+        operateurCriteria.siteWeb();
+        operateurCriteria.siret();
+        operateurCriteria.dateCreation();
         operateurCriteria.actif();
         operateurCriteria.lignesId();
         operateurCriteria.distinct();
@@ -91,6 +94,9 @@ class OperateurCriteriaTest {
                 condition.apply(criteria.getNom()) &&
                 condition.apply(criteria.getEmail()) &&
                 condition.apply(criteria.getTelephone()) &&
+                condition.apply(criteria.getSiteWeb()) &&
+                condition.apply(criteria.getSiret()) &&
+                condition.apply(criteria.getDateCreation()) &&
                 condition.apply(criteria.getActif()) &&
                 condition.apply(criteria.getLignesId()) &&
                 condition.apply(criteria.getDistinct()),
@@ -105,6 +111,9 @@ class OperateurCriteriaTest {
                 condition.apply(criteria.getNom(), copy.getNom()) &&
                 condition.apply(criteria.getEmail(), copy.getEmail()) &&
                 condition.apply(criteria.getTelephone(), copy.getTelephone()) &&
+                condition.apply(criteria.getSiteWeb(), copy.getSiteWeb()) &&
+                condition.apply(criteria.getSiret(), copy.getSiret()) &&
+                condition.apply(criteria.getDateCreation(), copy.getDateCreation()) &&
                 condition.apply(criteria.getActif(), copy.getActif()) &&
                 condition.apply(criteria.getLignesId(), copy.getLignesId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),

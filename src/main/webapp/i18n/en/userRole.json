@@ -1,0 +1,12 @@
+{
+  "yeggApp": {
+    "UserRole": {
+      "null": "",
+      "PASSENGER": "PASSENGER",
+      "TOURIST": "TOURIST",
+      "DRIVER": "DRIVER",
+      "OPERATOR": "OPERATOR",
+      "ADMIN": "ADMIN"
+    }
+  }
+}

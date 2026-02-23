@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.IntegrationTest;
 import sn.yegg.app.domain.Bus;
 import sn.yegg.app.domain.Tracking;
+import sn.yegg.app.domain.enumeration.TrackingSource;
 import sn.yegg.app.repository.TrackingRepository;
 import sn.yegg.app.service.dto.TrackingDTO;
 import sn.yegg.app.service.mapper.TrackingMapper;
@@ -55,11 +56,21 @@ class TrackingResourceIT {
     private static final Integer UPDATED_CAP = 1;
     private static final Integer SMALLER_CAP = 0 - 1;
 
+    private static final Integer DEFAULT_PRECISION = 1;
+    private static final Integer UPDATED_PRECISION = 2;
+    private static final Integer SMALLER_PRECISION = 1 - 1;
+
     private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_SOURCE = "AAAAAAAAAA";
-    private static final String UPDATED_SOURCE = "BBBBBBBBBB";
+    private static final TrackingSource DEFAULT_SOURCE = TrackingSource.ONBOARD_GPS;
+    private static final TrackingSource UPDATED_SOURCE = TrackingSource.DRIVER_APP;
+
+    private static final String DEFAULT_EVENEMENT = "AAAAAAAAAA";
+    private static final String UPDATED_EVENEMENT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMMENTAIRE = "AAAAAAAAAA";
+    private static final String UPDATED_COMMENTAIRE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/trackings";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -98,8 +109,11 @@ class TrackingResourceIT {
             .longitude(DEFAULT_LONGITUDE)
             .vitesse(DEFAULT_VITESSE)
             .cap(DEFAULT_CAP)
+            .precision(DEFAULT_PRECISION)
             .timestamp(DEFAULT_TIMESTAMP)
-            .source(DEFAULT_SOURCE);
+            .source(DEFAULT_SOURCE)
+            .evenement(DEFAULT_EVENEMENT)
+            .commentaire(DEFAULT_COMMENTAIRE);
     }
 
     /**
@@ -114,8 +128,11 @@ class TrackingResourceIT {
             .longitude(UPDATED_LONGITUDE)
             .vitesse(UPDATED_VITESSE)
             .cap(UPDATED_CAP)
+            .precision(UPDATED_PRECISION)
             .timestamp(UPDATED_TIMESTAMP)
-            .source(UPDATED_SOURCE);
+            .source(UPDATED_SOURCE)
+            .evenement(UPDATED_EVENEMENT)
+            .commentaire(UPDATED_COMMENTAIRE);
     }
 
     @BeforeEach
@@ -226,6 +243,23 @@ class TrackingResourceIT {
 
     @Test
     @Transactional
+    void checkSourceIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        tracking.setSource(null);
+
+        // Create the Tracking, which fails.
+        TrackingDTO trackingDTO = trackingMapper.toDto(tracking);
+
+        restTrackingMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(trackingDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllTrackings() throws Exception {
         // Initialize the database
         insertedTracking = trackingRepository.saveAndFlush(tracking);
@@ -240,8 +274,11 @@ class TrackingResourceIT {
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(sameNumber(DEFAULT_LONGITUDE))))
             .andExpect(jsonPath("$.[*].vitesse").value(hasItem(sameNumber(DEFAULT_VITESSE))))
             .andExpect(jsonPath("$.[*].cap").value(hasItem(DEFAULT_CAP)))
+            .andExpect(jsonPath("$.[*].precision").value(hasItem(DEFAULT_PRECISION)))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].source").value(hasItem(DEFAULT_SOURCE)));
+            .andExpect(jsonPath("$.[*].source").value(hasItem(DEFAULT_SOURCE.toString())))
+            .andExpect(jsonPath("$.[*].evenement").value(hasItem(DEFAULT_EVENEMENT)))
+            .andExpect(jsonPath("$.[*].commentaire").value(hasItem(DEFAULT_COMMENTAIRE)));
     }
 
     @Test
@@ -260,8 +297,11 @@ class TrackingResourceIT {
             .andExpect(jsonPath("$.longitude").value(sameNumber(DEFAULT_LONGITUDE)))
             .andExpect(jsonPath("$.vitesse").value(sameNumber(DEFAULT_VITESSE)))
             .andExpect(jsonPath("$.cap").value(DEFAULT_CAP))
+            .andExpect(jsonPath("$.precision").value(DEFAULT_PRECISION))
             .andExpect(jsonPath("$.timestamp").value(DEFAULT_TIMESTAMP.toString()))
-            .andExpect(jsonPath("$.source").value(DEFAULT_SOURCE));
+            .andExpect(jsonPath("$.source").value(DEFAULT_SOURCE.toString()))
+            .andExpect(jsonPath("$.evenement").value(DEFAULT_EVENEMENT))
+            .andExpect(jsonPath("$.commentaire").value(DEFAULT_COMMENTAIRE));
     }
 
     @Test
@@ -561,6 +601,76 @@ class TrackingResourceIT {
 
     @Test
     @Transactional
+    void getAllTrackingsByPrecisionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision equals to
+        defaultTrackingFiltering("precision.equals=" + DEFAULT_PRECISION, "precision.equals=" + UPDATED_PRECISION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision in
+        defaultTrackingFiltering("precision.in=" + DEFAULT_PRECISION + "," + UPDATED_PRECISION, "precision.in=" + UPDATED_PRECISION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision is not null
+        defaultTrackingFiltering("precision.specified=true", "precision.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision is greater than or equal to
+        defaultTrackingFiltering("precision.greaterThanOrEqual=" + DEFAULT_PRECISION, "precision.greaterThanOrEqual=" + UPDATED_PRECISION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision is less than or equal to
+        defaultTrackingFiltering("precision.lessThanOrEqual=" + DEFAULT_PRECISION, "precision.lessThanOrEqual=" + SMALLER_PRECISION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision is less than
+        defaultTrackingFiltering("precision.lessThan=" + UPDATED_PRECISION, "precision.lessThan=" + DEFAULT_PRECISION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByPrecisionIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where precision is greater than
+        defaultTrackingFiltering("precision.greaterThan=" + SMALLER_PRECISION, "precision.greaterThan=" + DEFAULT_PRECISION);
+    }
+
+    @Test
+    @Transactional
     void getAllTrackingsByTimestampIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedTracking = trackingRepository.saveAndFlush(tracking);
@@ -621,22 +731,52 @@ class TrackingResourceIT {
 
     @Test
     @Transactional
-    void getAllTrackingsBySourceContainsSomething() throws Exception {
+    void getAllTrackingsByEvenementIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedTracking = trackingRepository.saveAndFlush(tracking);
 
-        // Get all the trackingList where source contains
-        defaultTrackingFiltering("source.contains=" + DEFAULT_SOURCE, "source.contains=" + UPDATED_SOURCE);
+        // Get all the trackingList where evenement equals to
+        defaultTrackingFiltering("evenement.equals=" + DEFAULT_EVENEMENT, "evenement.equals=" + UPDATED_EVENEMENT);
     }
 
     @Test
     @Transactional
-    void getAllTrackingsBySourceNotContainsSomething() throws Exception {
+    void getAllTrackingsByEvenementIsInShouldWork() throws Exception {
         // Initialize the database
         insertedTracking = trackingRepository.saveAndFlush(tracking);
 
-        // Get all the trackingList where source does not contain
-        defaultTrackingFiltering("source.doesNotContain=" + UPDATED_SOURCE, "source.doesNotContain=" + DEFAULT_SOURCE);
+        // Get all the trackingList where evenement in
+        defaultTrackingFiltering("evenement.in=" + DEFAULT_EVENEMENT + "," + UPDATED_EVENEMENT, "evenement.in=" + UPDATED_EVENEMENT);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByEvenementIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where evenement is not null
+        defaultTrackingFiltering("evenement.specified=true", "evenement.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByEvenementContainsSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where evenement contains
+        defaultTrackingFiltering("evenement.contains=" + DEFAULT_EVENEMENT, "evenement.contains=" + UPDATED_EVENEMENT);
+    }
+
+    @Test
+    @Transactional
+    void getAllTrackingsByEvenementNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedTracking = trackingRepository.saveAndFlush(tracking);
+
+        // Get all the trackingList where evenement does not contain
+        defaultTrackingFiltering("evenement.doesNotContain=" + UPDATED_EVENEMENT, "evenement.doesNotContain=" + DEFAULT_EVENEMENT);
     }
 
     @Test
@@ -679,8 +819,11 @@ class TrackingResourceIT {
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(sameNumber(DEFAULT_LONGITUDE))))
             .andExpect(jsonPath("$.[*].vitesse").value(hasItem(sameNumber(DEFAULT_VITESSE))))
             .andExpect(jsonPath("$.[*].cap").value(hasItem(DEFAULT_CAP)))
+            .andExpect(jsonPath("$.[*].precision").value(hasItem(DEFAULT_PRECISION)))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].source").value(hasItem(DEFAULT_SOURCE)));
+            .andExpect(jsonPath("$.[*].source").value(hasItem(DEFAULT_SOURCE.toString())))
+            .andExpect(jsonPath("$.[*].evenement").value(hasItem(DEFAULT_EVENEMENT)))
+            .andExpect(jsonPath("$.[*].commentaire").value(hasItem(DEFAULT_COMMENTAIRE)));
 
         // Check, that the count call also returns 1
         restTrackingMockMvc
@@ -733,8 +876,11 @@ class TrackingResourceIT {
             .longitude(UPDATED_LONGITUDE)
             .vitesse(UPDATED_VITESSE)
             .cap(UPDATED_CAP)
+            .precision(UPDATED_PRECISION)
             .timestamp(UPDATED_TIMESTAMP)
-            .source(UPDATED_SOURCE);
+            .source(UPDATED_SOURCE)
+            .evenement(UPDATED_EVENEMENT)
+            .commentaire(UPDATED_COMMENTAIRE);
         TrackingDTO trackingDTO = trackingMapper.toDto(updatedTracking);
 
         restTrackingMockMvc
@@ -824,7 +970,7 @@ class TrackingResourceIT {
         Tracking partialUpdatedTracking = new Tracking();
         partialUpdatedTracking.setId(tracking.getId());
 
-        partialUpdatedTracking.cap(UPDATED_CAP).timestamp(UPDATED_TIMESTAMP).source(UPDATED_SOURCE);
+        partialUpdatedTracking.latitude(UPDATED_LATITUDE).vitesse(UPDATED_VITESSE);
 
         restTrackingMockMvc
             .perform(
@@ -857,8 +1003,11 @@ class TrackingResourceIT {
             .longitude(UPDATED_LONGITUDE)
             .vitesse(UPDATED_VITESSE)
             .cap(UPDATED_CAP)
+            .precision(UPDATED_PRECISION)
             .timestamp(UPDATED_TIMESTAMP)
-            .source(UPDATED_SOURCE);
+            .source(UPDATED_SOURCE)
+            .evenement(UPDATED_EVENEMENT)
+            .commentaire(UPDATED_COMMENTAIRE);
 
         restTrackingMockMvc
             .perform(

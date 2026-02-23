@@ -51,6 +51,7 @@ public class LigneAsserts {
             .satisfies(a -> assertThat(a.getNumero()).as("check numero").isEqualTo(expected.getNumero()))
             .satisfies(a -> assertThat(a.getNom()).as("check nom").isEqualTo(expected.getNom()))
             .satisfies(a -> assertThat(a.getDirection()).as("check direction").isEqualTo(expected.getDirection()))
+            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
             .satisfies(a -> assertThat(a.getCouleur()).as("check couleur").isEqualTo(expected.getCouleur()))
             .satisfies(a ->
                 assertThat(a.getDistanceKm())
@@ -59,7 +60,12 @@ public class LigneAsserts {
                     .isEqualTo(expected.getDistanceKm())
             )
             .satisfies(a -> assertThat(a.getDureeMoyenne()).as("check dureeMoyenne").isEqualTo(expected.getDureeMoyenne()))
-            .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()));
+            .satisfies(a -> assertThat(a.getFrequence()).as("check frequence").isEqualTo(expected.getFrequence()))
+            .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()))
+            .satisfies(a -> assertThat(a.getJoursFeries()).as("check joursFeries").isEqualTo(expected.getJoursFeries()))
+            .satisfies(a -> assertThat(a.getDateDebut()).as("check dateDebut").isEqualTo(expected.getDateDebut()))
+            .satisfies(a -> assertThat(a.getDateFin()).as("check dateFin").isEqualTo(expected.getDateFin()))
+            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
     }
 
     /**

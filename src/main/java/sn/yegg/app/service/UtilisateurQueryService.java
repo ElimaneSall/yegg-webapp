@@ -74,14 +74,30 @@ public class UtilisateurQueryService extends QueryService<Utilisateur> {
             specification = Specification.allOf(
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null,
                 buildRangeSpecification(criteria.getId(), Utilisateur_.id),
-                buildStringSpecification(criteria.getMatricule(), Utilisateur_.matricule),
+                buildStringSpecification(criteria.getPrenom(), Utilisateur_.prenom),
+                buildStringSpecification(criteria.getNom(), Utilisateur_.nom),
+                buildStringSpecification(criteria.getEmail(), Utilisateur_.email),
                 buildStringSpecification(criteria.getTelephone(), Utilisateur_.telephone),
+                buildStringSpecification(criteria.getMotDePasse(), Utilisateur_.motDePasse),
+                buildSpecification(criteria.getRole(), Utilisateur_.role),
+                buildStringSpecification(criteria.getMatricule(), Utilisateur_.matricule),
                 buildStringSpecification(criteria.getFcmToken(), Utilisateur_.fcmToken),
                 buildSpecification(criteria.getNotificationsPush(), Utilisateur_.notificationsPush),
+                buildSpecification(criteria.getNotificationsSms(), Utilisateur_.notificationsSms),
                 buildStringSpecification(criteria.getLangue(), Utilisateur_.langue),
+                buildRangeSpecification(criteria.getDateCreation(), Utilisateur_.dateCreation),
+                buildRangeSpecification(criteria.getDerniereConnexion(), Utilisateur_.derniereConnexion),
+                buildSpecification(criteria.getActif(), Utilisateur_.actif),
                 buildRangeSpecification(criteria.getDateEmbauche(), Utilisateur_.dateEmbauche),
                 buildStringSpecification(criteria.getNumeroPermis(), Utilisateur_.numeroPermis),
-                buildSpecification(criteria.getBusId(), root -> root.join(Utilisateur_.bus, JoinType.LEFT).get(Bus_.id))
+                buildSpecification(criteria.getFavorisId(), root -> root.join(Utilisateur_.favorises, JoinType.LEFT).get(Favori_.id)),
+                buildSpecification(criteria.getNotificationsId(), root ->
+                    root.join(Utilisateur_.notifications, JoinType.LEFT).get(Notification_.id)
+                ),
+                buildSpecification(criteria.getFeedbacksId(), root -> root.join(Utilisateur_.feedbacks, JoinType.LEFT).get(Feedback_.id)),
+                buildSpecification(criteria.getHistoriqueAlertesId(), root ->
+                    root.join(Utilisateur_.historiqueAlertes, JoinType.LEFT).get(HistoriqueAlerte_.id)
+                )
             );
         }
         return specification;

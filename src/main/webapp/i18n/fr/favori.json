@@ -22,8 +22,8 @@
       "cibleId": "Cible Id",
       "nomPersonnalise": "Nom Personnalise",
       "ordre": "Ordre",
-      "alerteActive": "Alerte Active",
-      "alerteSeuil": "Alerte Seuil",
+      "dateAjout": "Date Ajout",
+      "dernierAcces": "Dernier Acces",
       "utilisateur": "Utilisateur"
     }
   }

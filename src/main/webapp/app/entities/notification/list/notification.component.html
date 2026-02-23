@@ -84,6 +84,20 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="dateCreation">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.notification.dateCreation">Date Creation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateEnvoi">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.notification.dateEnvoi">Date Envoi</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="lu">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.notification.lu">Lu</span>
@@ -113,12 +127,29 @@
               <td>
                 <a [routerLink]="['/notification', notification.id, 'view']">{{ notification.id }}</a>
               </td>
-              <td>{{ notification.type }}</td>
+              <td [jhiTranslate]="'yeggApp.NotificationType.' + (notification.type ?? 'null')">
+                {{
+                  {
+                    null: '',
+                    BUS_APPROACHING: 'BUS_APPROACHING',
+                    DELAY: 'DELAY',
+                    INCIDENT: 'INCIDENT',
+                    BREAKDOWN: 'BREAKDOWN',
+                    INFORMATION: 'INFORMATION',
+                  }[notification.type ?? 'null']
+                }}
+              </td>
               <td>{{ notification.titre }}</td>
               <td>{{ notification.message }}</td>
               <td>{{ notification.donnees }}</td>
-              <td>{{ notification.priorite }}</td>
-              <td>{{ notification.statut }}</td>
+              <td [jhiTranslate]="'yeggApp.Priority.' + (notification.priorite ?? 'null')">
+                {{ { null: '', HIGH: 'HIGH', MEDIUM: 'MEDIUM', LOW: 'LOW' }[notification.priorite ?? 'null'] }}
+              </td>
+              <td [jhiTranslate]="'yeggApp.NotificationStatus.' + (notification.statut ?? 'null')">
+                {{ { null: '', SENT: 'SENT', FAILED: 'FAILED', PENDING: 'PENDING' }[notification.statut ?? 'null'] }}
+              </td>
+              <td>{{ notification.dateCreation | formatMediumDatetime }}</td>
+              <td>{{ notification.dateEnvoi | formatMediumDatetime }}</td>
               <td>{{ notification.lu }}</td>
               <td>{{ notification.dateLecture | formatMediumDatetime }}</td>
               <td>

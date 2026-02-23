@@ -2,13 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ILigne } from '../ligne.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../ligne.test-samples';
 
-import { LigneService } from './ligne.service';
+import { LigneService, RestLigne } from './ligne.service';
 
-const requireRestSample: ILigne = {
+const requireRestSample: RestLigne = {
   ...sampleWithRequiredData,
+  dateDebut: sampleWithRequiredData.dateDebut?.format(DATE_FORMAT),
+  dateFin: sampleWithRequiredData.dateFin?.format(DATE_FORMAT),
 };
 
 describe('Ligne Service', () => {

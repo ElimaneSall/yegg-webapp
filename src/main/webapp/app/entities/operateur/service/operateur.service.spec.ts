@@ -5,10 +5,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { IOperateur } from '../operateur.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../operateur.test-samples';
 
-import { OperateurService } from './operateur.service';
+import { OperateurService, RestOperateur } from './operateur.service';
 
-const requireRestSample: IOperateur = {
+const requireRestSample: RestOperateur = {
   ...sampleWithRequiredData,
+  dateCreation: sampleWithRequiredData.dateCreation?.toJSON(),
 };
 
 describe('Operateur Service', () => {

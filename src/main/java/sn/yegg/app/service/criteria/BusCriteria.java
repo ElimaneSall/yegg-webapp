@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
+import sn.yegg.app.domain.enumeration.BusStatus;
+import sn.yegg.app.domain.enumeration.EnergyType;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 
@@ -20,6 +22,40 @@ import tech.jhipster.service.filter.*;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class BusCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering EnergyType
+     */
+    public static class EnergyTypeFilter extends Filter<EnergyType> {
+
+        public EnergyTypeFilter() {}
+
+        public EnergyTypeFilter(EnergyTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public EnergyTypeFilter copy() {
+            return new EnergyTypeFilter(this);
+        }
+    }
+
+    /**
+     * Class for filtering BusStatus
+     */
+    public static class BusStatusFilter extends Filter<BusStatus> {
+
+        public BusStatusFilter() {}
+
+        public BusStatusFilter(BusStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public BusStatusFilter copy() {
+            return new BusStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -30,9 +66,17 @@ public class BusCriteria implements Serializable, Criteria {
 
     private StringFilter modele;
 
+    private StringFilter constructeur;
+
     private IntegerFilter capacite;
 
+    private IntegerFilter capaciteDebout;
+
     private IntegerFilter anneeFabrication;
+
+    private EnergyTypeFilter energie;
+
+    private IntegerFilter autonomieKm;
 
     private StringFilter gpsDeviceId;
 
@@ -52,11 +96,17 @@ public class BusCriteria implements Serializable, Criteria {
 
     private InstantFilter positionUpdatedAt;
 
-    private StringFilter statut;
+    private BusStatusFilter statut;
 
-    private LongFilter utilisateurId;
+    private LocalDateFilter dateMiseEnService;
+
+    private LocalDateFilter dateDernierEntretien;
+
+    private IntegerFilter prochainEntretienKm;
 
     private LongFilter ligneId;
+
+    private LongFilter chauffeurId;
 
     private Boolean distinct;
 
@@ -67,8 +117,12 @@ public class BusCriteria implements Serializable, Criteria {
         this.numeroVehicule = other.optionalNumeroVehicule().map(StringFilter::copy).orElse(null);
         this.plaque = other.optionalPlaque().map(StringFilter::copy).orElse(null);
         this.modele = other.optionalModele().map(StringFilter::copy).orElse(null);
+        this.constructeur = other.optionalConstructeur().map(StringFilter::copy).orElse(null);
         this.capacite = other.optionalCapacite().map(IntegerFilter::copy).orElse(null);
+        this.capaciteDebout = other.optionalCapaciteDebout().map(IntegerFilter::copy).orElse(null);
         this.anneeFabrication = other.optionalAnneeFabrication().map(IntegerFilter::copy).orElse(null);
+        this.energie = other.optionalEnergie().map(EnergyTypeFilter::copy).orElse(null);
+        this.autonomieKm = other.optionalAutonomieKm().map(IntegerFilter::copy).orElse(null);
         this.gpsDeviceId = other.optionalGpsDeviceId().map(StringFilter::copy).orElse(null);
         this.gpsStatus = other.optionalGpsStatus().map(StringFilter::copy).orElse(null);
         this.gpsLastPing = other.optionalGpsLastPing().map(InstantFilter::copy).orElse(null);
@@ -78,9 +132,12 @@ public class BusCriteria implements Serializable, Criteria {
         this.currentVitesse = other.optionalCurrentVitesse().map(BigDecimalFilter::copy).orElse(null);
         this.currentCap = other.optionalCurrentCap().map(IntegerFilter::copy).orElse(null);
         this.positionUpdatedAt = other.optionalPositionUpdatedAt().map(InstantFilter::copy).orElse(null);
-        this.statut = other.optionalStatut().map(StringFilter::copy).orElse(null);
-        this.utilisateurId = other.optionalUtilisateurId().map(LongFilter::copy).orElse(null);
+        this.statut = other.optionalStatut().map(BusStatusFilter::copy).orElse(null);
+        this.dateMiseEnService = other.optionalDateMiseEnService().map(LocalDateFilter::copy).orElse(null);
+        this.dateDernierEntretien = other.optionalDateDernierEntretien().map(LocalDateFilter::copy).orElse(null);
+        this.prochainEntretienKm = other.optionalProchainEntretienKm().map(IntegerFilter::copy).orElse(null);
         this.ligneId = other.optionalLigneId().map(LongFilter::copy).orElse(null);
+        this.chauffeurId = other.optionalChauffeurId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -165,6 +222,25 @@ public class BusCriteria implements Serializable, Criteria {
         this.modele = modele;
     }
 
+    public StringFilter getConstructeur() {
+        return constructeur;
+    }
+
+    public Optional<StringFilter> optionalConstructeur() {
+        return Optional.ofNullable(constructeur);
+    }
+
+    public StringFilter constructeur() {
+        if (constructeur == null) {
+            setConstructeur(new StringFilter());
+        }
+        return constructeur;
+    }
+
+    public void setConstructeur(StringFilter constructeur) {
+        this.constructeur = constructeur;
+    }
+
     public IntegerFilter getCapacite() {
         return capacite;
     }
@@ -184,6 +260,25 @@ public class BusCriteria implements Serializable, Criteria {
         this.capacite = capacite;
     }
 
+    public IntegerFilter getCapaciteDebout() {
+        return capaciteDebout;
+    }
+
+    public Optional<IntegerFilter> optionalCapaciteDebout() {
+        return Optional.ofNullable(capaciteDebout);
+    }
+
+    public IntegerFilter capaciteDebout() {
+        if (capaciteDebout == null) {
+            setCapaciteDebout(new IntegerFilter());
+        }
+        return capaciteDebout;
+    }
+
+    public void setCapaciteDebout(IntegerFilter capaciteDebout) {
+        this.capaciteDebout = capaciteDebout;
+    }
+
     public IntegerFilter getAnneeFabrication() {
         return anneeFabrication;
     }
@@ -201,6 +296,44 @@ public class BusCriteria implements Serializable, Criteria {
 
     public void setAnneeFabrication(IntegerFilter anneeFabrication) {
         this.anneeFabrication = anneeFabrication;
+    }
+
+    public EnergyTypeFilter getEnergie() {
+        return energie;
+    }
+
+    public Optional<EnergyTypeFilter> optionalEnergie() {
+        return Optional.ofNullable(energie);
+    }
+
+    public EnergyTypeFilter energie() {
+        if (energie == null) {
+            setEnergie(new EnergyTypeFilter());
+        }
+        return energie;
+    }
+
+    public void setEnergie(EnergyTypeFilter energie) {
+        this.energie = energie;
+    }
+
+    public IntegerFilter getAutonomieKm() {
+        return autonomieKm;
+    }
+
+    public Optional<IntegerFilter> optionalAutonomieKm() {
+        return Optional.ofNullable(autonomieKm);
+    }
+
+    public IntegerFilter autonomieKm() {
+        if (autonomieKm == null) {
+            setAutonomieKm(new IntegerFilter());
+        }
+        return autonomieKm;
+    }
+
+    public void setAutonomieKm(IntegerFilter autonomieKm) {
+        this.autonomieKm = autonomieKm;
     }
 
     public StringFilter getGpsDeviceId() {
@@ -374,42 +507,80 @@ public class BusCriteria implements Serializable, Criteria {
         this.positionUpdatedAt = positionUpdatedAt;
     }
 
-    public StringFilter getStatut() {
+    public BusStatusFilter getStatut() {
         return statut;
     }
 
-    public Optional<StringFilter> optionalStatut() {
+    public Optional<BusStatusFilter> optionalStatut() {
         return Optional.ofNullable(statut);
     }
 
-    public StringFilter statut() {
+    public BusStatusFilter statut() {
         if (statut == null) {
-            setStatut(new StringFilter());
+            setStatut(new BusStatusFilter());
         }
         return statut;
     }
 
-    public void setStatut(StringFilter statut) {
+    public void setStatut(BusStatusFilter statut) {
         this.statut = statut;
     }
 
-    public LongFilter getUtilisateurId() {
-        return utilisateurId;
+    public LocalDateFilter getDateMiseEnService() {
+        return dateMiseEnService;
     }
 
-    public Optional<LongFilter> optionalUtilisateurId() {
-        return Optional.ofNullable(utilisateurId);
+    public Optional<LocalDateFilter> optionalDateMiseEnService() {
+        return Optional.ofNullable(dateMiseEnService);
     }
 
-    public LongFilter utilisateurId() {
-        if (utilisateurId == null) {
-            setUtilisateurId(new LongFilter());
+    public LocalDateFilter dateMiseEnService() {
+        if (dateMiseEnService == null) {
+            setDateMiseEnService(new LocalDateFilter());
         }
-        return utilisateurId;
+        return dateMiseEnService;
     }
 
-    public void setUtilisateurId(LongFilter utilisateurId) {
-        this.utilisateurId = utilisateurId;
+    public void setDateMiseEnService(LocalDateFilter dateMiseEnService) {
+        this.dateMiseEnService = dateMiseEnService;
+    }
+
+    public LocalDateFilter getDateDernierEntretien() {
+        return dateDernierEntretien;
+    }
+
+    public Optional<LocalDateFilter> optionalDateDernierEntretien() {
+        return Optional.ofNullable(dateDernierEntretien);
+    }
+
+    public LocalDateFilter dateDernierEntretien() {
+        if (dateDernierEntretien == null) {
+            setDateDernierEntretien(new LocalDateFilter());
+        }
+        return dateDernierEntretien;
+    }
+
+    public void setDateDernierEntretien(LocalDateFilter dateDernierEntretien) {
+        this.dateDernierEntretien = dateDernierEntretien;
+    }
+
+    public IntegerFilter getProchainEntretienKm() {
+        return prochainEntretienKm;
+    }
+
+    public Optional<IntegerFilter> optionalProchainEntretienKm() {
+        return Optional.ofNullable(prochainEntretienKm);
+    }
+
+    public IntegerFilter prochainEntretienKm() {
+        if (prochainEntretienKm == null) {
+            setProchainEntretienKm(new IntegerFilter());
+        }
+        return prochainEntretienKm;
+    }
+
+    public void setProchainEntretienKm(IntegerFilter prochainEntretienKm) {
+        this.prochainEntretienKm = prochainEntretienKm;
     }
 
     public LongFilter getLigneId() {
@@ -429,6 +600,25 @@ public class BusCriteria implements Serializable, Criteria {
 
     public void setLigneId(LongFilter ligneId) {
         this.ligneId = ligneId;
+    }
+
+    public LongFilter getChauffeurId() {
+        return chauffeurId;
+    }
+
+    public Optional<LongFilter> optionalChauffeurId() {
+        return Optional.ofNullable(chauffeurId);
+    }
+
+    public LongFilter chauffeurId() {
+        if (chauffeurId == null) {
+            setChauffeurId(new LongFilter());
+        }
+        return chauffeurId;
+    }
+
+    public void setChauffeurId(LongFilter chauffeurId) {
+        this.chauffeurId = chauffeurId;
     }
 
     public Boolean getDistinct() {
@@ -464,8 +654,12 @@ public class BusCriteria implements Serializable, Criteria {
             Objects.equals(numeroVehicule, that.numeroVehicule) &&
             Objects.equals(plaque, that.plaque) &&
             Objects.equals(modele, that.modele) &&
+            Objects.equals(constructeur, that.constructeur) &&
             Objects.equals(capacite, that.capacite) &&
+            Objects.equals(capaciteDebout, that.capaciteDebout) &&
             Objects.equals(anneeFabrication, that.anneeFabrication) &&
+            Objects.equals(energie, that.energie) &&
+            Objects.equals(autonomieKm, that.autonomieKm) &&
             Objects.equals(gpsDeviceId, that.gpsDeviceId) &&
             Objects.equals(gpsStatus, that.gpsStatus) &&
             Objects.equals(gpsLastPing, that.gpsLastPing) &&
@@ -476,8 +670,11 @@ public class BusCriteria implements Serializable, Criteria {
             Objects.equals(currentCap, that.currentCap) &&
             Objects.equals(positionUpdatedAt, that.positionUpdatedAt) &&
             Objects.equals(statut, that.statut) &&
-            Objects.equals(utilisateurId, that.utilisateurId) &&
+            Objects.equals(dateMiseEnService, that.dateMiseEnService) &&
+            Objects.equals(dateDernierEntretien, that.dateDernierEntretien) &&
+            Objects.equals(prochainEntretienKm, that.prochainEntretienKm) &&
             Objects.equals(ligneId, that.ligneId) &&
+            Objects.equals(chauffeurId, that.chauffeurId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -489,8 +686,12 @@ public class BusCriteria implements Serializable, Criteria {
             numeroVehicule,
             plaque,
             modele,
+            constructeur,
             capacite,
+            capaciteDebout,
             anneeFabrication,
+            energie,
+            autonomieKm,
             gpsDeviceId,
             gpsStatus,
             gpsLastPing,
@@ -501,8 +702,11 @@ public class BusCriteria implements Serializable, Criteria {
             currentCap,
             positionUpdatedAt,
             statut,
-            utilisateurId,
+            dateMiseEnService,
+            dateDernierEntretien,
+            prochainEntretienKm,
             ligneId,
+            chauffeurId,
             distinct
         );
     }
@@ -515,8 +719,12 @@ public class BusCriteria implements Serializable, Criteria {
             optionalNumeroVehicule().map(f -> "numeroVehicule=" + f + ", ").orElse("") +
             optionalPlaque().map(f -> "plaque=" + f + ", ").orElse("") +
             optionalModele().map(f -> "modele=" + f + ", ").orElse("") +
+            optionalConstructeur().map(f -> "constructeur=" + f + ", ").orElse("") +
             optionalCapacite().map(f -> "capacite=" + f + ", ").orElse("") +
+            optionalCapaciteDebout().map(f -> "capaciteDebout=" + f + ", ").orElse("") +
             optionalAnneeFabrication().map(f -> "anneeFabrication=" + f + ", ").orElse("") +
+            optionalEnergie().map(f -> "energie=" + f + ", ").orElse("") +
+            optionalAutonomieKm().map(f -> "autonomieKm=" + f + ", ").orElse("") +
             optionalGpsDeviceId().map(f -> "gpsDeviceId=" + f + ", ").orElse("") +
             optionalGpsStatus().map(f -> "gpsStatus=" + f + ", ").orElse("") +
             optionalGpsLastPing().map(f -> "gpsLastPing=" + f + ", ").orElse("") +
@@ -527,8 +735,11 @@ public class BusCriteria implements Serializable, Criteria {
             optionalCurrentCap().map(f -> "currentCap=" + f + ", ").orElse("") +
             optionalPositionUpdatedAt().map(f -> "positionUpdatedAt=" + f + ", ").orElse("") +
             optionalStatut().map(f -> "statut=" + f + ", ").orElse("") +
-            optionalUtilisateurId().map(f -> "utilisateurId=" + f + ", ").orElse("") +
+            optionalDateMiseEnService().map(f -> "dateMiseEnService=" + f + ", ").orElse("") +
+            optionalDateDernierEntretien().map(f -> "dateDernierEntretien=" + f + ", ").orElse("") +
+            optionalProchainEntretienKm().map(f -> "prochainEntretienKm=" + f + ", ").orElse("") +
             optionalLigneId().map(f -> "ligneId=" + f + ", ").orElse("") +
+            optionalChauffeurId().map(f -> "chauffeurId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

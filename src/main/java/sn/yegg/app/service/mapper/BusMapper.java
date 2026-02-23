@@ -13,17 +13,17 @@ import sn.yegg.app.service.dto.UtilisateurDTO;
  */
 @Mapper(componentModel = "spring")
 public interface BusMapper extends EntityMapper<BusDTO, Bus> {
-    @Mapping(target = "utilisateur", source = "utilisateur", qualifiedByName = "utilisateurId")
     @Mapping(target = "ligne", source = "ligne", qualifiedByName = "ligneId")
+    @Mapping(target = "chauffeur", source = "chauffeur", qualifiedByName = "utilisateurId")
     BusDTO toDto(Bus s);
-
-    @Named("utilisateurId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UtilisateurDTO toDtoUtilisateurId(Utilisateur utilisateur);
 
     @Named("ligneId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     LigneDTO toDtoLigneId(Ligne ligne);
+
+    @Named("utilisateurId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    UtilisateurDTO toDtoUtilisateurId(Utilisateur utilisateur);
 }

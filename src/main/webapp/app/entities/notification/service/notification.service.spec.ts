@@ -9,6 +9,8 @@ import { NotificationService, RestNotification } from './notification.service';
 
 const requireRestSample: RestNotification = {
   ...sampleWithRequiredData,
+  dateCreation: sampleWithRequiredData.dateCreation?.toJSON(),
+  dateEnvoi: sampleWithRequiredData.dateEnvoi?.toJSON(),
   dateLecture: sampleWithRequiredData.dateLecture?.toJSON(),
 };
 

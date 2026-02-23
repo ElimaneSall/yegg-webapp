@@ -1,7 +1,11 @@
 package sn.yegg.app.service;
 
 import java.util.Optional;
+import sn.yegg.app.domain.Arret;
+import sn.yegg.app.domain.Bus;
+import sn.yegg.app.domain.Utilisateur;
 import sn.yegg.app.service.dto.NotificationDTO;
+import sn.yegg.app.service.impl.AlerteApprocheServiceImpl;
 
 /**
  * Service Interface for managing {@link sn.yegg.app.domain.Notification}.
@@ -45,4 +49,12 @@ public interface NotificationService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    void sendAlertNotification(
+        Utilisateur utilisateur,
+        Bus bus,
+        Arret arretCible,
+        double distance,
+        AlerteApprocheServiceImpl.ThresholdCheckResult thresholdResult
+    );
 }

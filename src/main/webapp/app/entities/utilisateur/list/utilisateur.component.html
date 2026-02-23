@@ -42,9 +42,23 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="matricule">
+            <th scope="col" jhiSortBy="prenom">
               <div class="d-flex">
-                <span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span>
+                <span jhiTranslate="yeggApp.utilisateur.prenom">Prenom</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nom">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.nom">Nom</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.email">Email</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -52,6 +66,27 @@
             <th scope="col" jhiSortBy="telephone">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.utilisateur.telephone">Telephone</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="motDePasse">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.motDePasse">Mot De Passe</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="role">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.role">Role</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="matricule">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -70,9 +105,44 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="notificationsSms">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.notificationsSms">Notifications Sms</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="langue">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.utilisateur.langue">Langue</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="photo">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.photo">Photo</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateCreation">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.dateCreation">Date Creation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="derniereConnexion">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.derniereConnexion">Derniere Connexion</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="actif">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.utilisateur.actif">Actif</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -100,15 +170,91 @@
               <td>
                 <a [routerLink]="['/utilisateur', utilisateur.id, 'view']">{{ utilisateur.id }}</a>
               </td>
-              <td>{{ utilisateur.matricule }}</td>
+              <td>{{ utilisateur.prenom }}</td>
+              <td>{{ utilisateur.nom }}</td>
+              <td>{{ utilisateur.email }}</td>
               <td>{{ utilisateur.telephone }}</td>
+              <td>{{ utilisateur.motDePasse }}</td>
+              <td [jhiTranslate]="'yeggApp.UserRole.' + (utilisateur.role ?? 'null')">
+                {{
+                  { null: '', PASSENGER: 'PASSENGER', TOURIST: 'TOURIST', DRIVER: 'DRIVER', OPERATOR: 'OPERATOR', ADMIN: 'ADMIN' }[
+                    utilisateur.role ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ utilisateur.matricule }}</td>
               <td>{{ utilisateur.fcmToken }}</td>
               <td>{{ utilisateur.notificationsPush }}</td>
+              <td>{{ utilisateur.notificationsSms }}</td>
               <td>{{ utilisateur.langue }}</td>
+              <td>{{ utilisateur.photo }}</td>
+              <td>{{ utilisateur.dateCreation | formatMediumDatetime }}</td>
+              <td>{{ utilisateur.derniereConnexion | formatMediumDatetime }}</td>
+              <td>{{ utilisateur.actif }}</td>
               <td>{{ utilisateur.dateEmbauche | formatMediumDate }}</td>
               <td>{{ utilisateur.numeroPermis }}</td>
               <td class="text-end">
                 <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/favori']"
+                    [queryParams]="{ 'filter[utilisateurId.in]': utilisateur.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.utilisateur.favoris' | translate) }"
+                      >Show Favoris</span
+                    >
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/notification']"
+                    [queryParams]="{ 'filter[utilisateurId.in]': utilisateur.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.utilisateur.notifications' | translate) }"
+                      >Show Notifications</span
+                    >
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/feedback']"
+                    [queryParams]="{ 'filter[utilisateurId.in]': utilisateur.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.utilisateur.feedbacks' | translate) }"
+                      >Show Feedbacks</span
+                    >
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/historique-alerte']"
+                    [queryParams]="{ 'filter[utilisateurId.in]': utilisateur.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('yeggApp.utilisateur.historiqueAlertes' | translate) }"
+                      >Show Historique Alertes</span
+                    >
+                  </button>
                   <a [routerLink]="['/utilisateur', utilisateur.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>

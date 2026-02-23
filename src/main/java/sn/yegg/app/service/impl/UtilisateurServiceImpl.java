@@ -1,10 +1,6 @@
 package sn.yegg.app.service.impl;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -62,19 +58,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             })
             .map(utilisateurRepository::save)
             .map(utilisateurMapper::toDto);
-    }
-
-    /**
-     *  Get all the utilisateurs where Bus is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<UtilisateurDTO> findAllWhereBusIsNull() {
-        LOG.debug("Request to get all utilisateurs where Bus is null");
-        return StreamSupport.stream(utilisateurRepository.findAll().spliterator(), false)
-            .filter(utilisateur -> utilisateur.getBus() == null)
-            .map(utilisateurMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

@@ -63,6 +63,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="constructeur">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.constructeur">Constructeur</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="capacite">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.bus.capacite">Capacite</span>
@@ -70,9 +77,30 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="capaciteDebout">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.capaciteDebout">Capacite Debout</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="anneeFabrication">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="energie">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.energie">Energie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="autonomieKm">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.autonomieKm">Autonomie Km</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -147,15 +175,36 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="utilisateur.id">
+            <th scope="col" jhiSortBy="dateMiseEnService">
               <div class="d-flex">
-                <span jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</span>
+                <span jhiTranslate="yeggApp.bus.dateMiseEnService">Date Mise En Service</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateDernierEntretien">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.dateDernierEntretien">Date Dernier Entretien</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="prochainEntretienKm">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.prochainEntretienKm">Prochain Entretien Km</span>
+
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="ligne.id">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.bus.ligne">Ligne</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="chauffeur.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.bus.chauffeur">Chauffeur</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -171,8 +220,14 @@
               <td>{{ bus.numeroVehicule }}</td>
               <td>{{ bus.plaque }}</td>
               <td>{{ bus.modele }}</td>
+              <td>{{ bus.constructeur }}</td>
               <td>{{ bus.capacite }}</td>
+              <td>{{ bus.capaciteDebout }}</td>
               <td>{{ bus.anneeFabrication }}</td>
+              <td [jhiTranslate]="'yeggApp.EnergyType.' + (bus.energie ?? 'null')">
+                {{ { null: '', DIESEL: 'DIESEL', ELECTRIC: 'ELECTRIC', HYBRID: 'HYBRID', CNG: 'CNG' }[bus.energie ?? 'null'] }}
+              </td>
+              <td>{{ bus.autonomieKm }}</td>
               <td>{{ bus.gpsDeviceId }}</td>
               <td>{{ bus.gpsStatus }}</td>
               <td>{{ bus.gpsLastPing | formatMediumDatetime }}</td>
@@ -182,18 +237,32 @@
               <td>{{ bus.currentVitesse }}</td>
               <td>{{ bus.currentCap }}</td>
               <td>{{ bus.positionUpdatedAt | formatMediumDatetime }}</td>
-              <td>{{ bus.statut }}</td>
-              <td>
-                @if (bus.utilisateur) {
-                  <div>
-                    <a [routerLink]="['/utilisateur', bus.utilisateur.id, 'view']">{{ bus.utilisateur.id }}</a>
-                  </div>
-                }
+              <td [jhiTranslate]="'yeggApp.BusStatus.' + (bus.statut ?? 'null')">
+                {{
+                  {
+                    null: '',
+                    IN_SERVICE: 'IN_SERVICE',
+                    OUT_OF_SERVICE: 'OUT_OF_SERVICE',
+                    BROKEN_DOWN: 'BROKEN_DOWN',
+                    UNDER_MAINTENANCE: 'UNDER_MAINTENANCE',
+                    ON_BREAK: 'ON_BREAK',
+                  }[bus.statut ?? 'null']
+                }}
               </td>
+              <td>{{ bus.dateMiseEnService | formatMediumDate }}</td>
+              <td>{{ bus.dateDernierEntretien | formatMediumDate }}</td>
+              <td>{{ bus.prochainEntretienKm }}</td>
               <td>
                 @if (bus.ligne) {
                   <div>
                     <a [routerLink]="['/ligne', bus.ligne.id, 'view']">{{ bus.ligne.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (bus.chauffeur) {
+                  <div>
+                    <a [routerLink]="['/utilisateur', bus.chauffeur.id, 'view']">{{ bus.chauffeur.id }}</a>
                   </div>
                 }
               </td>

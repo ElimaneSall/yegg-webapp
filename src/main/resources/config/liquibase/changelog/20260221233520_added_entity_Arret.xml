@@ -26,13 +26,31 @@
             <column name="longitude" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
+            <column name="altitude" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="adresse" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ville" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="code_postal" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="zone_tarifaire" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="equipements" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="photo" type="${blobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="photo_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="accessible_pmr" type="boolean">
                 <constraints nullable="true" />
             </column>
             <column name="actif" type="boolean">
@@ -63,9 +81,15 @@
             <column name="code" type="string"/>
             <column name="latitude" type="numeric"/>
             <column name="longitude" type="numeric"/>
+            <column name="altitude" type="numeric"/>
             <column name="adresse" type="string"/>
+            <column name="ville" type="string"/>
+            <column name="code_postal" type="string"/>
             <column name="zone_tarifaire" type="string"/>
             <column name="equipements" type="clob"/>
+            <column name="photo" type="blob"/>
+            <column name="photo_content_type" type="string"/>
+            <column name="accessible_pmr" type="boolean"/>
             <column name="actif" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

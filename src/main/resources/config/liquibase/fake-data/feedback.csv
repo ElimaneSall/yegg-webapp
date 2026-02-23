@@ -1,0 +1,11 @@
+id;note;commentaire;type_objet;objet_id;date_creation;anonyme
+1;5;../fake-data/blob/hipster.txt;avant que prestataire de services;12114;2026-02-22T21:00:30;false
+2;2;../fake-data/blob/hipster.txt;quand;22241;2026-02-22T13:09:12;true
+3;1;../fake-data/blob/hipster.txt;de crainte que détailler;12354;2026-02-22T08:25:02;true
+4;5;../fake-data/blob/hipster.txt;où;26884;2026-02-22T06:14:58;false
+5;4;../fake-data/blob/hipster.txt;adversaire deçà police;30619;2026-02-22T20:25:55;false
+6;5;../fake-data/blob/hipster.txt;au prix de tendre peut-être;19011;2026-02-22T18:06:31;true
+7;1;../fake-data/blob/hipster.txt;vorace actionnaire commissionnaire;22624;2026-02-23T00:17:47;true
+8;5;../fake-data/blob/hipster.txt;vite;4033;2026-02-22T11:12:02;false
+9;5;../fake-data/blob/hipster.txt;aggraver;3800;2026-02-22T20:58:32;true
+10;3;../fake-data/blob/hipster.txt;miam bè en face de;16359;2026-02-22T00:39:33;true

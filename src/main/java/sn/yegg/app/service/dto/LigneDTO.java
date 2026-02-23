@@ -1,9 +1,12 @@
 package sn.yegg.app.service.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.LineStatus;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Ligne} entity.
@@ -23,15 +26,33 @@ public class LigneDTO implements Serializable {
     @NotNull
     private String direction;
 
-    @Pattern(regexp = "^#[0-9A-Fa-f]{6}$")
+    @Lob
+    private String description;
+
     private String couleur;
 
+    @DecimalMin(value = "0")
     private BigDecimal distanceKm;
 
+    @Min(value = 0)
     private Integer dureeMoyenne;
 
+    @Min(value = 1)
+    @Max(value = 60)
+    private Integer frequence;
+
     @NotNull
-    private String statut;
+    private LineStatus statut;
+
+    @Lob
+    private String joursFeries;
+
+    private LocalDate dateDebut;
+
+    private LocalDate dateFin;
+
+    @NotNull
+    private Boolean actif;
 
     private OperateurDTO operateur;
 
@@ -67,6 +88,14 @@ public class LigneDTO implements Serializable {
         this.direction = direction;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCouleur() {
         return couleur;
     }
@@ -91,12 +120,52 @@ public class LigneDTO implements Serializable {
         this.dureeMoyenne = dureeMoyenne;
     }
 
-    public String getStatut() {
+    public Integer getFrequence() {
+        return frequence;
+    }
+
+    public void setFrequence(Integer frequence) {
+        this.frequence = frequence;
+    }
+
+    public LineStatus getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(LineStatus statut) {
         this.statut = statut;
+    }
+
+    public String getJoursFeries() {
+        return joursFeries;
+    }
+
+    public void setJoursFeries(String joursFeries) {
+        this.joursFeries = joursFeries;
+    }
+
+    public LocalDate getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public LocalDate getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public Boolean getActif() {
+        return actif;
+    }
+
+    public void setActif(Boolean actif) {
+        this.actif = actif;
     }
 
     public OperateurDTO getOperateur() {
@@ -136,10 +205,16 @@ public class LigneDTO implements Serializable {
             ", numero='" + getNumero() + "'" +
             ", nom='" + getNom() + "'" +
             ", direction='" + getDirection() + "'" +
+            ", description='" + getDescription() + "'" +
             ", couleur='" + getCouleur() + "'" +
             ", distanceKm=" + getDistanceKm() +
             ", dureeMoyenne=" + getDureeMoyenne() +
+            ", frequence=" + getFrequence() +
             ", statut='" + getStatut() + "'" +
+            ", joursFeries='" + getJoursFeries() + "'" +
+            ", dateDebut='" + getDateDebut() + "'" +
+            ", dateFin='" + getDateFin() + "'" +
+            ", actif='" + getActif() + "'" +
             ", operateur=" + getOperateur() +
             "}";
     }

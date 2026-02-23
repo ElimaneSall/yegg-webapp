@@ -70,9 +70,30 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="altitude">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.arret.altitude">Altitude</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="adresse">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.arret.adresse">Adresse</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ville">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.arret.ville">Ville</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="codePostal">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.arret.codePostal">Code Postal</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -87,6 +108,20 @@
             <th scope="col" jhiSortBy="equipements">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.arret.equipements">Equipements</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="photo">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.arret.photo">Photo</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="accessiblePMR">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.arret.accessiblePMR">Accessible PMR</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -111,9 +146,14 @@
               <td>{{ arret.code }}</td>
               <td>{{ arret.latitude }}</td>
               <td>{{ arret.longitude }}</td>
+              <td>{{ arret.altitude }}</td>
               <td>{{ arret.adresse }}</td>
+              <td>{{ arret.ville }}</td>
+              <td>{{ arret.codePostal }}</td>
               <td>{{ arret.zoneTarifaire }}</td>
               <td>{{ arret.equipements }}</td>
+              <td>{{ arret.photo }}</td>
+              <td>{{ arret.accessiblePMR }}</td>
               <td>{{ arret.actif }}</td>
               <td class="text-end">
                 <div class="btn-group">

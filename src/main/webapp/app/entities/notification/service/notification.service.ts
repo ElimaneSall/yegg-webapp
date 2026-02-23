@@ -11,7 +11,9 @@ import { INotification, NewNotification } from '../notification.model';
 
 export type PartialUpdateNotification = Partial<INotification> & Pick<INotification, 'id'>;
 
-type RestOf<T extends INotification | NewNotification> = Omit<T, 'dateLecture'> & {
+type RestOf<T extends INotification | NewNotification> = Omit<T, 'dateCreation' | 'dateEnvoi' | 'dateLecture'> & {
+  dateCreation?: string | null;
+  dateEnvoi?: string | null;
   dateLecture?: string | null;
 };
 
@@ -102,6 +104,8 @@ export class NotificationService {
   protected convertDateFromClient<T extends INotification | NewNotification | PartialUpdateNotification>(notification: T): RestOf<T> {
     return {
       ...notification,
+      dateCreation: notification.dateCreation?.toJSON() ?? null,
+      dateEnvoi: notification.dateEnvoi?.toJSON() ?? null,
       dateLecture: notification.dateLecture?.toJSON() ?? null,
     };
   }
@@ -109,6 +113,8 @@ export class NotificationService {
   protected convertDateFromServer(restNotification: RestNotification): INotification {
     return {
       ...restNotification,
+      dateCreation: restNotification.dateCreation ? dayjs(restNotification.dateCreation) : undefined,
+      dateEnvoi: restNotification.dateEnvoi ? dayjs(restNotification.dateEnvoi) : undefined,
       dateLecture: restNotification.dateLecture ? dayjs(restNotification.dateLecture) : undefined,
     };
   }

@@ -79,8 +79,12 @@ class BusCriteriaTest {
         busCriteria.numeroVehicule();
         busCriteria.plaque();
         busCriteria.modele();
+        busCriteria.constructeur();
         busCriteria.capacite();
+        busCriteria.capaciteDebout();
         busCriteria.anneeFabrication();
+        busCriteria.energie();
+        busCriteria.autonomieKm();
         busCriteria.gpsDeviceId();
         busCriteria.gpsStatus();
         busCriteria.gpsLastPing();
@@ -91,8 +95,11 @@ class BusCriteriaTest {
         busCriteria.currentCap();
         busCriteria.positionUpdatedAt();
         busCriteria.statut();
-        busCriteria.utilisateurId();
+        busCriteria.dateMiseEnService();
+        busCriteria.dateDernierEntretien();
+        busCriteria.prochainEntretienKm();
         busCriteria.ligneId();
+        busCriteria.chauffeurId();
         busCriteria.distinct();
     }
 
@@ -103,8 +110,12 @@ class BusCriteriaTest {
                 condition.apply(criteria.getNumeroVehicule()) &&
                 condition.apply(criteria.getPlaque()) &&
                 condition.apply(criteria.getModele()) &&
+                condition.apply(criteria.getConstructeur()) &&
                 condition.apply(criteria.getCapacite()) &&
+                condition.apply(criteria.getCapaciteDebout()) &&
                 condition.apply(criteria.getAnneeFabrication()) &&
+                condition.apply(criteria.getEnergie()) &&
+                condition.apply(criteria.getAutonomieKm()) &&
                 condition.apply(criteria.getGpsDeviceId()) &&
                 condition.apply(criteria.getGpsStatus()) &&
                 condition.apply(criteria.getGpsLastPing()) &&
@@ -115,8 +126,11 @@ class BusCriteriaTest {
                 condition.apply(criteria.getCurrentCap()) &&
                 condition.apply(criteria.getPositionUpdatedAt()) &&
                 condition.apply(criteria.getStatut()) &&
-                condition.apply(criteria.getUtilisateurId()) &&
+                condition.apply(criteria.getDateMiseEnService()) &&
+                condition.apply(criteria.getDateDernierEntretien()) &&
+                condition.apply(criteria.getProchainEntretienKm()) &&
                 condition.apply(criteria.getLigneId()) &&
+                condition.apply(criteria.getChauffeurId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -129,8 +143,12 @@ class BusCriteriaTest {
                 condition.apply(criteria.getNumeroVehicule(), copy.getNumeroVehicule()) &&
                 condition.apply(criteria.getPlaque(), copy.getPlaque()) &&
                 condition.apply(criteria.getModele(), copy.getModele()) &&
+                condition.apply(criteria.getConstructeur(), copy.getConstructeur()) &&
                 condition.apply(criteria.getCapacite(), copy.getCapacite()) &&
+                condition.apply(criteria.getCapaciteDebout(), copy.getCapaciteDebout()) &&
                 condition.apply(criteria.getAnneeFabrication(), copy.getAnneeFabrication()) &&
+                condition.apply(criteria.getEnergie(), copy.getEnergie()) &&
+                condition.apply(criteria.getAutonomieKm(), copy.getAutonomieKm()) &&
                 condition.apply(criteria.getGpsDeviceId(), copy.getGpsDeviceId()) &&
                 condition.apply(criteria.getGpsStatus(), copy.getGpsStatus()) &&
                 condition.apply(criteria.getGpsLastPing(), copy.getGpsLastPing()) &&
@@ -141,8 +159,11 @@ class BusCriteriaTest {
                 condition.apply(criteria.getCurrentCap(), copy.getCurrentCap()) &&
                 condition.apply(criteria.getPositionUpdatedAt(), copy.getPositionUpdatedAt()) &&
                 condition.apply(criteria.getStatut(), copy.getStatut()) &&
-                condition.apply(criteria.getUtilisateurId(), copy.getUtilisateurId()) &&
+                condition.apply(criteria.getDateMiseEnService(), copy.getDateMiseEnService()) &&
+                condition.apply(criteria.getDateDernierEntretien(), copy.getDateDernierEntretien()) &&
+                condition.apply(criteria.getProchainEntretienKm(), copy.getProchainEntretienKm()) &&
                 condition.apply(criteria.getLigneId(), copy.getLigneId()) &&
+                condition.apply(criteria.getChauffeurId(), copy.getChauffeurId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

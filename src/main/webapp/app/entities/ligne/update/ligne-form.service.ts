@@ -14,17 +14,23 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type LigneFormGroupInput = ILigne | PartialWithRequiredKeyOf<NewLigne>;
 
-type LigneFormDefaults = Pick<NewLigne, 'id'>;
+type LigneFormDefaults = Pick<NewLigne, 'id' | 'actif'>;
 
 type LigneFormGroupContent = {
   id: FormControl<ILigne['id'] | NewLigne['id']>;
   numero: FormControl<ILigne['numero']>;
   nom: FormControl<ILigne['nom']>;
   direction: FormControl<ILigne['direction']>;
+  description: FormControl<ILigne['description']>;
   couleur: FormControl<ILigne['couleur']>;
   distanceKm: FormControl<ILigne['distanceKm']>;
   dureeMoyenne: FormControl<ILigne['dureeMoyenne']>;
+  frequence: FormControl<ILigne['frequence']>;
   statut: FormControl<ILigne['statut']>;
+  joursFeries: FormControl<ILigne['joursFeries']>;
+  dateDebut: FormControl<ILigne['dateDebut']>;
+  dateFin: FormControl<ILigne['dateFin']>;
+  actif: FormControl<ILigne['actif']>;
   operateur: FormControl<ILigne['operateur']>;
 };
 
@@ -54,12 +60,24 @@ export class LigneFormService {
       direction: new FormControl(ligneRawValue.direction, {
         validators: [Validators.required],
       }),
-      couleur: new FormControl(ligneRawValue.couleur, {
-        validators: [Validators.pattern('^#[0-9A-Fa-f]{6}$')],
+      description: new FormControl(ligneRawValue.description),
+      couleur: new FormControl(ligneRawValue.couleur),
+      distanceKm: new FormControl(ligneRawValue.distanceKm, {
+        validators: [Validators.min(0)],
       }),
-      distanceKm: new FormControl(ligneRawValue.distanceKm),
-      dureeMoyenne: new FormControl(ligneRawValue.dureeMoyenne),
+      dureeMoyenne: new FormControl(ligneRawValue.dureeMoyenne, {
+        validators: [Validators.min(0)],
+      }),
+      frequence: new FormControl(ligneRawValue.frequence, {
+        validators: [Validators.min(1), Validators.max(60)],
+      }),
       statut: new FormControl(ligneRawValue.statut, {
+        validators: [Validators.required],
+      }),
+      joursFeries: new FormControl(ligneRawValue.joursFeries),
+      dateDebut: new FormControl(ligneRawValue.dateDebut),
+      dateFin: new FormControl(ligneRawValue.dateFin),
+      actif: new FormControl(ligneRawValue.actif, {
         validators: [Validators.required],
       }),
       operateur: new FormControl(ligneRawValue.operateur),
@@ -83,6 +101,7 @@ export class LigneFormService {
   private getFormDefaults(): LigneFormDefaults {
     return {
       id: null,
+      actif: false,
     };
   }
 }

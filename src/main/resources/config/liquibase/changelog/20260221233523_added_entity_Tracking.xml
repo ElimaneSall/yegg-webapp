@@ -26,10 +26,19 @@
             <column name="cap" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="jhi_precision" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="timestamp" type="${datetimeType}">
                 <constraints nullable="false" />
             </column>
             <column name="source" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="evenement" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="commentaire" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="bus_id" type="bigint">
@@ -61,8 +70,11 @@
             <column name="longitude" type="numeric"/>
             <column name="vitesse" type="numeric"/>
             <column name="cap" type="numeric"/>
+            <column name="jhi_precision" type="numeric"/>
             <column name="timestamp" type="date"/>
             <column name="source" type="string"/>
+            <column name="evenement" type="string"/>
+            <column name="commentaire" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

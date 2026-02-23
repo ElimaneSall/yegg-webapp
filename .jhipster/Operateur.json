@@ -17,9 +17,7 @@
     },
     {
       "fieldName": "telephone",
-      "fieldType": "String",
-      "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^[0-9]{9,15}$"
+      "fieldType": "String"
     },
     {
       "fieldName": "adresse",
@@ -28,6 +26,20 @@
     {
       "fieldName": "logo",
       "fieldType": "Blob"
+    },
+    {
+      "fieldName": "siteWeb",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "siret",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "dateCreation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "actif",

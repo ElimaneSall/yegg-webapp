@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { IBus } from '../bus.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../bus.test-samples';
 
@@ -11,6 +12,8 @@ const requireRestSample: RestBus = {
   ...sampleWithRequiredData,
   gpsLastPing: sampleWithRequiredData.gpsLastPing?.toJSON(),
   positionUpdatedAt: sampleWithRequiredData.positionUpdatedAt?.toJSON(),
+  dateMiseEnService: sampleWithRequiredData.dateMiseEnService?.format(DATE_FORMAT),
+  dateDernierEntretien: sampleWithRequiredData.dateDernierEntretien?.format(DATE_FORMAT),
 };
 
 describe('Bus Service', () => {

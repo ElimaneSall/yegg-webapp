@@ -1,0 +1,11 @@
+id;nom;seuil_distance;seuil_temps;type_seuil;jours_activation;heure_debut;heure_fin;statut;date_creation;date_modification;dernier_declenchement;nombre_declenchements
+1;désagréable affable;814;2;TIME;clientèle badaboum;assez;chef de cuisine;PAUSED;2026-02-22T08:59:15;2026-02-22T10:47:13;2026-02-22T20:24:48;31584
+2;miam;701;47;DISTANCE;partenaire à l'exception de;affable sitôt que de façon que;triathlète pff bientôt;ACTIVE;2026-02-22T01:38:44;2026-02-22T03:20:34;2026-02-22T17:42:45;26569
+3;ouf vu que à travers;867;60;TIME;turquoise;du moment que;ouille sans que;DISABLED;2026-02-22T13:46:13;2026-02-22T04:08:11;2026-02-22T03:56:56;37
+4;administration rose;443;53;AND_BOTH;près de;sans doute jusqu’à ce que membre à vie;à l'entour de étant donné que de crainte que;DISABLED;2026-02-22T23:35:32;2026-02-22T13:09:53;2026-02-22T19:56:50;30185
+5;un peu électorat;113;18;OR_BOTH;prévaloir à seule fin de;dorénavant;secouriste;DISABLED;2026-02-22T23:55:12;2026-02-22T20:12:45;2026-02-22T05:13:47;12692
+6;rudement à peine mairie;956;7;OR_BOTH;au-dessous de;prêter;membre titulaire;PAUSED;2026-02-22T15:09:01;2026-02-22T07:26:59;2026-02-22T19:22:20;32194
+7;quand liquider au lieu de;146;31;AND_BOTH;hausser;coac coac disparaître hé;absolument équipe;ACTIVE;2026-02-22T07:30:43;2026-02-22T06:32:24;2026-02-22T17:12:45;7032
+8;prout;404;57;AND_BOTH;soutenir tant pour que;estimer;membre à vie;ACTIVE;2026-02-22T17:26:19;2026-02-22T14:26:14;2026-02-22T22:03:04;4046
+9;vétuste psitt atchoum;919;29;TIME;clac aussitôt areu areu;chef de cuisine pauvre;du fait que chef zzzz;ACTIVE;2026-02-22T13:13:20;2026-02-22T18:49:11;2026-02-22T19:37:37;31902
+10;à peine avant que regretter;953;39;DISTANCE;également tellement;alors que en bas de délégation;étant donné que à la merci hebdomadaire;ACTIVE;2026-02-22T07:07:47;2026-02-22T23:22:33;2026-02-22T03:58:59;27979

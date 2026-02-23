@@ -1,0 +1,191 @@
+<div>
+  <h2 id="page-heading" data-cy="RapportHeading">
+    <span jhiTranslate="yeggApp.rapport.home.title">Rapports</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="yeggApp.rapport.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-rapport"
+        [routerLink]="['/rapport/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="yeggApp.rapport.home.createLabel">Créer un nouveau Rapport</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (rapports().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="yeggApp.rapport.home.notFound">Aucun Rapport trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nom">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.nom">Nom</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.type">Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="periodeDebut">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.periodeDebut">Periode Debut</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="periodeFin">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.periodeFin">Periode Fin</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="format">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.format">Format</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contenu">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.contenu">Contenu</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateGeneration">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.dateGeneration">Date Generation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="generePar">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.generePar">Genere Par</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="operateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.operateur">Operateur</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="admin.id">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.rapport.admin">Admin</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rapport of rapports(); track trackId(rapport)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/rapport', rapport.id, 'view']">{{ rapport.id }}</a>
+              </td>
+              <td>{{ rapport.nom }}</td>
+              <td [jhiTranslate]="'yeggApp.ReportType.' + (rapport.type ?? 'null')">
+                {{ { null: '', MONTHLY: 'MONTHLY', WEEKLY: 'WEEKLY', CUSTOM: 'CUSTOM' }[rapport.type ?? 'null'] }}
+              </td>
+              <td>{{ rapport.periodeDebut | formatMediumDate }}</td>
+              <td>{{ rapport.periodeFin | formatMediumDate }}</td>
+              <td [jhiTranslate]="'yeggApp.ReportFormat.' + (rapport.format ?? 'null')">
+                {{ { null: '', PDF: 'PDF', EXCEL: 'EXCEL', CSV: 'CSV' }[rapport.format ?? 'null'] }}
+              </td>
+              <td>{{ rapport.contenu }}</td>
+              <td>{{ rapport.dateGeneration | formatMediumDatetime }}</td>
+              <td>{{ rapport.generePar }}</td>
+              <td>
+                @if (rapport.operateur) {
+                  <div>
+                    <a [routerLink]="['/operateur', rapport.operateur.id, 'view']">{{ rapport.operateur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (rapport.admin) {
+                  <div>
+                    <a [routerLink]="['/utilisateur', rapport.admin.id, 'view']">{{ rapport.admin.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/rapport', rapport.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/rapport', rapport.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(rapport)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (rapports().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

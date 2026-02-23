@@ -17,7 +17,16 @@
           </dd>
           <dt><span jhiTranslate="yeggApp.notification.type">Type</span></dt>
           <dd>
-            <span>{{ notificationRef.type }}</span>
+            <span [jhiTranslate]="'yeggApp.NotificationType.' + (notificationRef.type ?? 'null')">{{
+              {
+                null: '',
+                BUS_APPROACHING: 'BUS_APPROACHING',
+                DELAY: 'DELAY',
+                INCIDENT: 'INCIDENT',
+                BREAKDOWN: 'BREAKDOWN',
+                INFORMATION: 'INFORMATION',
+              }[notificationRef.type ?? 'null']
+            }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.notification.titre">Titre</span></dt>
           <dd>
@@ -33,11 +42,23 @@
           </dd>
           <dt><span jhiTranslate="yeggApp.notification.priorite">Priorite</span></dt>
           <dd>
-            <span>{{ notificationRef.priorite }}</span>
+            <span [jhiTranslate]="'yeggApp.Priority.' + (notificationRef.priorite ?? 'null')">{{
+              { null: '', HIGH: 'HIGH', MEDIUM: 'MEDIUM', LOW: 'LOW' }[notificationRef.priorite ?? 'null']
+            }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.notification.statut">Statut</span></dt>
           <dd>
-            <span>{{ notificationRef.statut }}</span>
+            <span [jhiTranslate]="'yeggApp.NotificationStatus.' + (notificationRef.statut ?? 'null')">{{
+              { null: '', SENT: 'SENT', FAILED: 'FAILED', PENDING: 'PENDING' }[notificationRef.statut ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.notification.dateCreation">Date Creation</span></dt>
+          <dd>
+            <span>{{ notificationRef.dateCreation | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.notification.dateEnvoi">Date Envoi</span></dt>
+          <dd>
+            <span>{{ notificationRef.dateEnvoi | formatMediumDatetime }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.notification.lu">Lu</span></dt>
           <dd>

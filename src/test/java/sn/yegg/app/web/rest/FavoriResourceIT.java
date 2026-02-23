@@ -9,6 +9,8 @@ import static sn.yegg.app.web.rest.TestUtil.createUpdateProxyForBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.IntegrationTest;
 import sn.yegg.app.domain.Favori;
 import sn.yegg.app.domain.Utilisateur;
+import sn.yegg.app.domain.enumeration.FavoriteType;
 import sn.yegg.app.repository.FavoriRepository;
 import sn.yegg.app.service.dto.FavoriDTO;
 import sn.yegg.app.service.mapper.FavoriMapper;
@@ -35,8 +38,8 @@ import sn.yegg.app.service.mapper.FavoriMapper;
 @WithMockUser
 class FavoriResourceIT {
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final FavoriteType DEFAULT_TYPE = FavoriteType.LINE;
+    private static final FavoriteType UPDATED_TYPE = FavoriteType.STOP;
 
     private static final Long DEFAULT_CIBLE_ID = 1L;
     private static final Long UPDATED_CIBLE_ID = 2L;
@@ -49,12 +52,11 @@ class FavoriResourceIT {
     private static final Integer UPDATED_ORDRE = 2;
     private static final Integer SMALLER_ORDRE = 1 - 1;
 
-    private static final Boolean DEFAULT_ALERTE_ACTIVE = false;
-    private static final Boolean UPDATED_ALERTE_ACTIVE = true;
+    private static final Instant DEFAULT_DATE_AJOUT = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATE_AJOUT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Integer DEFAULT_ALERTE_SEUIL = 1;
-    private static final Integer UPDATED_ALERTE_SEUIL = 2;
-    private static final Integer SMALLER_ALERTE_SEUIL = 1 - 1;
+    private static final Instant DEFAULT_DERNIER_ACCES = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DERNIER_ACCES = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/favoris";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -93,8 +95,8 @@ class FavoriResourceIT {
             .cibleId(DEFAULT_CIBLE_ID)
             .nomPersonnalise(DEFAULT_NOM_PERSONNALISE)
             .ordre(DEFAULT_ORDRE)
-            .alerteActive(DEFAULT_ALERTE_ACTIVE)
-            .alerteSeuil(DEFAULT_ALERTE_SEUIL);
+            .dateAjout(DEFAULT_DATE_AJOUT)
+            .dernierAcces(DEFAULT_DERNIER_ACCES);
     }
 
     /**
@@ -109,8 +111,8 @@ class FavoriResourceIT {
             .cibleId(UPDATED_CIBLE_ID)
             .nomPersonnalise(UPDATED_NOM_PERSONNALISE)
             .ordre(UPDATED_ORDRE)
-            .alerteActive(UPDATED_ALERTE_ACTIVE)
-            .alerteSeuil(UPDATED_ALERTE_SEUIL);
+            .dateAjout(UPDATED_DATE_AJOUT)
+            .dernierAcces(UPDATED_DERNIER_ACCES);
     }
 
     @BeforeEach
@@ -204,6 +206,23 @@ class FavoriResourceIT {
 
     @Test
     @Transactional
+    void checkDateAjoutIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        favori.setDateAjout(null);
+
+        // Create the Favori, which fails.
+        FavoriDTO favoriDTO = favoriMapper.toDto(favori);
+
+        restFavoriMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(favoriDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllFavoris() throws Exception {
         // Initialize the database
         insertedFavori = favoriRepository.saveAndFlush(favori);
@@ -214,12 +233,12 @@ class FavoriResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(favori.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].cibleId").value(hasItem(DEFAULT_CIBLE_ID.intValue())))
             .andExpect(jsonPath("$.[*].nomPersonnalise").value(hasItem(DEFAULT_NOM_PERSONNALISE)))
             .andExpect(jsonPath("$.[*].ordre").value(hasItem(DEFAULT_ORDRE)))
-            .andExpect(jsonPath("$.[*].alerteActive").value(hasItem(DEFAULT_ALERTE_ACTIVE)))
-            .andExpect(jsonPath("$.[*].alerteSeuil").value(hasItem(DEFAULT_ALERTE_SEUIL)));
+            .andExpect(jsonPath("$.[*].dateAjout").value(hasItem(DEFAULT_DATE_AJOUT.toString())))
+            .andExpect(jsonPath("$.[*].dernierAcces").value(hasItem(DEFAULT_DERNIER_ACCES.toString())));
     }
 
     @Test
@@ -234,12 +253,12 @@ class FavoriResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(favori.getId().intValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.cibleId").value(DEFAULT_CIBLE_ID.intValue()))
             .andExpect(jsonPath("$.nomPersonnalise").value(DEFAULT_NOM_PERSONNALISE))
             .andExpect(jsonPath("$.ordre").value(DEFAULT_ORDRE))
-            .andExpect(jsonPath("$.alerteActive").value(DEFAULT_ALERTE_ACTIVE))
-            .andExpect(jsonPath("$.alerteSeuil").value(DEFAULT_ALERTE_SEUIL));
+            .andExpect(jsonPath("$.dateAjout").value(DEFAULT_DATE_AJOUT.toString()))
+            .andExpect(jsonPath("$.dernierAcces").value(DEFAULT_DERNIER_ACCES.toString()));
     }
 
     @Test
@@ -285,26 +304,6 @@ class FavoriResourceIT {
 
         // Get all the favoriList where type is not null
         defaultFavoriFiltering("type.specified=true", "type.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByTypeContainsSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where type contains
-        defaultFavoriFiltering("type.contains=" + DEFAULT_TYPE, "type.contains=" + UPDATED_TYPE);
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByTypeNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where type does not contain
-        defaultFavoriFiltering("type.doesNotContain=" + UPDATED_TYPE, "type.doesNotContain=" + DEFAULT_TYPE);
     }
 
     @Test
@@ -508,114 +507,65 @@ class FavoriResourceIT {
 
     @Test
     @Transactional
-    void getAllFavorisByAlerteActiveIsEqualToSomething() throws Exception {
+    void getAllFavorisByDateAjoutIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedFavori = favoriRepository.saveAndFlush(favori);
 
-        // Get all the favoriList where alerteActive equals to
-        defaultFavoriFiltering("alerteActive.equals=" + DEFAULT_ALERTE_ACTIVE, "alerteActive.equals=" + UPDATED_ALERTE_ACTIVE);
+        // Get all the favoriList where dateAjout equals to
+        defaultFavoriFiltering("dateAjout.equals=" + DEFAULT_DATE_AJOUT, "dateAjout.equals=" + UPDATED_DATE_AJOUT);
     }
 
     @Test
     @Transactional
-    void getAllFavorisByAlerteActiveIsInShouldWork() throws Exception {
+    void getAllFavorisByDateAjoutIsInShouldWork() throws Exception {
         // Initialize the database
         insertedFavori = favoriRepository.saveAndFlush(favori);
 
-        // Get all the favoriList where alerteActive in
+        // Get all the favoriList where dateAjout in
+        defaultFavoriFiltering("dateAjout.in=" + DEFAULT_DATE_AJOUT + "," + UPDATED_DATE_AJOUT, "dateAjout.in=" + UPDATED_DATE_AJOUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllFavorisByDateAjoutIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedFavori = favoriRepository.saveAndFlush(favori);
+
+        // Get all the favoriList where dateAjout is not null
+        defaultFavoriFiltering("dateAjout.specified=true", "dateAjout.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllFavorisByDernierAccesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedFavori = favoriRepository.saveAndFlush(favori);
+
+        // Get all the favoriList where dernierAcces equals to
+        defaultFavoriFiltering("dernierAcces.equals=" + DEFAULT_DERNIER_ACCES, "dernierAcces.equals=" + UPDATED_DERNIER_ACCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllFavorisByDernierAccesIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedFavori = favoriRepository.saveAndFlush(favori);
+
+        // Get all the favoriList where dernierAcces in
         defaultFavoriFiltering(
-            "alerteActive.in=" + DEFAULT_ALERTE_ACTIVE + "," + UPDATED_ALERTE_ACTIVE,
-            "alerteActive.in=" + UPDATED_ALERTE_ACTIVE
+            "dernierAcces.in=" + DEFAULT_DERNIER_ACCES + "," + UPDATED_DERNIER_ACCES,
+            "dernierAcces.in=" + UPDATED_DERNIER_ACCES
         );
     }
 
     @Test
     @Transactional
-    void getAllFavorisByAlerteActiveIsNullOrNotNull() throws Exception {
+    void getAllFavorisByDernierAccesIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedFavori = favoriRepository.saveAndFlush(favori);
 
-        // Get all the favoriList where alerteActive is not null
-        defaultFavoriFiltering("alerteActive.specified=true", "alerteActive.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil equals to
-        defaultFavoriFiltering("alerteSeuil.equals=" + DEFAULT_ALERTE_SEUIL, "alerteSeuil.equals=" + UPDATED_ALERTE_SEUIL);
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil in
-        defaultFavoriFiltering(
-            "alerteSeuil.in=" + DEFAULT_ALERTE_SEUIL + "," + UPDATED_ALERTE_SEUIL,
-            "alerteSeuil.in=" + UPDATED_ALERTE_SEUIL
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil is not null
-        defaultFavoriFiltering("alerteSeuil.specified=true", "alerteSeuil.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil is greater than or equal to
-        defaultFavoriFiltering(
-            "alerteSeuil.greaterThanOrEqual=" + DEFAULT_ALERTE_SEUIL,
-            "alerteSeuil.greaterThanOrEqual=" + (DEFAULT_ALERTE_SEUIL + 1)
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil is less than or equal to
-        defaultFavoriFiltering(
-            "alerteSeuil.lessThanOrEqual=" + DEFAULT_ALERTE_SEUIL,
-            "alerteSeuil.lessThanOrEqual=" + SMALLER_ALERTE_SEUIL
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsLessThanSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil is less than
-        defaultFavoriFiltering("alerteSeuil.lessThan=" + (DEFAULT_ALERTE_SEUIL + 1), "alerteSeuil.lessThan=" + DEFAULT_ALERTE_SEUIL);
-    }
-
-    @Test
-    @Transactional
-    void getAllFavorisByAlerteSeuilIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        insertedFavori = favoriRepository.saveAndFlush(favori);
-
-        // Get all the favoriList where alerteSeuil is greater than
-        defaultFavoriFiltering("alerteSeuil.greaterThan=" + SMALLER_ALERTE_SEUIL, "alerteSeuil.greaterThan=" + DEFAULT_ALERTE_SEUIL);
+        // Get all the favoriList where dernierAcces is not null
+        defaultFavoriFiltering("dernierAcces.specified=true", "dernierAcces.specified=false");
     }
 
     @Test
@@ -654,12 +604,12 @@ class FavoriResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(favori.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].cibleId").value(hasItem(DEFAULT_CIBLE_ID.intValue())))
             .andExpect(jsonPath("$.[*].nomPersonnalise").value(hasItem(DEFAULT_NOM_PERSONNALISE)))
             .andExpect(jsonPath("$.[*].ordre").value(hasItem(DEFAULT_ORDRE)))
-            .andExpect(jsonPath("$.[*].alerteActive").value(hasItem(DEFAULT_ALERTE_ACTIVE)))
-            .andExpect(jsonPath("$.[*].alerteSeuil").value(hasItem(DEFAULT_ALERTE_SEUIL)));
+            .andExpect(jsonPath("$.[*].dateAjout").value(hasItem(DEFAULT_DATE_AJOUT.toString())))
+            .andExpect(jsonPath("$.[*].dernierAcces").value(hasItem(DEFAULT_DERNIER_ACCES.toString())));
 
         // Check, that the count call also returns 1
         restFavoriMockMvc
@@ -712,8 +662,8 @@ class FavoriResourceIT {
             .cibleId(UPDATED_CIBLE_ID)
             .nomPersonnalise(UPDATED_NOM_PERSONNALISE)
             .ordre(UPDATED_ORDRE)
-            .alerteActive(UPDATED_ALERTE_ACTIVE)
-            .alerteSeuil(UPDATED_ALERTE_SEUIL);
+            .dateAjout(UPDATED_DATE_AJOUT)
+            .dernierAcces(UPDATED_DERNIER_ACCES);
         FavoriDTO favoriDTO = favoriMapper.toDto(updatedFavori);
 
         restFavoriMockMvc
@@ -799,7 +749,7 @@ class FavoriResourceIT {
         Favori partialUpdatedFavori = new Favori();
         partialUpdatedFavori.setId(favori.getId());
 
-        partialUpdatedFavori.type(UPDATED_TYPE).nomPersonnalise(UPDATED_NOM_PERSONNALISE);
+        partialUpdatedFavori.cibleId(UPDATED_CIBLE_ID).nomPersonnalise(UPDATED_NOM_PERSONNALISE).dateAjout(UPDATED_DATE_AJOUT);
 
         restFavoriMockMvc
             .perform(
@@ -832,8 +782,8 @@ class FavoriResourceIT {
             .cibleId(UPDATED_CIBLE_ID)
             .nomPersonnalise(UPDATED_NOM_PERSONNALISE)
             .ordre(UPDATED_ORDRE)
-            .alerteActive(UPDATED_ALERTE_ACTIVE)
-            .alerteSeuil(UPDATED_ALERTE_SEUIL);
+            .dateAjout(UPDATED_DATE_AJOUT)
+            .dernierAcces(UPDATED_DERNIER_ACCES);
 
         restFavoriMockMvc
             .perform(

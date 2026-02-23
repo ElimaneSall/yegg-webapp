@@ -30,6 +30,12 @@ public class OperateurCriteria implements Serializable, Criteria {
 
     private StringFilter telephone;
 
+    private StringFilter siteWeb;
+
+    private StringFilter siret;
+
+    private InstantFilter dateCreation;
+
     private BooleanFilter actif;
 
     private LongFilter lignesId;
@@ -43,6 +49,9 @@ public class OperateurCriteria implements Serializable, Criteria {
         this.nom = other.optionalNom().map(StringFilter::copy).orElse(null);
         this.email = other.optionalEmail().map(StringFilter::copy).orElse(null);
         this.telephone = other.optionalTelephone().map(StringFilter::copy).orElse(null);
+        this.siteWeb = other.optionalSiteWeb().map(StringFilter::copy).orElse(null);
+        this.siret = other.optionalSiret().map(StringFilter::copy).orElse(null);
+        this.dateCreation = other.optionalDateCreation().map(InstantFilter::copy).orElse(null);
         this.actif = other.optionalActif().map(BooleanFilter::copy).orElse(null);
         this.lignesId = other.optionalLignesId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -129,6 +138,63 @@ public class OperateurCriteria implements Serializable, Criteria {
         this.telephone = telephone;
     }
 
+    public StringFilter getSiteWeb() {
+        return siteWeb;
+    }
+
+    public Optional<StringFilter> optionalSiteWeb() {
+        return Optional.ofNullable(siteWeb);
+    }
+
+    public StringFilter siteWeb() {
+        if (siteWeb == null) {
+            setSiteWeb(new StringFilter());
+        }
+        return siteWeb;
+    }
+
+    public void setSiteWeb(StringFilter siteWeb) {
+        this.siteWeb = siteWeb;
+    }
+
+    public StringFilter getSiret() {
+        return siret;
+    }
+
+    public Optional<StringFilter> optionalSiret() {
+        return Optional.ofNullable(siret);
+    }
+
+    public StringFilter siret() {
+        if (siret == null) {
+            setSiret(new StringFilter());
+        }
+        return siret;
+    }
+
+    public void setSiret(StringFilter siret) {
+        this.siret = siret;
+    }
+
+    public InstantFilter getDateCreation() {
+        return dateCreation;
+    }
+
+    public Optional<InstantFilter> optionalDateCreation() {
+        return Optional.ofNullable(dateCreation);
+    }
+
+    public InstantFilter dateCreation() {
+        if (dateCreation == null) {
+            setDateCreation(new InstantFilter());
+        }
+        return dateCreation;
+    }
+
+    public void setDateCreation(InstantFilter dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
     public BooleanFilter getActif() {
         return actif;
     }
@@ -200,6 +266,9 @@ public class OperateurCriteria implements Serializable, Criteria {
             Objects.equals(nom, that.nom) &&
             Objects.equals(email, that.email) &&
             Objects.equals(telephone, that.telephone) &&
+            Objects.equals(siteWeb, that.siteWeb) &&
+            Objects.equals(siret, that.siret) &&
+            Objects.equals(dateCreation, that.dateCreation) &&
             Objects.equals(actif, that.actif) &&
             Objects.equals(lignesId, that.lignesId) &&
             Objects.equals(distinct, that.distinct)
@@ -208,7 +277,7 @@ public class OperateurCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, email, telephone, actif, lignesId, distinct);
+        return Objects.hash(id, nom, email, telephone, siteWeb, siret, dateCreation, actif, lignesId, distinct);
     }
 
     // prettier-ignore
@@ -219,6 +288,9 @@ public class OperateurCriteria implements Serializable, Criteria {
             optionalNom().map(f -> "nom=" + f + ", ").orElse("") +
             optionalEmail().map(f -> "email=" + f + ", ").orElse("") +
             optionalTelephone().map(f -> "telephone=" + f + ", ").orElse("") +
+            optionalSiteWeb().map(f -> "siteWeb=" + f + ", ").orElse("") +
+            optionalSiret().map(f -> "siret=" + f + ", ").orElse("") +
+            optionalDateCreation().map(f -> "dateCreation=" + f + ", ").orElse("") +
             optionalActif().map(f -> "actif=" + f + ", ").orElse("") +
             optionalLignesId().map(f -> "lignesId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +

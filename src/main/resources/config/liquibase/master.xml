@@ -22,6 +22,11 @@
     <include file="config/liquibase/changelog/20260221233525_added_entity_Favori.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233526_added_entity_Notification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233527_added_entity_LigneArret.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002345_added_entity_AlerteApproche.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002346_added_entity_AlerteLigneArret.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002347_added_entity_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002348_added_entity_Feedback.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002349_added_entity_Rapport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20260221233519_added_entity_constraints_Ligne.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233521_added_entity_constraints_Bus.xml" relativeToChangelogFile="false"/>
@@ -30,6 +35,11 @@
     <include file="config/liquibase/changelog/20260221233525_added_entity_constraints_Favori.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233526_added_entity_constraints_Notification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233527_added_entity_constraints_LigneArret.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002345_added_entity_constraints_AlerteApproche.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002346_added_entity_constraints_AlerteLigneArret.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002347_added_entity_constraints_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002348_added_entity_constraints_Feedback.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260223002349_added_entity_constraints_Rapport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

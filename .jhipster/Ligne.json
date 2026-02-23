@@ -8,7 +8,7 @@
     {
       "fieldName": "numero",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRules": ["required", "minlength", "maxlength", "unique"],
       "fieldValidateRulesMaxlength": "10",
       "fieldValidateRulesMinlength": "1"
     },
@@ -23,22 +23,53 @@
       "fieldValidateRules": ["required"]
     },
     {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
       "fieldName": "couleur",
-      "fieldType": "String",
-      "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^#[0-9A-Fa-f]{6}$"
+      "fieldType": "String"
     },
     {
       "fieldName": "distanceKm",
-      "fieldType": "BigDecimal"
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "dureeMoyenne",
-      "fieldType": "Integer"
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "frequence",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "60",
+      "fieldValidateRulesMin": "1"
     },
     {
       "fieldName": "statut",
-      "fieldType": "String",
+      "fieldType": "LineStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,SUSPENDED,CLOSED,UNDER_CONSTRUCTION"
+    },
+    {
+      "fieldName": "joursFeries",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "dateDebut",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateFin",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
     }
   ],

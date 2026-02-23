@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
+import sn.yegg.app.domain.enumeration.FavoriteType;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 
@@ -20,11 +21,28 @@ import tech.jhipster.service.filter.*;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class FavoriCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering FavoriteType
+     */
+    public static class FavoriteTypeFilter extends Filter<FavoriteType> {
+
+        public FavoriteTypeFilter() {}
+
+        public FavoriteTypeFilter(FavoriteTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public FavoriteTypeFilter copy() {
+            return new FavoriteTypeFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
-    private StringFilter type;
+    private FavoriteTypeFilter type;
 
     private LongFilter cibleId;
 
@@ -32,9 +50,9 @@ public class FavoriCriteria implements Serializable, Criteria {
 
     private IntegerFilter ordre;
 
-    private BooleanFilter alerteActive;
+    private InstantFilter dateAjout;
 
-    private IntegerFilter alerteSeuil;
+    private InstantFilter dernierAcces;
 
     private LongFilter utilisateurId;
 
@@ -44,12 +62,12 @@ public class FavoriCriteria implements Serializable, Criteria {
 
     public FavoriCriteria(FavoriCriteria other) {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
-        this.type = other.optionalType().map(StringFilter::copy).orElse(null);
+        this.type = other.optionalType().map(FavoriteTypeFilter::copy).orElse(null);
         this.cibleId = other.optionalCibleId().map(LongFilter::copy).orElse(null);
         this.nomPersonnalise = other.optionalNomPersonnalise().map(StringFilter::copy).orElse(null);
         this.ordre = other.optionalOrdre().map(IntegerFilter::copy).orElse(null);
-        this.alerteActive = other.optionalAlerteActive().map(BooleanFilter::copy).orElse(null);
-        this.alerteSeuil = other.optionalAlerteSeuil().map(IntegerFilter::copy).orElse(null);
+        this.dateAjout = other.optionalDateAjout().map(InstantFilter::copy).orElse(null);
+        this.dernierAcces = other.optionalDernierAcces().map(InstantFilter::copy).orElse(null);
         this.utilisateurId = other.optionalUtilisateurId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
@@ -78,22 +96,22 @@ public class FavoriCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getType() {
+    public FavoriteTypeFilter getType() {
         return type;
     }
 
-    public Optional<StringFilter> optionalType() {
+    public Optional<FavoriteTypeFilter> optionalType() {
         return Optional.ofNullable(type);
     }
 
-    public StringFilter type() {
+    public FavoriteTypeFilter type() {
         if (type == null) {
-            setType(new StringFilter());
+            setType(new FavoriteTypeFilter());
         }
         return type;
     }
 
-    public void setType(StringFilter type) {
+    public void setType(FavoriteTypeFilter type) {
         this.type = type;
     }
 
@@ -154,42 +172,42 @@ public class FavoriCriteria implements Serializable, Criteria {
         this.ordre = ordre;
     }
 
-    public BooleanFilter getAlerteActive() {
-        return alerteActive;
+    public InstantFilter getDateAjout() {
+        return dateAjout;
     }
 
-    public Optional<BooleanFilter> optionalAlerteActive() {
-        return Optional.ofNullable(alerteActive);
+    public Optional<InstantFilter> optionalDateAjout() {
+        return Optional.ofNullable(dateAjout);
     }
 
-    public BooleanFilter alerteActive() {
-        if (alerteActive == null) {
-            setAlerteActive(new BooleanFilter());
+    public InstantFilter dateAjout() {
+        if (dateAjout == null) {
+            setDateAjout(new InstantFilter());
         }
-        return alerteActive;
+        return dateAjout;
     }
 
-    public void setAlerteActive(BooleanFilter alerteActive) {
-        this.alerteActive = alerteActive;
+    public void setDateAjout(InstantFilter dateAjout) {
+        this.dateAjout = dateAjout;
     }
 
-    public IntegerFilter getAlerteSeuil() {
-        return alerteSeuil;
+    public InstantFilter getDernierAcces() {
+        return dernierAcces;
     }
 
-    public Optional<IntegerFilter> optionalAlerteSeuil() {
-        return Optional.ofNullable(alerteSeuil);
+    public Optional<InstantFilter> optionalDernierAcces() {
+        return Optional.ofNullable(dernierAcces);
     }
 
-    public IntegerFilter alerteSeuil() {
-        if (alerteSeuil == null) {
-            setAlerteSeuil(new IntegerFilter());
+    public InstantFilter dernierAcces() {
+        if (dernierAcces == null) {
+            setDernierAcces(new InstantFilter());
         }
-        return alerteSeuil;
+        return dernierAcces;
     }
 
-    public void setAlerteSeuil(IntegerFilter alerteSeuil) {
-        this.alerteSeuil = alerteSeuil;
+    public void setDernierAcces(InstantFilter dernierAcces) {
+        this.dernierAcces = dernierAcces;
     }
 
     public LongFilter getUtilisateurId() {
@@ -245,8 +263,8 @@ public class FavoriCriteria implements Serializable, Criteria {
             Objects.equals(cibleId, that.cibleId) &&
             Objects.equals(nomPersonnalise, that.nomPersonnalise) &&
             Objects.equals(ordre, that.ordre) &&
-            Objects.equals(alerteActive, that.alerteActive) &&
-            Objects.equals(alerteSeuil, that.alerteSeuil) &&
+            Objects.equals(dateAjout, that.dateAjout) &&
+            Objects.equals(dernierAcces, that.dernierAcces) &&
             Objects.equals(utilisateurId, that.utilisateurId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -254,7 +272,7 @@ public class FavoriCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, cibleId, nomPersonnalise, ordre, alerteActive, alerteSeuil, utilisateurId, distinct);
+        return Objects.hash(id, type, cibleId, nomPersonnalise, ordre, dateAjout, dernierAcces, utilisateurId, distinct);
     }
 
     // prettier-ignore
@@ -266,8 +284,8 @@ public class FavoriCriteria implements Serializable, Criteria {
             optionalCibleId().map(f -> "cibleId=" + f + ", ").orElse("") +
             optionalNomPersonnalise().map(f -> "nomPersonnalise=" + f + ", ").orElse("") +
             optionalOrdre().map(f -> "ordre=" + f + ", ").orElse("") +
-            optionalAlerteActive().map(f -> "alerteActive=" + f + ", ").orElse("") +
-            optionalAlerteSeuil().map(f -> "alerteSeuil=" + f + ", ").orElse("") +
+            optionalDateAjout().map(f -> "dateAjout=" + f + ", ").orElse("") +
+            optionalDernierAcces().map(f -> "dernierAcces=" + f + ", ").orElse("") +
             optionalUtilisateurId().map(f -> "utilisateurId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";

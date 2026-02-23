@@ -21,10 +21,16 @@
       "numero": "Numero",
       "nom": "Nom",
       "direction": "Direction",
+      "description": "Description",
       "couleur": "Couleur",
       "distanceKm": "Distance Km",
       "dureeMoyenne": "Duree Moyenne",
+      "frequence": "Frequence",
       "statut": "Statut",
+      "joursFeries": "Jours Feries",
+      "dateDebut": "Date Debut",
+      "dateFin": "Date Fin",
+      "actif": "Actif",
       "ligneArrets": "Ligne Arrets",
       "operateur": "Operateur"
     }

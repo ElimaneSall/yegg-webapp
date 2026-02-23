@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import sn.yegg.app.domain.enumeration.TrackingSource;
 
 /**
  * A Tracking.
@@ -41,15 +42,27 @@ public class Tracking implements Serializable {
     @Column(name = "cap")
     private Integer cap;
 
+    @Column(name = "jhi_precision")
+    private Integer precision;
+
     @NotNull
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
-    @Column(name = "source")
-    private String source;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "source", nullable = false)
+    private TrackingSource source;
+
+    @Column(name = "evenement")
+    private String evenement;
+
+    @Lob
+    @Column(name = "commentaire")
+    private String commentaire;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "utilisateur", "ligne" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "ligne", "chauffeur" }, allowSetters = true)
     private Bus bus;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -119,6 +132,19 @@ public class Tracking implements Serializable {
         this.cap = cap;
     }
 
+    public Integer getPrecision() {
+        return this.precision;
+    }
+
+    public Tracking precision(Integer precision) {
+        this.setPrecision(precision);
+        return this;
+    }
+
+    public void setPrecision(Integer precision) {
+        this.precision = precision;
+    }
+
     public Instant getTimestamp() {
         return this.timestamp;
     }
@@ -132,17 +158,43 @@ public class Tracking implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public String getSource() {
+    public TrackingSource getSource() {
         return this.source;
     }
 
-    public Tracking source(String source) {
+    public Tracking source(TrackingSource source) {
         this.setSource(source);
         return this;
     }
 
-    public void setSource(String source) {
+    public void setSource(TrackingSource source) {
         this.source = source;
+    }
+
+    public String getEvenement() {
+        return this.evenement;
+    }
+
+    public Tracking evenement(String evenement) {
+        this.setEvenement(evenement);
+        return this;
+    }
+
+    public void setEvenement(String evenement) {
+        this.evenement = evenement;
+    }
+
+    public String getCommentaire() {
+        return this.commentaire;
+    }
+
+    public Tracking commentaire(String commentaire) {
+        this.setCommentaire(commentaire);
+        return this;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 
     public Bus getBus() {
@@ -186,8 +238,11 @@ public class Tracking implements Serializable {
             ", longitude=" + getLongitude() +
             ", vitesse=" + getVitesse() +
             ", cap=" + getCap() +
+            ", precision=" + getPrecision() +
             ", timestamp='" + getTimestamp() + "'" +
             ", source='" + getSource() + "'" +
+            ", evenement='" + getEvenement() + "'" +
+            ", commentaire='" + getCommentaire() + "'" +
             "}";
     }
 }

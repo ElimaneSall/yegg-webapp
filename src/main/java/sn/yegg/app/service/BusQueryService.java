@@ -77,8 +77,12 @@ public class BusQueryService extends QueryService<Bus> {
                 buildStringSpecification(criteria.getNumeroVehicule(), Bus_.numeroVehicule),
                 buildStringSpecification(criteria.getPlaque(), Bus_.plaque),
                 buildStringSpecification(criteria.getModele(), Bus_.modele),
+                buildStringSpecification(criteria.getConstructeur(), Bus_.constructeur),
                 buildRangeSpecification(criteria.getCapacite(), Bus_.capacite),
+                buildRangeSpecification(criteria.getCapaciteDebout(), Bus_.capaciteDebout),
                 buildRangeSpecification(criteria.getAnneeFabrication(), Bus_.anneeFabrication),
+                buildSpecification(criteria.getEnergie(), Bus_.energie),
+                buildRangeSpecification(criteria.getAutonomieKm(), Bus_.autonomieKm),
                 buildStringSpecification(criteria.getGpsDeviceId(), Bus_.gpsDeviceId),
                 buildStringSpecification(criteria.getGpsStatus(), Bus_.gpsStatus),
                 buildRangeSpecification(criteria.getGpsLastPing(), Bus_.gpsLastPing),
@@ -88,9 +92,12 @@ public class BusQueryService extends QueryService<Bus> {
                 buildRangeSpecification(criteria.getCurrentVitesse(), Bus_.currentVitesse),
                 buildRangeSpecification(criteria.getCurrentCap(), Bus_.currentCap),
                 buildRangeSpecification(criteria.getPositionUpdatedAt(), Bus_.positionUpdatedAt),
-                buildStringSpecification(criteria.getStatut(), Bus_.statut),
-                buildSpecification(criteria.getUtilisateurId(), root -> root.join(Bus_.utilisateur, JoinType.LEFT).get(Utilisateur_.id)),
-                buildSpecification(criteria.getLigneId(), root -> root.join(Bus_.ligne, JoinType.LEFT).get(Ligne_.id))
+                buildSpecification(criteria.getStatut(), Bus_.statut),
+                buildRangeSpecification(criteria.getDateMiseEnService(), Bus_.dateMiseEnService),
+                buildRangeSpecification(criteria.getDateDernierEntretien(), Bus_.dateDernierEntretien),
+                buildRangeSpecification(criteria.getProchainEntretienKm(), Bus_.prochainEntretienKm),
+                buildSpecification(criteria.getLigneId(), root -> root.join(Bus_.ligne, JoinType.LEFT).get(Ligne_.id)),
+                buildSpecification(criteria.getChauffeurId(), root -> root.join(Bus_.chauffeur, JoinType.LEFT).get(Utilisateur_.id))
             );
         }
         return specification;

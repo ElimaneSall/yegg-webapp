@@ -51,8 +51,8 @@ public class FavoriAsserts {
             .satisfies(a -> assertThat(a.getCibleId()).as("check cibleId").isEqualTo(expected.getCibleId()))
             .satisfies(a -> assertThat(a.getNomPersonnalise()).as("check nomPersonnalise").isEqualTo(expected.getNomPersonnalise()))
             .satisfies(a -> assertThat(a.getOrdre()).as("check ordre").isEqualTo(expected.getOrdre()))
-            .satisfies(a -> assertThat(a.getAlerteActive()).as("check alerteActive").isEqualTo(expected.getAlerteActive()))
-            .satisfies(a -> assertThat(a.getAlerteSeuil()).as("check alerteSeuil").isEqualTo(expected.getAlerteSeuil()));
+            .satisfies(a -> assertThat(a.getDateAjout()).as("check dateAjout").isEqualTo(expected.getDateAjout()))
+            .satisfies(a -> assertThat(a.getDernierAcces()).as("check dernierAcces").isEqualTo(expected.getDernierAcces()));
     }
 
     /**

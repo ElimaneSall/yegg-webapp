@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -33,7 +34,6 @@ public class Operateur implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Pattern(regexp = "^[0-9]{9,15}$")
     @Column(name = "telephone")
     private String telephone;
 
@@ -47,6 +47,16 @@ public class Operateur implements Serializable {
 
     @Column(name = "logo_content_type")
     private String logoContentType;
+
+    @Column(name = "site_web")
+    private String siteWeb;
+
+    @Column(name = "siret", unique = true)
+    private String siret;
+
+    @NotNull
+    @Column(name = "date_creation", nullable = false)
+    private Instant dateCreation;
 
     @NotNull
     @Column(name = "actif", nullable = false)
@@ -150,6 +160,45 @@ public class Operateur implements Serializable {
         this.logoContentType = logoContentType;
     }
 
+    public String getSiteWeb() {
+        return this.siteWeb;
+    }
+
+    public Operateur siteWeb(String siteWeb) {
+        this.setSiteWeb(siteWeb);
+        return this;
+    }
+
+    public void setSiteWeb(String siteWeb) {
+        this.siteWeb = siteWeb;
+    }
+
+    public String getSiret() {
+        return this.siret;
+    }
+
+    public Operateur siret(String siret) {
+        this.setSiret(siret);
+        return this;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+
+    public Instant getDateCreation() {
+        return this.dateCreation;
+    }
+
+    public Operateur dateCreation(Instant dateCreation) {
+        this.setDateCreation(dateCreation);
+        return this;
+    }
+
+    public void setDateCreation(Instant dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
     public Boolean getActif() {
         return this.actif;
     }
@@ -224,6 +273,9 @@ public class Operateur implements Serializable {
             ", adresse='" + getAdresse() + "'" +
             ", logo='" + getLogo() + "'" +
             ", logoContentType='" + getLogoContentType() + "'" +
+            ", siteWeb='" + getSiteWeb() + "'" +
+            ", siret='" + getSiret() + "'" +
+            ", dateCreation='" + getDateCreation() + "'" +
             ", actif='" + getActif() + "'" +
             "}";
     }

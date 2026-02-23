@@ -23,6 +23,9 @@
       "telephone": "Telephone",
       "adresse": "Adresse",
       "logo": "Logo",
+      "siteWeb": "Site Web",
+      "siret": "Siret",
+      "dateCreation": "Date Creation",
       "actif": "Actif",
       "lignes": "Lignes"
     }

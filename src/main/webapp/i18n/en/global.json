@@ -14,10 +14,14 @@
         "bus": "Bus",
         "utilisateur": "Utilisateur",
         "tracking": "Tracking",
-        "alerte": "Alerte",
         "favori": "Favori",
         "notification": "Notification",
-        "ligneArret": "Ligne Arret"
+        "ligneArret": "Ligne Arret",
+        "alerteApproche": "Alerte Approche",
+        "alerteLigneArret": "Alerte Ligne Arret",
+        "historiqueAlerte": "Historique Alerte",
+        "feedback": "Feedback",
+        "rapport": "Rapport"
       },
       "account": {
         "main": "Account",

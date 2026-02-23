@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-alerte-ligne-arret-heading"
+        data-cy="AlerteLigneArretCreateUpdateHeading"
+        jhiTranslate="yeggApp.alerteLigneArret.home.createOrEditLabel"
+      >
+        Créer ou éditer un Alerte Ligne Arret
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="yeggApp.alerteLigneArret.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_sens" jhiTranslate="yeggApp.alerteLigneArret.sens">Sens</label>
+          <input type="text" class="form-control" name="sens" id="field_sens" data-cy="sens" formControlName="sens" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="yeggApp.alerteLigneArret.actif">Actif</label>
+          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ligne" jhiTranslate="yeggApp.alerteLigneArret.ligne">Ligne</label>
+          <select class="form-control" id="field_ligne" data-cy="ligne" name="ligne" formControlName="ligne" [compareWith]="compareLigne">
+            <option [ngValue]="null"></option>
+            @for (ligneOption of lignesSharedCollection; track $index) {
+              <option [ngValue]="ligneOption">{{ ligneOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_arret" jhiTranslate="yeggApp.alerteLigneArret.arret">Arret</label>
+          <select class="form-control" id="field_arret" data-cy="arret" name="arret" formControlName="arret" [compareWith]="compareArret">
+            <option [ngValue]="null"></option>
+            @for (arretOption of arretsSharedCollection; track $index) {
+              <option [ngValue]="arretOption">{{ arretOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_alerteApproche" jhiTranslate="yeggApp.alerteLigneArret.alerteApproche"
+            >Alerte Approche</label
+          >
+          <select
+            class="form-control"
+            id="field_alerteApproche"
+            data-cy="alerteApproche"
+            name="alerteApproche"
+            formControlName="alerteApproche"
+            [compareWith]="compareAlerteApproche"
+          >
+            <option [ngValue]="null"></option>
+            @for (alerteApprocheOption of alerteApprochesSharedCollection; track $index) {
+              <option [ngValue]="alerteApprocheOption">{{ alerteApprocheOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

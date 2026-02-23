@@ -80,8 +80,10 @@ class TrackingCriteriaTest {
         trackingCriteria.longitude();
         trackingCriteria.vitesse();
         trackingCriteria.cap();
+        trackingCriteria.precision();
         trackingCriteria.timestamp();
         trackingCriteria.source();
+        trackingCriteria.evenement();
         trackingCriteria.busId();
         trackingCriteria.distinct();
     }
@@ -94,8 +96,10 @@ class TrackingCriteriaTest {
                 condition.apply(criteria.getLongitude()) &&
                 condition.apply(criteria.getVitesse()) &&
                 condition.apply(criteria.getCap()) &&
+                condition.apply(criteria.getPrecision()) &&
                 condition.apply(criteria.getTimestamp()) &&
                 condition.apply(criteria.getSource()) &&
+                condition.apply(criteria.getEvenement()) &&
                 condition.apply(criteria.getBusId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
@@ -110,8 +114,10 @@ class TrackingCriteriaTest {
                 condition.apply(criteria.getLongitude(), copy.getLongitude()) &&
                 condition.apply(criteria.getVitesse(), copy.getVitesse()) &&
                 condition.apply(criteria.getCap(), copy.getCap()) &&
+                condition.apply(criteria.getPrecision(), copy.getPrecision()) &&
                 condition.apply(criteria.getTimestamp(), copy.getTimestamp()) &&
                 condition.apply(criteria.getSource(), copy.getSource()) &&
+                condition.apply(criteria.getEvenement(), copy.getEvenement()) &&
                 condition.apply(criteria.getBusId(), copy.getBusId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"

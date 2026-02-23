@@ -47,11 +47,22 @@ public class UtilisateurAsserts {
     public static void assertUtilisateurUpdatableFieldsEquals(Utilisateur expected, Utilisateur actual) {
         assertThat(actual)
             .as("Verify Utilisateur relevant properties")
-            .satisfies(a -> assertThat(a.getMatricule()).as("check matricule").isEqualTo(expected.getMatricule()))
+            .satisfies(a -> assertThat(a.getPrenom()).as("check prenom").isEqualTo(expected.getPrenom()))
+            .satisfies(a -> assertThat(a.getNom()).as("check nom").isEqualTo(expected.getNom()))
+            .satisfies(a -> assertThat(a.getEmail()).as("check email").isEqualTo(expected.getEmail()))
             .satisfies(a -> assertThat(a.getTelephone()).as("check telephone").isEqualTo(expected.getTelephone()))
+            .satisfies(a -> assertThat(a.getMotDePasse()).as("check motDePasse").isEqualTo(expected.getMotDePasse()))
+            .satisfies(a -> assertThat(a.getRole()).as("check role").isEqualTo(expected.getRole()))
+            .satisfies(a -> assertThat(a.getMatricule()).as("check matricule").isEqualTo(expected.getMatricule()))
             .satisfies(a -> assertThat(a.getFcmToken()).as("check fcmToken").isEqualTo(expected.getFcmToken()))
             .satisfies(a -> assertThat(a.getNotificationsPush()).as("check notificationsPush").isEqualTo(expected.getNotificationsPush()))
+            .satisfies(a -> assertThat(a.getNotificationsSms()).as("check notificationsSms").isEqualTo(expected.getNotificationsSms()))
             .satisfies(a -> assertThat(a.getLangue()).as("check langue").isEqualTo(expected.getLangue()))
+            .satisfies(a -> assertThat(a.getPhoto()).as("check photo").isEqualTo(expected.getPhoto()))
+            .satisfies(a -> assertThat(a.getPhotoContentType()).as("check photo contenty type").isEqualTo(expected.getPhotoContentType()))
+            .satisfies(a -> assertThat(a.getDateCreation()).as("check dateCreation").isEqualTo(expected.getDateCreation()))
+            .satisfies(a -> assertThat(a.getDerniereConnexion()).as("check derniereConnexion").isEqualTo(expected.getDerniereConnexion()))
+            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()))
             .satisfies(a -> assertThat(a.getDateEmbauche()).as("check dateEmbauche").isEqualTo(expected.getDateEmbauche()))
             .satisfies(a -> assertThat(a.getNumeroPermis()).as("check numeroPermis").isEqualTo(expected.getNumeroPermis()));
     }

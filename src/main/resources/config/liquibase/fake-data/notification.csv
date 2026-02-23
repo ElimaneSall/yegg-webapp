@@ -1,11 +1,11 @@
-id;type;titre;message;donnees;priorite;statut;lu;date_lecture;utilisateur_id;date_creation
-1;alerte;Retard sur la ligne 1;Le bus BUS-001 a 8 minutes de retard à l'arrêt Aéroport;{"ligne_id":1,"bus_id":1,"arret_id":1};haute;envoyee;true;2026-02-21T08:25:10;1;2026-02-21T08:23:15
-2;info;Changement d'itinéraire;La ligne 7 est déviée entre Thiaroye et Pikine pour travaux;{"ligne_id":5};basse;envoyee;false;;2;2026-02-21T07:15:30
-3;alerte;Problème technique;Le bus BUS-007 signale une panne à Thiaroye Gare;{"bus_id":7};haute;envoyee;true;2026-02-21T09:30:45;5;2026-02-21T09:28:22
-4;info;Nouveaux horaires;La ligne 9 adopte de nouveaux horaires à partir du 1er mars;{"ligne_id":8};moyenne;envoyee;false;;8;2026-02-21T10:00:00
-5;alerte;Retard sur la ligne 9;Le bus BUS-011 a 15 minutes de retard à Diamniadio;{"ligne_id":9,"bus_id":11};haute;envoyee;true;2026-02-21T06:35:10;8;2026-02-21T06:30:18
-6;info;Fermeture de gare;La gare de Petersen sera fermée de 14h à 16h pour maintenance;{"arret_id":2};basse;envoyee;false;;3;2026-02-21T08:45:00
-7;alerte;Retard sur la ligne 13;Le bus BUS-013 a 6 minutes de retard à Parcelles Assainies;{"ligne_id":8,"bus_id":13};haute;envoyee;false;;14;2026-02-21T09:00:33
-8;info;Maintenance programmée;Le bus BUS-005 sera en maintenance le 22 février;{"bus_id":5};moyenne;envoyee;true;2026-02-21T10:10:00;3;2026-02-21T08:20:15
-9;alerte;Dépassement de seuil;L'arrêt Parcelles Assainies enregistre un afflux important;{"arret_id":8};haute;envoyee;false;;3;2026-02-21T09:15:22
-10;info;Mise à jour app;Nouvelle version de l'application disponible;{};basse;envoyee;false;;1;2026-02-21T09:00:00
+id;type;titre;message;donnees;priorite;statut;date_creation;date_envoi;lu;date_lecture
+1;BUS_APPROACHING;maigre;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;MEDIUM;SENT;2026-02-21T19:48:19;2026-02-21T11:34:52;true;2026-02-21T08:57:31
+2;BREAKDOWN;derrière grrr lutter;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;HIGH;SENT;2026-02-21T16:10:17;2026-02-21T02:04:49;false;2026-02-21T05:45:33
+3;BUS_APPROACHING;de façon à après que;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;MEDIUM;FAILED;2026-02-21T15:51:27;2026-02-21T08:17:14;false;2026-02-21T20:37:10
+4;INCIDENT;membre à vie;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;LOW;PENDING;2026-02-21T18:24:07;2026-02-21T09:43:23;true;2026-02-21T05:12:27
+5;BUS_APPROACHING;mal dans la mesure où;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;HIGH;FAILED;2026-02-21T13:09:36;2026-02-21T06:03:36;false;2026-02-21T22:49:14
+6;DELAY;malgré émérite;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;HIGH;SENT;2026-02-21T05:19:53;2026-02-21T15:22:40;true;2026-02-21T22:32:27
+7;BREAKDOWN;maigre;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;HIGH;PENDING;2026-02-21T17:17:50;2026-02-21T11:15:39;false;2026-02-21T12:48:39
+8;DELAY;renforcer dedans;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;LOW;SENT;2026-02-21T04:14:40;2026-02-21T09:11:23;true;2026-02-21T05:52:40
+9;INFORMATION;par suite de;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;HIGH;FAILED;2026-02-21T08:10:52;2026-02-21T03:54:38;false;2026-02-21T06:43:30
+10;INFORMATION;infime;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;LOW;FAILED;2026-02-21T02:54:39;2026-02-21T18:19:30;false;2026-02-21T13:23:30

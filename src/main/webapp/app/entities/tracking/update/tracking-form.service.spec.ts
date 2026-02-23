@@ -24,8 +24,11 @@ describe('Tracking Form Service', () => {
             longitude: expect.any(Object),
             vitesse: expect.any(Object),
             cap: expect.any(Object),
+            precision: expect.any(Object),
             timestamp: expect.any(Object),
             source: expect.any(Object),
+            evenement: expect.any(Object),
+            commentaire: expect.any(Object),
             bus: expect.any(Object),
           }),
         );
@@ -41,8 +44,11 @@ describe('Tracking Form Service', () => {
             longitude: expect.any(Object),
             vitesse: expect.any(Object),
             cap: expect.any(Object),
+            precision: expect.any(Object),
             timestamp: expect.any(Object),
             source: expect.any(Object),
+            evenement: expect.any(Object),
+            commentaire: expect.any(Object),
             bus: expect.any(Object),
           }),
         );

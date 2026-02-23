@@ -11,6 +11,7 @@ import static sn.yegg.app.web.rest.TestUtil.sameNumber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -50,14 +51,32 @@ class ArretResourceIT {
     private static final BigDecimal UPDATED_LONGITUDE = new BigDecimal(-179);
     private static final BigDecimal SMALLER_LONGITUDE = new BigDecimal(-180 - 1);
 
+    private static final Integer DEFAULT_ALTITUDE = 1;
+    private static final Integer UPDATED_ALTITUDE = 2;
+    private static final Integer SMALLER_ALTITUDE = 1 - 1;
+
     private static final String DEFAULT_ADRESSE = "AAAAAAAAAA";
     private static final String UPDATED_ADRESSE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_VILLE = "AAAAAAAAAA";
+    private static final String UPDATED_VILLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CODE_POSTAL = "AAAAAAAAAA";
+    private static final String UPDATED_CODE_POSTAL = "BBBBBBBBBB";
 
     private static final String DEFAULT_ZONE_TARIFAIRE = "AAAAAAAAAA";
     private static final String UPDATED_ZONE_TARIFAIRE = "BBBBBBBBBB";
 
     private static final String DEFAULT_EQUIPEMENTS = "AAAAAAAAAA";
     private static final String UPDATED_EQUIPEMENTS = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_PHOTO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_PHOTO = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_PHOTO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_PHOTO_CONTENT_TYPE = "image/png";
+
+    private static final Boolean DEFAULT_ACCESSIBLE_PMR = false;
+    private static final Boolean UPDATED_ACCESSIBLE_PMR = true;
 
     private static final Boolean DEFAULT_ACTIF = false;
     private static final Boolean UPDATED_ACTIF = true;
@@ -99,9 +118,15 @@ class ArretResourceIT {
             .code(DEFAULT_CODE)
             .latitude(DEFAULT_LATITUDE)
             .longitude(DEFAULT_LONGITUDE)
+            .altitude(DEFAULT_ALTITUDE)
             .adresse(DEFAULT_ADRESSE)
+            .ville(DEFAULT_VILLE)
+            .codePostal(DEFAULT_CODE_POSTAL)
             .zoneTarifaire(DEFAULT_ZONE_TARIFAIRE)
             .equipements(DEFAULT_EQUIPEMENTS)
+            .photo(DEFAULT_PHOTO)
+            .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
+            .accessiblePMR(DEFAULT_ACCESSIBLE_PMR)
             .actif(DEFAULT_ACTIF);
     }
 
@@ -117,9 +142,15 @@ class ArretResourceIT {
             .code(UPDATED_CODE)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
+            .altitude(UPDATED_ALTITUDE)
             .adresse(UPDATED_ADRESSE)
+            .ville(UPDATED_VILLE)
+            .codePostal(UPDATED_CODE_POSTAL)
             .zoneTarifaire(UPDATED_ZONE_TARIFAIRE)
             .equipements(UPDATED_EQUIPEMENTS)
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .accessiblePMR(UPDATED_ACCESSIBLE_PMR)
             .actif(UPDATED_ACTIF);
     }
 
@@ -279,9 +310,15 @@ class ArretResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(sameNumber(DEFAULT_LATITUDE))))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(sameNumber(DEFAULT_LONGITUDE))))
+            .andExpect(jsonPath("$.[*].altitude").value(hasItem(DEFAULT_ALTITUDE)))
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
+            .andExpect(jsonPath("$.[*].ville").value(hasItem(DEFAULT_VILLE)))
+            .andExpect(jsonPath("$.[*].codePostal").value(hasItem(DEFAULT_CODE_POSTAL)))
             .andExpect(jsonPath("$.[*].zoneTarifaire").value(hasItem(DEFAULT_ZONE_TARIFAIRE)))
             .andExpect(jsonPath("$.[*].equipements").value(hasItem(DEFAULT_EQUIPEMENTS)))
+            .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PHOTO))))
+            .andExpect(jsonPath("$.[*].accessiblePMR").value(hasItem(DEFAULT_ACCESSIBLE_PMR)))
             .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
     }
 
@@ -301,9 +338,15 @@ class ArretResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.latitude").value(sameNumber(DEFAULT_LATITUDE)))
             .andExpect(jsonPath("$.longitude").value(sameNumber(DEFAULT_LONGITUDE)))
+            .andExpect(jsonPath("$.altitude").value(DEFAULT_ALTITUDE))
             .andExpect(jsonPath("$.adresse").value(DEFAULT_ADRESSE))
+            .andExpect(jsonPath("$.ville").value(DEFAULT_VILLE))
+            .andExpect(jsonPath("$.codePostal").value(DEFAULT_CODE_POSTAL))
             .andExpect(jsonPath("$.zoneTarifaire").value(DEFAULT_ZONE_TARIFAIRE))
             .andExpect(jsonPath("$.equipements").value(DEFAULT_EQUIPEMENTS))
+            .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.photo").value(Base64.getEncoder().encodeToString(DEFAULT_PHOTO)))
+            .andExpect(jsonPath("$.accessiblePMR").value(DEFAULT_ACCESSIBLE_PMR))
             .andExpect(jsonPath("$.actif").value(DEFAULT_ACTIF));
     }
 
@@ -570,6 +613,76 @@ class ArretResourceIT {
 
     @Test
     @Transactional
+    void getAllArretsByAltitudeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude equals to
+        defaultArretFiltering("altitude.equals=" + DEFAULT_ALTITUDE, "altitude.equals=" + UPDATED_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude in
+        defaultArretFiltering("altitude.in=" + DEFAULT_ALTITUDE + "," + UPDATED_ALTITUDE, "altitude.in=" + UPDATED_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude is not null
+        defaultArretFiltering("altitude.specified=true", "altitude.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude is greater than or equal to
+        defaultArretFiltering("altitude.greaterThanOrEqual=" + DEFAULT_ALTITUDE, "altitude.greaterThanOrEqual=" + UPDATED_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude is less than or equal to
+        defaultArretFiltering("altitude.lessThanOrEqual=" + DEFAULT_ALTITUDE, "altitude.lessThanOrEqual=" + SMALLER_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude is less than
+        defaultArretFiltering("altitude.lessThan=" + UPDATED_ALTITUDE, "altitude.lessThan=" + DEFAULT_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAltitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where altitude is greater than
+        defaultArretFiltering("altitude.greaterThan=" + SMALLER_ALTITUDE, "altitude.greaterThan=" + DEFAULT_ALTITUDE);
+    }
+
+    @Test
+    @Transactional
     void getAllArretsByAdresseIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedArret = arretRepository.saveAndFlush(arret);
@@ -616,6 +729,106 @@ class ArretResourceIT {
 
         // Get all the arretList where adresse does not contain
         defaultArretFiltering("adresse.doesNotContain=" + UPDATED_ADRESSE, "adresse.doesNotContain=" + DEFAULT_ADRESSE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByVilleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where ville equals to
+        defaultArretFiltering("ville.equals=" + DEFAULT_VILLE, "ville.equals=" + UPDATED_VILLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByVilleIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where ville in
+        defaultArretFiltering("ville.in=" + DEFAULT_VILLE + "," + UPDATED_VILLE, "ville.in=" + UPDATED_VILLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByVilleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where ville is not null
+        defaultArretFiltering("ville.specified=true", "ville.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByVilleContainsSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where ville contains
+        defaultArretFiltering("ville.contains=" + DEFAULT_VILLE, "ville.contains=" + UPDATED_VILLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByVilleNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where ville does not contain
+        defaultArretFiltering("ville.doesNotContain=" + UPDATED_VILLE, "ville.doesNotContain=" + DEFAULT_VILLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByCodePostalIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where codePostal equals to
+        defaultArretFiltering("codePostal.equals=" + DEFAULT_CODE_POSTAL, "codePostal.equals=" + UPDATED_CODE_POSTAL);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByCodePostalIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where codePostal in
+        defaultArretFiltering("codePostal.in=" + DEFAULT_CODE_POSTAL + "," + UPDATED_CODE_POSTAL, "codePostal.in=" + UPDATED_CODE_POSTAL);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByCodePostalIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where codePostal is not null
+        defaultArretFiltering("codePostal.specified=true", "codePostal.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByCodePostalContainsSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where codePostal contains
+        defaultArretFiltering("codePostal.contains=" + DEFAULT_CODE_POSTAL, "codePostal.contains=" + UPDATED_CODE_POSTAL);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByCodePostalNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where codePostal does not contain
+        defaultArretFiltering("codePostal.doesNotContain=" + UPDATED_CODE_POSTAL, "codePostal.doesNotContain=" + DEFAULT_CODE_POSTAL);
     }
 
     @Test
@@ -676,6 +889,39 @@ class ArretResourceIT {
 
     @Test
     @Transactional
+    void getAllArretsByAccessiblePMRIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where accessiblePMR equals to
+        defaultArretFiltering("accessiblePMR.equals=" + DEFAULT_ACCESSIBLE_PMR, "accessiblePMR.equals=" + UPDATED_ACCESSIBLE_PMR);
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAccessiblePMRIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where accessiblePMR in
+        defaultArretFiltering(
+            "accessiblePMR.in=" + DEFAULT_ACCESSIBLE_PMR + "," + UPDATED_ACCESSIBLE_PMR,
+            "accessiblePMR.in=" + UPDATED_ACCESSIBLE_PMR
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllArretsByAccessiblePMRIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedArret = arretRepository.saveAndFlush(arret);
+
+        // Get all the arretList where accessiblePMR is not null
+        defaultArretFiltering("accessiblePMR.specified=true", "accessiblePMR.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllArretsByActifIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedArret = arretRepository.saveAndFlush(arret);
@@ -722,9 +968,15 @@ class ArretResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(sameNumber(DEFAULT_LATITUDE))))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(sameNumber(DEFAULT_LONGITUDE))))
+            .andExpect(jsonPath("$.[*].altitude").value(hasItem(DEFAULT_ALTITUDE)))
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
+            .andExpect(jsonPath("$.[*].ville").value(hasItem(DEFAULT_VILLE)))
+            .andExpect(jsonPath("$.[*].codePostal").value(hasItem(DEFAULT_CODE_POSTAL)))
             .andExpect(jsonPath("$.[*].zoneTarifaire").value(hasItem(DEFAULT_ZONE_TARIFAIRE)))
             .andExpect(jsonPath("$.[*].equipements").value(hasItem(DEFAULT_EQUIPEMENTS)))
+            .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_PHOTO))))
+            .andExpect(jsonPath("$.[*].accessiblePMR").value(hasItem(DEFAULT_ACCESSIBLE_PMR)))
             .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
 
         // Check, that the count call also returns 1
@@ -778,9 +1030,15 @@ class ArretResourceIT {
             .code(UPDATED_CODE)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
+            .altitude(UPDATED_ALTITUDE)
             .adresse(UPDATED_ADRESSE)
+            .ville(UPDATED_VILLE)
+            .codePostal(UPDATED_CODE_POSTAL)
             .zoneTarifaire(UPDATED_ZONE_TARIFAIRE)
             .equipements(UPDATED_EQUIPEMENTS)
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .accessiblePMR(UPDATED_ACCESSIBLE_PMR)
             .actif(UPDATED_ACTIF);
         ArretDTO arretDTO = arretMapper.toDto(updatedArret);
 
@@ -867,7 +1125,14 @@ class ArretResourceIT {
         Arret partialUpdatedArret = new Arret();
         partialUpdatedArret.setId(arret.getId());
 
-        partialUpdatedArret.nom(UPDATED_NOM).actif(UPDATED_ACTIF);
+        partialUpdatedArret
+            .nom(UPDATED_NOM)
+            .latitude(UPDATED_LATITUDE)
+            .altitude(UPDATED_ALTITUDE)
+            .ville(UPDATED_VILLE)
+            .equipements(UPDATED_EQUIPEMENTS)
+            .accessiblePMR(UPDATED_ACCESSIBLE_PMR)
+            .actif(UPDATED_ACTIF);
 
         restArretMockMvc
             .perform(
@@ -900,9 +1165,15 @@ class ArretResourceIT {
             .code(UPDATED_CODE)
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
+            .altitude(UPDATED_ALTITUDE)
             .adresse(UPDATED_ADRESSE)
+            .ville(UPDATED_VILLE)
+            .codePostal(UPDATED_CODE_POSTAL)
             .zoneTarifaire(UPDATED_ZONE_TARIFAIRE)
             .equipements(UPDATED_EQUIPEMENTS)
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .accessiblePMR(UPDATED_ACCESSIBLE_PMR)
             .actif(UPDATED_ACTIF);
 
         restArretMockMvc

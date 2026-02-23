@@ -23,6 +23,12 @@
             <column name="distance_depart" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
+            <column name="temps_arret_moyen" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="arret_physique" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="ligne_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -53,6 +59,8 @@
             <column name="ordre" type="numeric"/>
             <column name="temps_trajet_depart" type="numeric"/>
             <column name="distance_depart" type="numeric"/>
+            <column name="temps_arret_moyen" type="numeric"/>
+            <column name="arret_physique" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

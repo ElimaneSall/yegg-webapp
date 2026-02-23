@@ -78,8 +78,10 @@ public class TrackingQueryService extends QueryService<Tracking> {
                 buildRangeSpecification(criteria.getLongitude(), Tracking_.longitude),
                 buildRangeSpecification(criteria.getVitesse(), Tracking_.vitesse),
                 buildRangeSpecification(criteria.getCap(), Tracking_.cap),
+                buildRangeSpecification(criteria.getPrecision(), Tracking_.precision),
                 buildRangeSpecification(criteria.getTimestamp(), Tracking_.timestamp),
-                buildStringSpecification(criteria.getSource(), Tracking_.source),
+                buildSpecification(criteria.getSource(), Tracking_.source),
+                buildStringSpecification(criteria.getEvenement(), Tracking_.evenement),
                 buildSpecification(criteria.getBusId(), root -> root.join(Tracking_.bus, JoinType.LEFT).get(Bus_.id))
             );
         }

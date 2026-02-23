@@ -81,6 +81,11 @@
           }
         </div>
 
+        <div class="mb-3">
+          <label class="form-label" for="field_precision" jhiTranslate="yeggApp.tracking.precision">Precision</label>
+          <input type="number" class="form-control" name="precision" id="field_precision" data-cy="precision" formControlName="precision" />
+        </div>
+
         @let timestampRef = editForm.get('timestamp')!;
         <div class="mb-3">
           <label class="form-label" for="field_timestamp" jhiTranslate="yeggApp.tracking.timestamp">Timestamp</label>
@@ -110,9 +115,38 @@
           }
         </div>
 
+        @let sourceRef = editForm.get('source')!;
         <div class="mb-3">
           <label class="form-label" for="field_source" jhiTranslate="yeggApp.tracking.source">Source</label>
-          <input type="text" class="form-control" name="source" id="field_source" data-cy="source" formControlName="source" />
+          <select class="form-control" name="source" formControlName="source" id="field_source" data-cy="source">
+            <option [ngValue]="null">{{ 'yeggApp.TrackingSource.null' | translate }}</option>
+            @for (trackingSource of trackingSourceValues; track $index) {
+              <option [value]="trackingSource">{{ 'yeggApp.TrackingSource.' + trackingSource | translate }}</option>
+            }
+          </select>
+          @if (sourceRef.invalid && (sourceRef.dirty || sourceRef.touched)) {
+            <div>
+              @if (editForm.get('source')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_evenement" jhiTranslate="yeggApp.tracking.evenement">Evenement</label>
+          <input type="text" class="form-control" name="evenement" id="field_evenement" data-cy="evenement" formControlName="evenement" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_commentaire" jhiTranslate="yeggApp.tracking.commentaire">Commentaire</label>
+          <textarea
+            class="form-control"
+            name="commentaire"
+            id="field_commentaire"
+            data-cy="commentaire"
+            formControlName="commentaire"
+          ></textarea>
         </div>
 
         <div class="mb-3">

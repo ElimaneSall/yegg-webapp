@@ -11,6 +11,8 @@ import static sn.yegg.app.web.rest.TestUtil.sameNumber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.IntegrationTest;
 import sn.yegg.app.domain.Ligne;
 import sn.yegg.app.domain.Operateur;
+import sn.yegg.app.domain.enumeration.LineStatus;
 import sn.yegg.app.repository.LigneRepository;
 import sn.yegg.app.service.dto.LigneDTO;
 import sn.yegg.app.service.mapper.LigneMapper;
@@ -46,19 +49,40 @@ class LigneResourceIT {
     private static final String DEFAULT_DIRECTION = "AAAAAAAAAA";
     private static final String UPDATED_DIRECTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_COULEUR = "#2dBdD9";
-    private static final String UPDATED_COULEUR = "#2Bf013";
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_DISTANCE_KM = new BigDecimal(1);
-    private static final BigDecimal UPDATED_DISTANCE_KM = new BigDecimal(2);
-    private static final BigDecimal SMALLER_DISTANCE_KM = new BigDecimal(1 - 1);
+    private static final String DEFAULT_COULEUR = "AAAAAAAAAA";
+    private static final String UPDATED_COULEUR = "BBBBBBBBBB";
 
-    private static final Integer DEFAULT_DUREE_MOYENNE = 1;
-    private static final Integer UPDATED_DUREE_MOYENNE = 2;
-    private static final Integer SMALLER_DUREE_MOYENNE = 1 - 1;
+    private static final BigDecimal DEFAULT_DISTANCE_KM = new BigDecimal(0);
+    private static final BigDecimal UPDATED_DISTANCE_KM = new BigDecimal(1);
+    private static final BigDecimal SMALLER_DISTANCE_KM = new BigDecimal(0 - 1);
 
-    private static final String DEFAULT_STATUT = "AAAAAAAAAA";
-    private static final String UPDATED_STATUT = "BBBBBBBBBB";
+    private static final Integer DEFAULT_DUREE_MOYENNE = 0;
+    private static final Integer UPDATED_DUREE_MOYENNE = 1;
+    private static final Integer SMALLER_DUREE_MOYENNE = 0 - 1;
+
+    private static final Integer DEFAULT_FREQUENCE = 1;
+    private static final Integer UPDATED_FREQUENCE = 2;
+    private static final Integer SMALLER_FREQUENCE = 1 - 1;
+
+    private static final LineStatus DEFAULT_STATUT = LineStatus.ACTIVE;
+    private static final LineStatus UPDATED_STATUT = LineStatus.SUSPENDED;
+
+    private static final String DEFAULT_JOURS_FERIES = "AAAAAAAAAA";
+    private static final String UPDATED_JOURS_FERIES = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_DATE_DEBUT = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_DEBUT = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_DEBUT = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DATE_FIN = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_FIN = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_FIN = LocalDate.ofEpochDay(-1L);
+
+    private static final Boolean DEFAULT_ACTIF = false;
+    private static final Boolean UPDATED_ACTIF = true;
 
     private static final String ENTITY_API_URL = "/api/lignes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -96,10 +120,16 @@ class LigneResourceIT {
             .numero(DEFAULT_NUMERO)
             .nom(DEFAULT_NOM)
             .direction(DEFAULT_DIRECTION)
+            .description(DEFAULT_DESCRIPTION)
             .couleur(DEFAULT_COULEUR)
             .distanceKm(DEFAULT_DISTANCE_KM)
             .dureeMoyenne(DEFAULT_DUREE_MOYENNE)
-            .statut(DEFAULT_STATUT);
+            .frequence(DEFAULT_FREQUENCE)
+            .statut(DEFAULT_STATUT)
+            .joursFeries(DEFAULT_JOURS_FERIES)
+            .dateDebut(DEFAULT_DATE_DEBUT)
+            .dateFin(DEFAULT_DATE_FIN)
+            .actif(DEFAULT_ACTIF);
     }
 
     /**
@@ -113,10 +143,16 @@ class LigneResourceIT {
             .numero(UPDATED_NUMERO)
             .nom(UPDATED_NOM)
             .direction(UPDATED_DIRECTION)
+            .description(UPDATED_DESCRIPTION)
             .couleur(UPDATED_COULEUR)
             .distanceKm(UPDATED_DISTANCE_KM)
             .dureeMoyenne(UPDATED_DUREE_MOYENNE)
-            .statut(UPDATED_STATUT);
+            .frequence(UPDATED_FREQUENCE)
+            .statut(UPDATED_STATUT)
+            .joursFeries(UPDATED_JOURS_FERIES)
+            .dateDebut(UPDATED_DATE_DEBUT)
+            .dateFin(UPDATED_DATE_FIN)
+            .actif(UPDATED_ACTIF);
     }
 
     @BeforeEach
@@ -244,6 +280,23 @@ class LigneResourceIT {
 
     @Test
     @Transactional
+    void checkActifIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        ligne.setActif(null);
+
+        // Create the Ligne, which fails.
+        LigneDTO ligneDTO = ligneMapper.toDto(ligne);
+
+        restLigneMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(ligneDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllLignes() throws Exception {
         // Initialize the database
         insertedLigne = ligneRepository.saveAndFlush(ligne);
@@ -257,10 +310,16 @@ class LigneResourceIT {
             .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)))
             .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM)))
             .andExpect(jsonPath("$.[*].direction").value(hasItem(DEFAULT_DIRECTION)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].couleur").value(hasItem(DEFAULT_COULEUR)))
             .andExpect(jsonPath("$.[*].distanceKm").value(hasItem(sameNumber(DEFAULT_DISTANCE_KM))))
             .andExpect(jsonPath("$.[*].dureeMoyenne").value(hasItem(DEFAULT_DUREE_MOYENNE)))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].frequence").value(hasItem(DEFAULT_FREQUENCE)))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].joursFeries").value(hasItem(DEFAULT_JOURS_FERIES)))
+            .andExpect(jsonPath("$.[*].dateDebut").value(hasItem(DEFAULT_DATE_DEBUT.toString())))
+            .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
+            .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
     }
 
     @Test
@@ -278,10 +337,16 @@ class LigneResourceIT {
             .andExpect(jsonPath("$.numero").value(DEFAULT_NUMERO))
             .andExpect(jsonPath("$.nom").value(DEFAULT_NOM))
             .andExpect(jsonPath("$.direction").value(DEFAULT_DIRECTION))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.couleur").value(DEFAULT_COULEUR))
             .andExpect(jsonPath("$.distanceKm").value(sameNumber(DEFAULT_DISTANCE_KM)))
             .andExpect(jsonPath("$.dureeMoyenne").value(DEFAULT_DUREE_MOYENNE))
-            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT));
+            .andExpect(jsonPath("$.frequence").value(DEFAULT_FREQUENCE))
+            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
+            .andExpect(jsonPath("$.joursFeries").value(DEFAULT_JOURS_FERIES))
+            .andExpect(jsonPath("$.dateDebut").value(DEFAULT_DATE_DEBUT.toString()))
+            .andExpect(jsonPath("$.dateFin").value(DEFAULT_DATE_FIN.toString()))
+            .andExpect(jsonPath("$.actif").value(DEFAULT_ACTIF));
     }
 
     @Test
@@ -653,6 +718,79 @@ class LigneResourceIT {
 
     @Test
     @Transactional
+    void getAllLignesByFrequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence equals to
+        defaultLigneFiltering("frequence.equals=" + DEFAULT_FREQUENCE, "frequence.equals=" + UPDATED_FREQUENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence in
+        defaultLigneFiltering("frequence.in=" + DEFAULT_FREQUENCE + "," + UPDATED_FREQUENCE, "frequence.in=" + UPDATED_FREQUENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence is not null
+        defaultLigneFiltering("frequence.specified=true", "frequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence is greater than or equal to
+        defaultLigneFiltering(
+            "frequence.greaterThanOrEqual=" + DEFAULT_FREQUENCE,
+            "frequence.greaterThanOrEqual=" + (DEFAULT_FREQUENCE + 1)
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence is less than or equal to
+        defaultLigneFiltering("frequence.lessThanOrEqual=" + DEFAULT_FREQUENCE, "frequence.lessThanOrEqual=" + SMALLER_FREQUENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence is less than
+        defaultLigneFiltering("frequence.lessThan=" + (DEFAULT_FREQUENCE + 1), "frequence.lessThan=" + DEFAULT_FREQUENCE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByFrequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where frequence is greater than
+        defaultLigneFiltering("frequence.greaterThan=" + SMALLER_FREQUENCE, "frequence.greaterThan=" + DEFAULT_FREQUENCE);
+    }
+
+    @Test
+    @Transactional
     void getAllLignesByStatutIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedLigne = ligneRepository.saveAndFlush(ligne);
@@ -683,22 +821,172 @@ class LigneResourceIT {
 
     @Test
     @Transactional
-    void getAllLignesByStatutContainsSomething() throws Exception {
+    void getAllLignesByDateDebutIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedLigne = ligneRepository.saveAndFlush(ligne);
 
-        // Get all the ligneList where statut contains
-        defaultLigneFiltering("statut.contains=" + DEFAULT_STATUT, "statut.contains=" + UPDATED_STATUT);
+        // Get all the ligneList where dateDebut equals to
+        defaultLigneFiltering("dateDebut.equals=" + DEFAULT_DATE_DEBUT, "dateDebut.equals=" + UPDATED_DATE_DEBUT);
     }
 
     @Test
     @Transactional
-    void getAllLignesByStatutNotContainsSomething() throws Exception {
+    void getAllLignesByDateDebutIsInShouldWork() throws Exception {
         // Initialize the database
         insertedLigne = ligneRepository.saveAndFlush(ligne);
 
-        // Get all the ligneList where statut does not contain
-        defaultLigneFiltering("statut.doesNotContain=" + UPDATED_STATUT, "statut.doesNotContain=" + DEFAULT_STATUT);
+        // Get all the ligneList where dateDebut in
+        defaultLigneFiltering("dateDebut.in=" + DEFAULT_DATE_DEBUT + "," + UPDATED_DATE_DEBUT, "dateDebut.in=" + UPDATED_DATE_DEBUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateDebutIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateDebut is not null
+        defaultLigneFiltering("dateDebut.specified=true", "dateDebut.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateDebutIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateDebut is greater than or equal to
+        defaultLigneFiltering("dateDebut.greaterThanOrEqual=" + DEFAULT_DATE_DEBUT, "dateDebut.greaterThanOrEqual=" + UPDATED_DATE_DEBUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateDebutIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateDebut is less than or equal to
+        defaultLigneFiltering("dateDebut.lessThanOrEqual=" + DEFAULT_DATE_DEBUT, "dateDebut.lessThanOrEqual=" + SMALLER_DATE_DEBUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateDebutIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateDebut is less than
+        defaultLigneFiltering("dateDebut.lessThan=" + UPDATED_DATE_DEBUT, "dateDebut.lessThan=" + DEFAULT_DATE_DEBUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateDebutIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateDebut is greater than
+        defaultLigneFiltering("dateDebut.greaterThan=" + SMALLER_DATE_DEBUT, "dateDebut.greaterThan=" + DEFAULT_DATE_DEBUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin equals to
+        defaultLigneFiltering("dateFin.equals=" + DEFAULT_DATE_FIN, "dateFin.equals=" + UPDATED_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin in
+        defaultLigneFiltering("dateFin.in=" + DEFAULT_DATE_FIN + "," + UPDATED_DATE_FIN, "dateFin.in=" + UPDATED_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin is not null
+        defaultLigneFiltering("dateFin.specified=true", "dateFin.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin is greater than or equal to
+        defaultLigneFiltering("dateFin.greaterThanOrEqual=" + DEFAULT_DATE_FIN, "dateFin.greaterThanOrEqual=" + UPDATED_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin is less than or equal to
+        defaultLigneFiltering("dateFin.lessThanOrEqual=" + DEFAULT_DATE_FIN, "dateFin.lessThanOrEqual=" + SMALLER_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin is less than
+        defaultLigneFiltering("dateFin.lessThan=" + UPDATED_DATE_FIN, "dateFin.lessThan=" + DEFAULT_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByDateFinIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where dateFin is greater than
+        defaultLigneFiltering("dateFin.greaterThan=" + SMALLER_DATE_FIN, "dateFin.greaterThan=" + DEFAULT_DATE_FIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByActifIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where actif equals to
+        defaultLigneFiltering("actif.equals=" + DEFAULT_ACTIF, "actif.equals=" + UPDATED_ACTIF);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByActifIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where actif in
+        defaultLigneFiltering("actif.in=" + DEFAULT_ACTIF + "," + UPDATED_ACTIF, "actif.in=" + UPDATED_ACTIF);
+    }
+
+    @Test
+    @Transactional
+    void getAllLignesByActifIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigne = ligneRepository.saveAndFlush(ligne);
+
+        // Get all the ligneList where actif is not null
+        defaultLigneFiltering("actif.specified=true", "actif.specified=false");
     }
 
     @Test
@@ -740,10 +1028,16 @@ class LigneResourceIT {
             .andExpect(jsonPath("$.[*].numero").value(hasItem(DEFAULT_NUMERO)))
             .andExpect(jsonPath("$.[*].nom").value(hasItem(DEFAULT_NOM)))
             .andExpect(jsonPath("$.[*].direction").value(hasItem(DEFAULT_DIRECTION)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].couleur").value(hasItem(DEFAULT_COULEUR)))
             .andExpect(jsonPath("$.[*].distanceKm").value(hasItem(sameNumber(DEFAULT_DISTANCE_KM))))
             .andExpect(jsonPath("$.[*].dureeMoyenne").value(hasItem(DEFAULT_DUREE_MOYENNE)))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].frequence").value(hasItem(DEFAULT_FREQUENCE)))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].joursFeries").value(hasItem(DEFAULT_JOURS_FERIES)))
+            .andExpect(jsonPath("$.[*].dateDebut").value(hasItem(DEFAULT_DATE_DEBUT.toString())))
+            .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
+            .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
 
         // Check, that the count call also returns 1
         restLigneMockMvc
@@ -795,10 +1089,16 @@ class LigneResourceIT {
             .numero(UPDATED_NUMERO)
             .nom(UPDATED_NOM)
             .direction(UPDATED_DIRECTION)
+            .description(UPDATED_DESCRIPTION)
             .couleur(UPDATED_COULEUR)
             .distanceKm(UPDATED_DISTANCE_KM)
             .dureeMoyenne(UPDATED_DUREE_MOYENNE)
-            .statut(UPDATED_STATUT);
+            .frequence(UPDATED_FREQUENCE)
+            .statut(UPDATED_STATUT)
+            .joursFeries(UPDATED_JOURS_FERIES)
+            .dateDebut(UPDATED_DATE_DEBUT)
+            .dateFin(UPDATED_DATE_FIN)
+            .actif(UPDATED_ACTIF);
         LigneDTO ligneDTO = ligneMapper.toDto(updatedLigne);
 
         restLigneMockMvc
@@ -884,7 +1184,14 @@ class LigneResourceIT {
         Ligne partialUpdatedLigne = new Ligne();
         partialUpdatedLigne.setId(ligne.getId());
 
-        partialUpdatedLigne.numero(UPDATED_NUMERO).couleur(UPDATED_COULEUR).statut(UPDATED_STATUT);
+        partialUpdatedLigne
+            .direction(UPDATED_DIRECTION)
+            .description(UPDATED_DESCRIPTION)
+            .couleur(UPDATED_COULEUR)
+            .distanceKm(UPDATED_DISTANCE_KM)
+            .dureeMoyenne(UPDATED_DUREE_MOYENNE)
+            .dateDebut(UPDATED_DATE_DEBUT)
+            .dateFin(UPDATED_DATE_FIN);
 
         restLigneMockMvc
             .perform(
@@ -916,10 +1223,16 @@ class LigneResourceIT {
             .numero(UPDATED_NUMERO)
             .nom(UPDATED_NOM)
             .direction(UPDATED_DIRECTION)
+            .description(UPDATED_DESCRIPTION)
             .couleur(UPDATED_COULEUR)
             .distanceKm(UPDATED_DISTANCE_KM)
             .dureeMoyenne(UPDATED_DUREE_MOYENNE)
-            .statut(UPDATED_STATUT);
+            .frequence(UPDATED_FREQUENCE)
+            .statut(UPDATED_STATUT)
+            .joursFeries(UPDATED_JOURS_FERIES)
+            .dateDebut(UPDATED_DATE_DEBUT)
+            .dateFin(UPDATED_DATE_FIN)
+            .actif(UPDATED_ACTIF);
 
         restLigneMockMvc
             .perform(

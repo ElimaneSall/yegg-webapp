@@ -12,7 +12,9 @@ import { IUtilisateur, NewUtilisateur } from '../utilisateur.model';
 
 export type PartialUpdateUtilisateur = Partial<IUtilisateur> & Pick<IUtilisateur, 'id'>;
 
-type RestOf<T extends IUtilisateur | NewUtilisateur> = Omit<T, 'dateEmbauche'> & {
+type RestOf<T extends IUtilisateur | NewUtilisateur> = Omit<T, 'dateCreation' | 'derniereConnexion' | 'dateEmbauche'> & {
+  dateCreation?: string | null;
+  derniereConnexion?: string | null;
   dateEmbauche?: string | null;
 };
 
@@ -101,6 +103,8 @@ export class UtilisateurService {
   protected convertDateFromClient<T extends IUtilisateur | NewUtilisateur | PartialUpdateUtilisateur>(utilisateur: T): RestOf<T> {
     return {
       ...utilisateur,
+      dateCreation: utilisateur.dateCreation?.toJSON() ?? null,
+      derniereConnexion: utilisateur.derniereConnexion?.toJSON() ?? null,
       dateEmbauche: utilisateur.dateEmbauche?.format(DATE_FORMAT) ?? null,
     };
   }
@@ -108,6 +112,8 @@ export class UtilisateurService {
   protected convertDateFromServer(restUtilisateur: RestUtilisateur): IUtilisateur {
     return {
       ...restUtilisateur,
+      dateCreation: restUtilisateur.dateCreation ? dayjs(restUtilisateur.dateCreation) : undefined,
+      derniereConnexion: restUtilisateur.derniereConnexion ? dayjs(restUtilisateur.derniereConnexion) : undefined,
       dateEmbauche: restUtilisateur.dateEmbauche ? dayjs(restUtilisateur.dateEmbauche) : undefined,
     };
   }

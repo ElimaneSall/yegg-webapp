@@ -24,8 +24,8 @@ describe('Favori Form Service', () => {
             cibleId: expect.any(Object),
             nomPersonnalise: expect.any(Object),
             ordre: expect.any(Object),
-            alerteActive: expect.any(Object),
-            alerteSeuil: expect.any(Object),
+            dateAjout: expect.any(Object),
+            dernierAcces: expect.any(Object),
             utilisateur: expect.any(Object),
           }),
         );
@@ -41,8 +41,8 @@ describe('Favori Form Service', () => {
             cibleId: expect.any(Object),
             nomPersonnalise: expect.any(Object),
             ordre: expect.any(Object),
-            alerteActive: expect.any(Object),
-            alerteSeuil: expect.any(Object),
+            dateAjout: expect.any(Object),
+            dernierAcces: expect.any(Object),
             utilisateur: expect.any(Object),
           }),
         );

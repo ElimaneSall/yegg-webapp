@@ -12,8 +12,12 @@ public class UtilisateurTestSamples {
     public static Utilisateur getUtilisateurSample1() {
         return new Utilisateur()
             .id(1L)
-            .matricule("matricule1")
+            .prenom("prenom1")
+            .nom("nom1")
+            .email("email1")
             .telephone("telephone1")
+            .motDePasse("motDePasse1")
+            .matricule("matricule1")
             .fcmToken("fcmToken1")
             .langue("langue1")
             .numeroPermis("numeroPermis1");
@@ -22,8 +26,12 @@ public class UtilisateurTestSamples {
     public static Utilisateur getUtilisateurSample2() {
         return new Utilisateur()
             .id(2L)
-            .matricule("matricule2")
+            .prenom("prenom2")
+            .nom("nom2")
+            .email("email2")
             .telephone("telephone2")
+            .motDePasse("motDePasse2")
+            .matricule("matricule2")
             .fcmToken("fcmToken2")
             .langue("langue2")
             .numeroPermis("numeroPermis2");
@@ -32,8 +40,12 @@ public class UtilisateurTestSamples {
     public static Utilisateur getUtilisateurRandomSampleGenerator() {
         return new Utilisateur()
             .id(longCount.incrementAndGet())
-            .matricule(UUID.randomUUID().toString())
+            .prenom(UUID.randomUUID().toString())
+            .nom(UUID.randomUUID().toString())
+            .email(UUID.randomUUID().toString())
             .telephone(UUID.randomUUID().toString())
+            .motDePasse(UUID.randomUUID().toString())
+            .matricule(UUID.randomUUID().toString())
             .fcmToken(UUID.randomUUID().toString())
             .langue(UUID.randomUUID().toString())
             .numeroPermis(UUID.randomUUID().toString());

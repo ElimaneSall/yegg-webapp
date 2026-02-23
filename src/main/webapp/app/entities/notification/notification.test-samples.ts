@@ -4,34 +4,44 @@ import { INotification, NewNotification } from './notification.model';
 
 export const sampleWithRequiredData: INotification = {
   id: 10110,
-  titre: 'ramper triathlète',
+  type: 'BREAKDOWN',
+  titre: 'malade',
   message: '../fake-data/blob/hipster.txt',
+  statut: 'FAILED',
+  dateCreation: dayjs('2026-02-21T04:35'),
 };
 
 export const sampleWithPartialData: INotification = {
-  id: 22441,
+  id: 2380,
+  type: 'BREAKDOWN',
   titre: 'hé cadre',
   message: '../fake-data/blob/hipster.txt',
-  priorite: 'au cas où',
-  lu: false,
-  dateLecture: dayjs('2026-02-21T15:39'),
+  statut: 'SENT',
+  dateCreation: dayjs('2026-02-21T02:37'),
+  dateEnvoi: dayjs('2026-02-21T14:05'),
+  dateLecture: dayjs('2026-02-21T19:38'),
 };
 
 export const sampleWithFullData: INotification = {
   id: 5787,
-  type: 'sédentaire émérite',
-  titre: 'avare',
+  type: 'INCIDENT',
+  titre: 'immense bè avare',
   message: '../fake-data/blob/hipster.txt',
   donnees: '../fake-data/blob/hipster.txt',
-  priorite: 'aigre excuser',
-  statut: 'au prix de attacher',
+  priorite: 'MEDIUM',
+  statut: 'SENT',
+  dateCreation: dayjs('2026-02-21T17:09'),
+  dateEnvoi: dayjs('2026-02-21T23:29'),
   lu: false,
-  dateLecture: dayjs('2026-02-21T06:13'),
+  dateLecture: dayjs('2026-02-21T08:01'),
 };
 
 export const sampleWithNewData: NewNotification = {
-  titre: 'de peur que en vérité coin-coin',
+  type: 'INFORMATION',
+  titre: 'sus jeune enfant secours',
   message: '../fake-data/blob/hipster.txt',
+  statut: 'SENT',
+  dateCreation: dayjs('2026-02-21T20:53'),
   id: null,
 };
 

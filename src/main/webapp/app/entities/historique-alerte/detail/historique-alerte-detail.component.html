@@ -1,0 +1,92 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (historiqueAlerte(); as historiqueAlerteRef) {
+      <div>
+        <h2 data-cy="historiqueAlerteDetailsHeading">
+          <span jhiTranslate="yeggApp.historiqueAlerte.detail.title">Historique Alerte</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.dateDeclenchement">Date Declenchement</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.dateDeclenchement | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.busNumero">Bus Numero</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.busNumero }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.distanceReelle">Distance Reelle</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.distanceReelle }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.tempsReel">Temps Reel</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.tempsReel }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.typeDeclenchement">Type Declenchement</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.ThresholdType.' + (historiqueAlerteRef.typeDeclenchement ?? 'null')">{{
+              { null: '', DISTANCE: 'DISTANCE', TIME: 'TIME', OR_BOTH: 'OR_BOTH', AND_BOTH: 'AND_BOTH' }[
+                historiqueAlerteRef.typeDeclenchement ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.notificationEnvoyee">Notification Envoyee</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.notificationEnvoyee }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.dateLecture">Date Lecture</span></dt>
+          <dd>
+            <span>{{ historiqueAlerteRef.dateLecture | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.bus">Bus</span></dt>
+          <dd>
+            @if (historiqueAlerte()!.bus) {
+              <div>
+                <a [routerLink]="['/bus', historiqueAlerte()!.bus?.id, 'view']">{{ historiqueAlerteRef.bus?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.alerteApproche">Alerte Approche</span></dt>
+          <dd>
+            @if (historiqueAlerte()!.alerteApproche) {
+              <div>
+                <a [routerLink]="['/alerte-approche', historiqueAlerte()!.alerteApproche?.id, 'view']">{{
+                  historiqueAlerteRef.alerteApproche?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.historiqueAlerte.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (historiqueAlerte()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', historiqueAlerte()!.utilisateur?.id, 'view']">{{
+                  historiqueAlerteRef.utilisateur?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/historique-alerte', historiqueAlerteRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

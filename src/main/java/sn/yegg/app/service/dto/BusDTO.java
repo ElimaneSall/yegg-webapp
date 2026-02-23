@@ -4,7 +4,10 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.BusStatus;
+import sn.yegg.app.domain.enumeration.EnergyType;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Bus} entity.
@@ -22,12 +25,24 @@ public class BusDTO implements Serializable {
 
     private String modele;
 
+    private String constructeur;
+
     @NotNull
     @Min(value = 1)
     @Max(value = 200)
     private Integer capacite;
 
+    @Min(value = 0)
+    @Max(value = 100)
+    private Integer capaciteDebout;
+
+    @Min(value = 1990)
+    @Max(value = 2100)
     private Integer anneeFabrication;
+
+    private EnergyType energie;
+
+    private Integer autonomieKm;
 
     private String gpsDeviceId;
 
@@ -52,11 +67,17 @@ public class BusDTO implements Serializable {
     private Instant positionUpdatedAt;
 
     @NotNull
-    private String statut;
+    private BusStatus statut;
 
-    private UtilisateurDTO utilisateur;
+    private LocalDate dateMiseEnService;
+
+    private LocalDate dateDernierEntretien;
+
+    private Integer prochainEntretienKm;
 
     private LigneDTO ligne;
+
+    private UtilisateurDTO chauffeur;
 
     public Long getId() {
         return id;
@@ -90,6 +111,14 @@ public class BusDTO implements Serializable {
         this.modele = modele;
     }
 
+    public String getConstructeur() {
+        return constructeur;
+    }
+
+    public void setConstructeur(String constructeur) {
+        this.constructeur = constructeur;
+    }
+
     public Integer getCapacite() {
         return capacite;
     }
@@ -98,12 +127,36 @@ public class BusDTO implements Serializable {
         this.capacite = capacite;
     }
 
+    public Integer getCapaciteDebout() {
+        return capaciteDebout;
+    }
+
+    public void setCapaciteDebout(Integer capaciteDebout) {
+        this.capaciteDebout = capaciteDebout;
+    }
+
     public Integer getAnneeFabrication() {
         return anneeFabrication;
     }
 
     public void setAnneeFabrication(Integer anneeFabrication) {
         this.anneeFabrication = anneeFabrication;
+    }
+
+    public EnergyType getEnergie() {
+        return energie;
+    }
+
+    public void setEnergie(EnergyType energie) {
+        this.energie = energie;
+    }
+
+    public Integer getAutonomieKm() {
+        return autonomieKm;
+    }
+
+    public void setAutonomieKm(Integer autonomieKm) {
+        this.autonomieKm = autonomieKm;
     }
 
     public String getGpsDeviceId() {
@@ -178,20 +231,36 @@ public class BusDTO implements Serializable {
         this.positionUpdatedAt = positionUpdatedAt;
     }
 
-    public String getStatut() {
+    public BusStatus getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(BusStatus statut) {
         this.statut = statut;
     }
 
-    public UtilisateurDTO getUtilisateur() {
-        return utilisateur;
+    public LocalDate getDateMiseEnService() {
+        return dateMiseEnService;
     }
 
-    public void setUtilisateur(UtilisateurDTO utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setDateMiseEnService(LocalDate dateMiseEnService) {
+        this.dateMiseEnService = dateMiseEnService;
+    }
+
+    public LocalDate getDateDernierEntretien() {
+        return dateDernierEntretien;
+    }
+
+    public void setDateDernierEntretien(LocalDate dateDernierEntretien) {
+        this.dateDernierEntretien = dateDernierEntretien;
+    }
+
+    public Integer getProchainEntretienKm() {
+        return prochainEntretienKm;
+    }
+
+    public void setProchainEntretienKm(Integer prochainEntretienKm) {
+        this.prochainEntretienKm = prochainEntretienKm;
     }
 
     public LigneDTO getLigne() {
@@ -200,6 +269,14 @@ public class BusDTO implements Serializable {
 
     public void setLigne(LigneDTO ligne) {
         this.ligne = ligne;
+    }
+
+    public UtilisateurDTO getChauffeur() {
+        return chauffeur;
+    }
+
+    public void setChauffeur(UtilisateurDTO chauffeur) {
+        this.chauffeur = chauffeur;
     }
 
     @Override
@@ -231,8 +308,12 @@ public class BusDTO implements Serializable {
             ", numeroVehicule='" + getNumeroVehicule() + "'" +
             ", plaque='" + getPlaque() + "'" +
             ", modele='" + getModele() + "'" +
+            ", constructeur='" + getConstructeur() + "'" +
             ", capacite=" + getCapacite() +
+            ", capaciteDebout=" + getCapaciteDebout() +
             ", anneeFabrication=" + getAnneeFabrication() +
+            ", energie='" + getEnergie() + "'" +
+            ", autonomieKm=" + getAutonomieKm() +
             ", gpsDeviceId='" + getGpsDeviceId() + "'" +
             ", gpsStatus='" + getGpsStatus() + "'" +
             ", gpsLastPing='" + getGpsLastPing() + "'" +
@@ -243,8 +324,11 @@ public class BusDTO implements Serializable {
             ", currentCap=" + getCurrentCap() +
             ", positionUpdatedAt='" + getPositionUpdatedAt() + "'" +
             ", statut='" + getStatut() + "'" +
-            ", utilisateur=" + getUtilisateur() +
+            ", dateMiseEnService='" + getDateMiseEnService() + "'" +
+            ", dateDernierEntretien='" + getDateDernierEntretien() + "'" +
+            ", prochainEntretienKm=" + getProchainEntretienKm() +
             ", ligne=" + getLigne() +
+            ", chauffeur=" + getChauffeur() +
             "}";
     }
 }

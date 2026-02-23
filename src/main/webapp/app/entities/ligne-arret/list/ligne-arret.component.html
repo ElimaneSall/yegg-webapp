@@ -63,6 +63,20 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="tempsArretMoyen">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.tempsArretMoyen">Temps Arret Moyen</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="arretPhysique">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.ligneArret.arretPhysique">Arret Physique</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="ligne.id">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.ligneArret.ligne">Ligne</span>
@@ -87,6 +101,8 @@
               <td>{{ ligneArret.ordre }}</td>
               <td>{{ ligneArret.tempsTrajetDepart }}</td>
               <td>{{ ligneArret.distanceDepart }}</td>
+              <td>{{ ligneArret.tempsArretMoyen }}</td>
+              <td>{{ ligneArret.arretPhysique }}</td>
               <td>
                 @if (ligneArret.ligne) {
                   <div>

@@ -18,7 +18,12 @@
         @let typeRef = editForm.get('type')!;
         <div class="mb-3">
           <label class="form-label" for="field_type" jhiTranslate="yeggApp.favori.type">Type</label>
-          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'yeggApp.FavoriteType.null' | translate }}</option>
+            @for (favoriteType of favoriteTypeValues; track $index) {
+              <option [value]="favoriteType">{{ 'yeggApp.FavoriteType.' + favoriteType | translate }}</option>
+            }
+          </select>
           @if (typeRef.invalid && (typeRef.dirty || typeRef.touched)) {
             <div>
               @if (editForm.get('type')?.errors?.required) {
@@ -64,49 +69,48 @@
           <input type="number" class="form-control" name="ordre" id="field_ordre" data-cy="ordre" formControlName="ordre" />
         </div>
 
+        @let dateAjoutRef = editForm.get('dateAjout')!;
         <div class="mb-3">
-          <label class="form-label" for="field_alerteActive" jhiTranslate="yeggApp.favori.alerteActive">Alerte Active</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="alerteActive"
-            id="field_alerteActive"
-            data-cy="alerteActive"
-            formControlName="alerteActive"
-          />
-        </div>
-
-        @let alerteSeuilRef = editForm.get('alerteSeuil')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_alerteSeuil" jhiTranslate="yeggApp.favori.alerteSeuil">Alerte Seuil</label>
-          <input
-            type="number"
-            class="form-control"
-            name="alerteSeuil"
-            id="field_alerteSeuil"
-            data-cy="alerteSeuil"
-            formControlName="alerteSeuil"
-          />
-          @if (alerteSeuilRef.invalid && (alerteSeuilRef.dirty || alerteSeuilRef.touched)) {
+          <label class="form-label" for="field_dateAjout" jhiTranslate="yeggApp.favori.dateAjout">Date Ajout</label>
+          <div class="d-flex">
+            <input
+              id="field_dateAjout"
+              data-cy="dateAjout"
+              type="datetime-local"
+              class="form-control"
+              name="dateAjout"
+              formControlName="dateAjout"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateAjoutRef.invalid && (dateAjoutRef.dirty || dateAjoutRef.touched)) {
             <div>
-              @if (editForm.get('alerteSeuil')?.errors?.min) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
-                  >Ce champ doit être supérieur à 1.</small
-                >
-              }
-              @if (editForm.get('alerteSeuil')?.errors?.max) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '60' }"
-                  >Ce champ doit être inférieur à 60.</small
-                >
+              @if (editForm.get('dateAjout')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
               }
               <small
                 class="form-text text-danger"
-                [hidden]="!editForm.get('alerteSeuil')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-                >Ce champ doit être un nombre.</small
+                [hidden]="!editForm.get('dateAjout')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
               >
             </div>
           }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dernierAcces" jhiTranslate="yeggApp.favori.dernierAcces">Dernier Acces</label>
+          <div class="d-flex">
+            <input
+              id="field_dernierAcces"
+              data-cy="dernierAcces"
+              type="datetime-local"
+              class="form-control"
+              name="dernierAcces"
+              formControlName="dernierAcces"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
         </div>
 
         <div class="mb-3">

@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (alerteLigneArret(); as alerteLigneArretRef) {
+      <div>
+        <h2 data-cy="alerteLigneArretDetailsHeading">
+          <span jhiTranslate="yeggApp.alerteLigneArret.detail.title">Alerte Ligne Arret</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ alerteLigneArretRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteLigneArret.sens">Sens</span></dt>
+          <dd>
+            <span>{{ alerteLigneArretRef.sens }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteLigneArret.actif">Actif</span></dt>
+          <dd>
+            <span>{{ alerteLigneArretRef.actif }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteLigneArret.ligne">Ligne</span></dt>
+          <dd>
+            @if (alerteLigneArret()!.ligne) {
+              <div>
+                <a [routerLink]="['/ligne', alerteLigneArret()!.ligne?.id, 'view']">{{ alerteLigneArretRef.ligne?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteLigneArret.arret">Arret</span></dt>
+          <dd>
+            @if (alerteLigneArret()!.arret) {
+              <div>
+                <a [routerLink]="['/arret', alerteLigneArret()!.arret?.id, 'view']">{{ alerteLigneArretRef.arret?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.alerteLigneArret.alerteApproche">Alerte Approche</span></dt>
+          <dd>
+            @if (alerteLigneArret()!.alerteApproche) {
+              <div>
+                <a [routerLink]="['/alerte-approche', alerteLigneArret()!.alerteApproche?.id, 'view']">{{
+                  alerteLigneArretRef.alerteApproche?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/alerte-ligne-arret', alerteLigneArretRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,16 +1,11 @@
-id;numero;nom;direction;couleur;distance_km;duree_moyenne;statut;operateur_id
-1;1;Yoff - Palais;Aéroport > Palais de Justice;#FF0000;22.5;65;actif;1
-2;1B;Yoff - Gueule Tapée;Yoff > Palais;#00AAFF;18.3;55;actif;1
-3;2;Parcelles Assainies - Médina;PAU > Médina;#00FF00;14.2;45;actif;1
-4;4;Ouakam - Grand Yoff;Ouakam > VDN;#FFAA00;12.8;40;actif;1
-5;7;Camp Vert - Thiaroye;Camp Vert > Thiaroye Gare;#AA00FF;16.5;50;actif;2
-6;8;Liberté 6 - Gare Routière;L6 > Pompier;#FFA500;10.2;35;actif;2
-7;9;Fann - Colobane;Fann Hôpital > Colobane;#0000FF;8.5;25;actif;2
-8;14;Rufisque - Patte d'Oie;Rufisque > POM;#FF69B4;28.3;75;actif;3
-9;15;Diamniadio - Dakar Centre;Diamniadio > Médina;#800080;35.7;90;actif;3
-10;20;Pikine - Khar Yalla;Pikine Technopole > Khar Yalla;#008080;11.5;40;actif;4
-11;23;Keur Massar - Castors;Keur Massar > Castors;#FF1493;18.9;60;actif;5
-12;33;Cambérène - Guédiawaye;Cambérène > Guédiawaye;#808000;9.8;30;actif;5
-13;45;Yeumbeul - HLM;Yeumbeul > HLM;#FF4500;14.5;45;actif;6
-14;50;Mbao - Grand Médine;Mbao > GM;#2E8B57;12.3;40;inactif;6
-15;68;Sébikotane - Ouakam;Sébikotane > UCAD;#4B0082;42.6;110;actif;3
+id;numero;nom;direction;description;couleur;distance_km;duree_moyenne;frequence;statut;jours_feries;date_debut;date_fin;actif
+1;collègue t;loin de coûter fonctionnaire;afin que ferme ainsi;../fake-data/blob/hipster.txt;après;22737.54;31074;2;UNDER_CONSTRUCTION;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;true
+2;ci à l'ins;diététiste;cocorico hystérique;../fake-data/blob/hipster.txt;exagérer malade;27323.11;20622;17;CLOSED;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;true
+3;charitable;guère;étrangler;../fake-data/blob/hipster.txt;coin-coin;13932.72;15736;58;CLOSED;../fake-data/blob/hipster.txt;2026-02-21;2026-02-20;false
+4;de façon à;prou;premièrement;../fake-data/blob/hipster.txt;communauté étudiante de manière à ce que;22860.08;20793;40;UNDER_CONSTRUCTION;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;false
+5;adorable;a tantôt ah;deçà tant;../fake-data/blob/hipster.txt;psitt à raison de;9422.56;15593;27;ACTIVE;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;true
+6;aimable ru;sauvage sous couleur de;électorat après de crainte que;../fake-data/blob/hipster.txt;vaste secouer achever;15013.2;2727;59;ACTIVE;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;true
+7;parler;tellement;sage jeune;../fake-data/blob/hipster.txt;au-dessus à l'entour de chier;4178.32;14976;21;UNDER_CONSTRUCTION;../fake-data/blob/hipster.txt;2026-02-20;2026-02-21;true
+8;bâtir désa;bang;de façon à ce que blesser;../fake-data/blob/hipster.txt;présidence volontiers;28444.73;16217;59;UNDER_CONSTRUCTION;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;false
+9;repérer;sitôt que moderne enterrer;du fait que;../fake-data/blob/hipster.txt;membre titulaire fourrer au point que;26495.95;3893;48;CLOSED;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;false
+10;remplacer ;à défaut de;inviter;../fake-data/blob/hipster.txt;sincère doucement alentour;7462.26;1105;48;UNDER_CONSTRUCTION;../fake-data/blob/hipster.txt;2026-02-21;2026-02-21;true

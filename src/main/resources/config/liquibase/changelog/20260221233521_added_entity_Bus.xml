@@ -23,10 +23,22 @@
             <column name="modele" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="constructeur" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="capacite" type="integer">
                 <constraints nullable="false" />
             </column>
+            <column name="capacite_debout" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="annee_fabrication" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="energie" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="autonomie_km" type="integer">
                 <constraints nullable="true" />
             </column>
             <column name="gps_device_id" type="varchar(255)">
@@ -59,10 +71,19 @@
             <column name="statut" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="utilisateur_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_bus__utilisateur_id" />
+            <column name="date_mise_en_service" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_dernier_entretien" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="prochain_entretien_km" type="integer">
+                <constraints nullable="true" />
             </column>
             <column name="ligne_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="chauffeur_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -91,8 +112,12 @@
             <column name="numero_vehicule" type="string"/>
             <column name="plaque" type="string"/>
             <column name="modele" type="string"/>
+            <column name="constructeur" type="string"/>
             <column name="capacite" type="numeric"/>
+            <column name="capacite_debout" type="numeric"/>
             <column name="annee_fabrication" type="numeric"/>
+            <column name="energie" type="string"/>
+            <column name="autonomie_km" type="numeric"/>
             <column name="gps_device_id" type="string"/>
             <column name="gps_status" type="string"/>
             <column name="gps_last_ping" type="date"/>
@@ -103,6 +128,9 @@
             <column name="current_cap" type="numeric"/>
             <column name="position_updated_at" type="date"/>
             <column name="statut" type="string"/>
+            <column name="date_mise_en_service" type="date"/>
+            <column name="date_dernier_entretien" type="date"/>
+            <column name="prochain_entretien_km" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

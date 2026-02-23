@@ -56,9 +56,15 @@ public class ArretAsserts {
             .satisfies(a ->
                 assertThat(a.getLongitude()).as("check longitude").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getLongitude())
             )
+            .satisfies(a -> assertThat(a.getAltitude()).as("check altitude").isEqualTo(expected.getAltitude()))
             .satisfies(a -> assertThat(a.getAdresse()).as("check adresse").isEqualTo(expected.getAdresse()))
+            .satisfies(a -> assertThat(a.getVille()).as("check ville").isEqualTo(expected.getVille()))
+            .satisfies(a -> assertThat(a.getCodePostal()).as("check codePostal").isEqualTo(expected.getCodePostal()))
             .satisfies(a -> assertThat(a.getZoneTarifaire()).as("check zoneTarifaire").isEqualTo(expected.getZoneTarifaire()))
             .satisfies(a -> assertThat(a.getEquipements()).as("check equipements").isEqualTo(expected.getEquipements()))
+            .satisfies(a -> assertThat(a.getPhoto()).as("check photo").isEqualTo(expected.getPhoto()))
+            .satisfies(a -> assertThat(a.getPhotoContentType()).as("check photo contenty type").isEqualTo(expected.getPhotoContentType()))
+            .satisfies(a -> assertThat(a.getAccessiblePMR()).as("check accessiblePMR").isEqualTo(expected.getAccessiblePMR()))
             .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
     }
 

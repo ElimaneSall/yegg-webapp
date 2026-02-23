@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
+import sn.yegg.app.domain.enumeration.LineStatus;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 
@@ -19,6 +20,23 @@ import tech.jhipster.service.filter.*;
 @ParameterObject
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class LigneCriteria implements Serializable, Criteria {
+
+    /**
+     * Class for filtering LineStatus
+     */
+    public static class LineStatusFilter extends Filter<LineStatus> {
+
+        public LineStatusFilter() {}
+
+        public LineStatusFilter(LineStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public LineStatusFilter copy() {
+            return new LineStatusFilter(this);
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +54,15 @@ public class LigneCriteria implements Serializable, Criteria {
 
     private IntegerFilter dureeMoyenne;
 
-    private StringFilter statut;
+    private IntegerFilter frequence;
+
+    private LineStatusFilter statut;
+
+    private LocalDateFilter dateDebut;
+
+    private LocalDateFilter dateFin;
+
+    private BooleanFilter actif;
 
     private LongFilter ligneArretsId;
 
@@ -54,7 +80,11 @@ public class LigneCriteria implements Serializable, Criteria {
         this.couleur = other.optionalCouleur().map(StringFilter::copy).orElse(null);
         this.distanceKm = other.optionalDistanceKm().map(BigDecimalFilter::copy).orElse(null);
         this.dureeMoyenne = other.optionalDureeMoyenne().map(IntegerFilter::copy).orElse(null);
-        this.statut = other.optionalStatut().map(StringFilter::copy).orElse(null);
+        this.frequence = other.optionalFrequence().map(IntegerFilter::copy).orElse(null);
+        this.statut = other.optionalStatut().map(LineStatusFilter::copy).orElse(null);
+        this.dateDebut = other.optionalDateDebut().map(LocalDateFilter::copy).orElse(null);
+        this.dateFin = other.optionalDateFin().map(LocalDateFilter::copy).orElse(null);
+        this.actif = other.optionalActif().map(BooleanFilter::copy).orElse(null);
         this.ligneArretsId = other.optionalLigneArretsId().map(LongFilter::copy).orElse(null);
         this.operateurId = other.optionalOperateurId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -198,23 +228,99 @@ public class LigneCriteria implements Serializable, Criteria {
         this.dureeMoyenne = dureeMoyenne;
     }
 
-    public StringFilter getStatut() {
+    public IntegerFilter getFrequence() {
+        return frequence;
+    }
+
+    public Optional<IntegerFilter> optionalFrequence() {
+        return Optional.ofNullable(frequence);
+    }
+
+    public IntegerFilter frequence() {
+        if (frequence == null) {
+            setFrequence(new IntegerFilter());
+        }
+        return frequence;
+    }
+
+    public void setFrequence(IntegerFilter frequence) {
+        this.frequence = frequence;
+    }
+
+    public LineStatusFilter getStatut() {
         return statut;
     }
 
-    public Optional<StringFilter> optionalStatut() {
+    public Optional<LineStatusFilter> optionalStatut() {
         return Optional.ofNullable(statut);
     }
 
-    public StringFilter statut() {
+    public LineStatusFilter statut() {
         if (statut == null) {
-            setStatut(new StringFilter());
+            setStatut(new LineStatusFilter());
         }
         return statut;
     }
 
-    public void setStatut(StringFilter statut) {
+    public void setStatut(LineStatusFilter statut) {
         this.statut = statut;
+    }
+
+    public LocalDateFilter getDateDebut() {
+        return dateDebut;
+    }
+
+    public Optional<LocalDateFilter> optionalDateDebut() {
+        return Optional.ofNullable(dateDebut);
+    }
+
+    public LocalDateFilter dateDebut() {
+        if (dateDebut == null) {
+            setDateDebut(new LocalDateFilter());
+        }
+        return dateDebut;
+    }
+
+    public void setDateDebut(LocalDateFilter dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public LocalDateFilter getDateFin() {
+        return dateFin;
+    }
+
+    public Optional<LocalDateFilter> optionalDateFin() {
+        return Optional.ofNullable(dateFin);
+    }
+
+    public LocalDateFilter dateFin() {
+        if (dateFin == null) {
+            setDateFin(new LocalDateFilter());
+        }
+        return dateFin;
+    }
+
+    public void setDateFin(LocalDateFilter dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public BooleanFilter getActif() {
+        return actif;
+    }
+
+    public Optional<BooleanFilter> optionalActif() {
+        return Optional.ofNullable(actif);
+    }
+
+    public BooleanFilter actif() {
+        if (actif == null) {
+            setActif(new BooleanFilter());
+        }
+        return actif;
+    }
+
+    public void setActif(BooleanFilter actif) {
+        this.actif = actif;
     }
 
     public LongFilter getLigneArretsId() {
@@ -291,7 +397,11 @@ public class LigneCriteria implements Serializable, Criteria {
             Objects.equals(couleur, that.couleur) &&
             Objects.equals(distanceKm, that.distanceKm) &&
             Objects.equals(dureeMoyenne, that.dureeMoyenne) &&
+            Objects.equals(frequence, that.frequence) &&
             Objects.equals(statut, that.statut) &&
+            Objects.equals(dateDebut, that.dateDebut) &&
+            Objects.equals(dateFin, that.dateFin) &&
+            Objects.equals(actif, that.actif) &&
             Objects.equals(ligneArretsId, that.ligneArretsId) &&
             Objects.equals(operateurId, that.operateurId) &&
             Objects.equals(distinct, that.distinct)
@@ -300,7 +410,23 @@ public class LigneCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numero, nom, direction, couleur, distanceKm, dureeMoyenne, statut, ligneArretsId, operateurId, distinct);
+        return Objects.hash(
+            id,
+            numero,
+            nom,
+            direction,
+            couleur,
+            distanceKm,
+            dureeMoyenne,
+            frequence,
+            statut,
+            dateDebut,
+            dateFin,
+            actif,
+            ligneArretsId,
+            operateurId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -314,7 +440,11 @@ public class LigneCriteria implements Serializable, Criteria {
             optionalCouleur().map(f -> "couleur=" + f + ", ").orElse("") +
             optionalDistanceKm().map(f -> "distanceKm=" + f + ", ").orElse("") +
             optionalDureeMoyenne().map(f -> "dureeMoyenne=" + f + ", ").orElse("") +
+            optionalFrequence().map(f -> "frequence=" + f + ", ").orElse("") +
             optionalStatut().map(f -> "statut=" + f + ", ").orElse("") +
+            optionalDateDebut().map(f -> "dateDebut=" + f + ", ").orElse("") +
+            optionalDateFin().map(f -> "dateFin=" + f + ", ").orElse("") +
+            optionalActif().map(f -> "actif=" + f + ", ").orElse("") +
             optionalLigneArretsId().map(f -> "ligneArretsId=" + f + ", ").orElse("") +
             optionalOperateurId().map(f -> "operateurId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +

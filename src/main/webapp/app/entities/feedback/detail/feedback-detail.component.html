@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (feedback(); as feedbackRef) {
+      <div>
+        <h2 data-cy="feedbackDetailsHeading"><span jhiTranslate="yeggApp.feedback.detail.title">Feedback</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ feedbackRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.note">Note</span></dt>
+          <dd>
+            <span>{{ feedbackRef.note }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.commentaire">Commentaire</span></dt>
+          <dd>
+            <span>{{ feedbackRef.commentaire }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.typeObjet">Type Objet</span></dt>
+          <dd>
+            <span>{{ feedbackRef.typeObjet }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.objetId">Objet Id</span></dt>
+          <dd>
+            <span>{{ feedbackRef.objetId }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.dateCreation">Date Creation</span></dt>
+          <dd>
+            <span>{{ feedbackRef.dateCreation | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.anonyme">Anonyme</span></dt>
+          <dd>
+            <span>{{ feedbackRef.anonyme }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.feedback.utilisateur">Utilisateur</span></dt>
+          <dd>
+            @if (feedback()!.utilisateur) {
+              <div>
+                <a [routerLink]="['/utilisateur', feedback()!.utilisateur?.id, 'view']">{{ feedbackRef.utilisateur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/feedback', feedbackRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

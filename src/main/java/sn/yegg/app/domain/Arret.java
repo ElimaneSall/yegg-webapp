@@ -46,8 +46,17 @@ public class Arret implements Serializable {
     @Column(name = "longitude", precision = 21, scale = 2, nullable = false)
     private BigDecimal longitude;
 
+    @Column(name = "altitude")
+    private Integer altitude;
+
     @Column(name = "adresse")
     private String adresse;
+
+    @Column(name = "ville")
+    private String ville;
+
+    @Column(name = "code_postal")
+    private String codePostal;
 
     @Column(name = "zone_tarifaire")
     private String zoneTarifaire;
@@ -55,6 +64,16 @@ public class Arret implements Serializable {
     @Lob
     @Column(name = "equipements")
     private String equipements;
+
+    @Lob
+    @Column(name = "photo")
+    private byte[] photo;
+
+    @Column(name = "photo_content_type")
+    private String photoContentType;
+
+    @Column(name = "accessible_pmr")
+    private Boolean accessiblePMR;
 
     @NotNull
     @Column(name = "actif", nullable = false)
@@ -132,6 +151,19 @@ public class Arret implements Serializable {
         this.longitude = longitude;
     }
 
+    public Integer getAltitude() {
+        return this.altitude;
+    }
+
+    public Arret altitude(Integer altitude) {
+        this.setAltitude(altitude);
+        return this;
+    }
+
+    public void setAltitude(Integer altitude) {
+        this.altitude = altitude;
+    }
+
     public String getAdresse() {
         return this.adresse;
     }
@@ -143,6 +175,32 @@ public class Arret implements Serializable {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public String getVille() {
+        return this.ville;
+    }
+
+    public Arret ville(String ville) {
+        this.setVille(ville);
+        return this;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodePostal() {
+        return this.codePostal;
+    }
+
+    public Arret codePostal(String codePostal) {
+        this.setCodePostal(codePostal);
+        return this;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getZoneTarifaire() {
@@ -169,6 +227,45 @@ public class Arret implements Serializable {
 
     public void setEquipements(String equipements) {
         this.equipements = equipements;
+    }
+
+    public byte[] getPhoto() {
+        return this.photo;
+    }
+
+    public Arret photo(byte[] photo) {
+        this.setPhoto(photo);
+        return this;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return this.photoContentType;
+    }
+
+    public Arret photoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+        return this;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+    }
+
+    public Boolean getAccessiblePMR() {
+        return this.accessiblePMR;
+    }
+
+    public Arret accessiblePMR(Boolean accessiblePMR) {
+        this.setAccessiblePMR(accessiblePMR);
+        return this;
+    }
+
+    public void setAccessiblePMR(Boolean accessiblePMR) {
+        this.accessiblePMR = accessiblePMR;
     }
 
     public Boolean getActif() {
@@ -243,9 +340,15 @@ public class Arret implements Serializable {
             ", code='" + getCode() + "'" +
             ", latitude=" + getLatitude() +
             ", longitude=" + getLongitude() +
+            ", altitude=" + getAltitude() +
             ", adresse='" + getAdresse() + "'" +
+            ", ville='" + getVille() + "'" +
+            ", codePostal='" + getCodePostal() + "'" +
             ", zoneTarifaire='" + getZoneTarifaire() + "'" +
             ", equipements='" + getEquipements() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", photoContentType='" + getPhotoContentType() + "'" +
+            ", accessiblePMR='" + getAccessiblePMR() + "'" +
             ", actif='" + getActif() + "'" +
             "}";
     }

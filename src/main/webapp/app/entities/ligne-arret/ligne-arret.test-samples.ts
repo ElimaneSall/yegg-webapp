@@ -6,9 +6,10 @@ export const sampleWithRequiredData: ILigneArret = {
 };
 
 export const sampleWithPartialData: ILigneArret = {
-  id: 27825,
-  ordre: 7458,
-  tempsTrajetDepart: 12241,
+  id: 12241,
+  ordre: 21643,
+  tempsTrajetDepart: 19541,
+  arretPhysique: true,
 };
 
 export const sampleWithFullData: ILigneArret = {
@@ -16,6 +17,8 @@ export const sampleWithFullData: ILigneArret = {
   ordre: 16437,
   tempsTrajetDepart: 2433,
   distanceDepart: 24926.42,
+  tempsArretMoyen: 15928,
+  arretPhysique: false,
 };
 
 export const sampleWithNewData: NewLigneArret = {

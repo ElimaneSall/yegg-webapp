@@ -6,20 +6,31 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { FormatMediumDatePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
+
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { DataUtils } from 'app/core/util/data-util.service';
 import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
-import { ILigne } from '../ligne.model';
-
 import { EntityArrayResponseType, LigneService } from '../service/ligne.service';
 import { LigneDeleteDialogComponent } from '../delete/ligne-delete-dialog.component';
+import { ILigne } from '../ligne.model';
 
 @Component({
   selector: 'jhi-ligne',
   templateUrl: './ligne.component.html',
-  imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, FilterComponent, ItemCountComponent],
+  imports: [
+    RouterModule,
+    FormsModule,
+    SharedModule,
+    SortDirective,
+    SortByDirective,
+    FormatMediumDatePipe,
+    FilterComponent,
+    ItemCountComponent,
+  ],
 })
 export class LigneComponent implements OnInit {
   subscription: Subscription | null = null;
@@ -37,6 +48,7 @@ export class LigneComponent implements OnInit {
   protected readonly ligneService = inject(LigneService);
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
+  protected dataUtils = inject(DataUtils);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
 
@@ -51,6 +63,14 @@ export class LigneComponent implements OnInit {
       .subscribe();
 
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(ligne: ILigne): void {

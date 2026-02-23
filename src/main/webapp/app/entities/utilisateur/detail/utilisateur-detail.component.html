@@ -15,13 +15,37 @@
           <dd>
             <span>{{ utilisateurRef.id }}</span>
           </dd>
-          <dt><span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span></dt>
+          <dt><span jhiTranslate="yeggApp.utilisateur.prenom">Prenom</span></dt>
           <dd>
-            <span>{{ utilisateurRef.matricule }}</span>
+            <span>{{ utilisateurRef.prenom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.nom">Nom</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.email">Email</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.email }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.utilisateur.telephone">Telephone</span></dt>
           <dd>
             <span>{{ utilisateurRef.telephone }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.motDePasse">Mot De Passe</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.motDePasse }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.role">Role</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.UserRole.' + (utilisateurRef.role ?? 'null')">{{
+              { null: '', PASSENGER: 'PASSENGER', TOURIST: 'TOURIST', DRIVER: 'DRIVER', OPERATOR: 'OPERATOR', ADMIN: 'ADMIN' }[
+                utilisateurRef.role ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.matricule">Matricule</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.matricule }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.utilisateur.fcmToken">Fcm Token</span></dt>
           <dd>
@@ -31,9 +55,29 @@
           <dd>
             <span>{{ utilisateurRef.notificationsPush }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.notificationsSms">Notifications Sms</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.notificationsSms }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.utilisateur.langue">Langue</span></dt>
           <dd>
             <span>{{ utilisateurRef.langue }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.photo">Photo</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.photo }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.dateCreation">Date Creation</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.dateCreation | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.derniereConnexion">Derniere Connexion</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.derniereConnexion | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.utilisateur.actif">Actif</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.actif }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.utilisateur.dateEmbauche">Date Embauche</span></dt>
           <dd>

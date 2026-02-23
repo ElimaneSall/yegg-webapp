@@ -58,11 +58,35 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_tempsArretMoyen" jhiTranslate="yeggApp.ligneArret.tempsArretMoyen">Temps Arret Moyen</label>
+          <input
+            type="number"
+            class="form-control"
+            name="tempsArretMoyen"
+            id="field_tempsArretMoyen"
+            data-cy="tempsArretMoyen"
+            formControlName="tempsArretMoyen"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_arretPhysique" jhiTranslate="yeggApp.ligneArret.arretPhysique">Arret Physique</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="arretPhysique"
+            id="field_arretPhysique"
+            data-cy="arretPhysique"
+            formControlName="arretPhysique"
+          />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="field_ligne" jhiTranslate="yeggApp.ligneArret.ligne">Ligne</label>
           <select class="form-control" id="field_ligne" data-cy="ligne" name="ligne" formControlName="ligne" [compareWith]="compareLigne">
             <option [ngValue]="null"></option>
             @for (ligneOption of lignesSharedCollection; track $index) {
-              <option [ngValue]="ligneOption">{{ ligneOption.numero }}</option>
+              <option [ngValue]="ligneOption">{{ ligneOption.id }}</option>
             }
           </select>
         </div>
@@ -72,7 +96,7 @@
           <select class="form-control" id="field_arret" data-cy="arret" name="arret" formControlName="arret" [compareWith]="compareArret">
             <option [ngValue]="null"></option>
             @for (arretOption of arretsSharedCollection; track $index) {
-              <option [ngValue]="arretOption">{{ arretOption.code }}</option>
+              <option [ngValue]="arretOption">{{ arretOption.id }}</option>
             }
           </select>
         </div>

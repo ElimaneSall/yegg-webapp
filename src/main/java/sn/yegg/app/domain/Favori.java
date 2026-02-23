@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import sn.yegg.app.domain.enumeration.FavoriteType;
 
 /**
  * A Favori.
@@ -24,8 +26,9 @@ public class Favori implements Serializable {
     private Long id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private FavoriteType type;
 
     @NotNull
     @Column(name = "cible_id", nullable = false)
@@ -37,16 +40,15 @@ public class Favori implements Serializable {
     @Column(name = "ordre")
     private Integer ordre;
 
-    @Column(name = "alerte_active")
-    private Boolean alerteActive;
+    @NotNull
+    @Column(name = "date_ajout", nullable = false)
+    private Instant dateAjout;
 
-    @Min(value = 1)
-    @Max(value = 60)
-    @Column(name = "alerte_seuil")
-    private Integer alerteSeuil;
+    @Column(name = "dernier_acces")
+    private Instant dernierAcces;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "bus" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "favorises", "notifications", "feedbacks", "historiqueAlertes" }, allowSetters = true)
     private Utilisateur utilisateur;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -64,16 +66,16 @@ public class Favori implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public FavoriteType getType() {
         return this.type;
     }
 
-    public Favori type(String type) {
+    public Favori type(FavoriteType type) {
         this.setType(type);
         return this;
     }
 
-    public void setType(String type) {
+    public void setType(FavoriteType type) {
         this.type = type;
     }
 
@@ -116,30 +118,30 @@ public class Favori implements Serializable {
         this.ordre = ordre;
     }
 
-    public Boolean getAlerteActive() {
-        return this.alerteActive;
+    public Instant getDateAjout() {
+        return this.dateAjout;
     }
 
-    public Favori alerteActive(Boolean alerteActive) {
-        this.setAlerteActive(alerteActive);
+    public Favori dateAjout(Instant dateAjout) {
+        this.setDateAjout(dateAjout);
         return this;
     }
 
-    public void setAlerteActive(Boolean alerteActive) {
-        this.alerteActive = alerteActive;
+    public void setDateAjout(Instant dateAjout) {
+        this.dateAjout = dateAjout;
     }
 
-    public Integer getAlerteSeuil() {
-        return this.alerteSeuil;
+    public Instant getDernierAcces() {
+        return this.dernierAcces;
     }
 
-    public Favori alerteSeuil(Integer alerteSeuil) {
-        this.setAlerteSeuil(alerteSeuil);
+    public Favori dernierAcces(Instant dernierAcces) {
+        this.setDernierAcces(dernierAcces);
         return this;
     }
 
-    public void setAlerteSeuil(Integer alerteSeuil) {
-        this.alerteSeuil = alerteSeuil;
+    public void setDernierAcces(Instant dernierAcces) {
+        this.dernierAcces = dernierAcces;
     }
 
     public Utilisateur getUtilisateur() {
@@ -183,8 +185,8 @@ public class Favori implements Serializable {
             ", cibleId=" + getCibleId() +
             ", nomPersonnalise='" + getNomPersonnalise() + "'" +
             ", ordre=" + getOrdre() +
-            ", alerteActive='" + getAlerteActive() + "'" +
-            ", alerteSeuil=" + getAlerteSeuil() +
+            ", dateAjout='" + getDateAjout() + "'" +
+            ", dernierAcces='" + getDernierAcces() + "'" +
             "}";
     }
 }

@@ -24,6 +24,8 @@
       "donnees": "Donnees",
       "priorite": "Priorite",
       "statut": "Statut",
+      "dateCreation": "Date Creation",
+      "dateEnvoi": "Date Envoi",
       "lu": "Lu",
       "dateLecture": "Date Lecture",
       "utilisateur": "Utilisateur"

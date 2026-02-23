@@ -41,19 +41,9 @@
           }
         </div>
 
-        @let telephoneRef = editForm.get('telephone')!;
         <div class="mb-3">
           <label class="form-label" for="field_telephone" jhiTranslate="yeggApp.operateur.telephone">Telephone</label>
           <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
-          @if (telephoneRef.invalid && (telephoneRef.dirty || telephoneRef.touched)) {
-            <div>
-              @if (editForm.get('telephone')?.errors?.pattern) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Telephone' }"
-                  >Ce champ doit suivre l&apos;expression régulière Telephone.</small
-                >
-              }
-            </div>
-          }
         </div>
 
         <div class="mb-3">
@@ -87,6 +77,49 @@
           </div>
           <input type="hidden" class="form-control" name="logo" id="field_logo" data-cy="logo" formControlName="logo" />
           <input type="hidden" class="form-control" name="logoContentType" id="field_logoContentType" formControlName="logoContentType" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_siteWeb" jhiTranslate="yeggApp.operateur.siteWeb">Site Web</label>
+          <input type="text" class="form-control" name="siteWeb" id="field_siteWeb" data-cy="siteWeb" formControlName="siteWeb" />
+        </div>
+
+        @let siretRef = editForm.get('siret')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_siret" jhiTranslate="yeggApp.operateur.siret">Siret</label>
+          <input type="text" class="form-control" name="siret" id="field_siret" data-cy="siret" formControlName="siret" />
+          @if (siretRef.invalid && (siretRef.dirty || siretRef.touched)) {
+            <div></div>
+          }
+        </div>
+
+        @let dateCreationRef = editForm.get('dateCreation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateCreation" jhiTranslate="yeggApp.operateur.dateCreation">Date Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateCreation"
+              data-cy="dateCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateCreation"
+              formControlName="dateCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateCreationRef.invalid && (dateCreationRef.dirty || dateCreationRef.touched)) {
+            <div>
+              @if (editForm.get('dateCreation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dateCreation')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
         </div>
 
         @let actifRef = editForm.get('actif')!;

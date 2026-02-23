@@ -4,10 +4,10 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 
-import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
-import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
 import { ILigne } from 'app/entities/ligne/ligne.model';
 import { LigneService } from 'app/entities/ligne/service/ligne.service';
+import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
+import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
 import { IBus } from '../bus.model';
 import { BusService } from '../service/bus.service';
 import { BusFormService } from './bus-form.service';
@@ -20,8 +20,8 @@ describe('Bus Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let busFormService: BusFormService;
   let busService: BusService;
-  let utilisateurService: UtilisateurService;
   let ligneService: LigneService;
+  let utilisateurService: UtilisateurService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,31 +44,13 @@ describe('Bus Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     busFormService = TestBed.inject(BusFormService);
     busService = TestBed.inject(BusService);
-    utilisateurService = TestBed.inject(UtilisateurService);
     ligneService = TestBed.inject(LigneService);
+    utilisateurService = TestBed.inject(UtilisateurService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('should call utilisateur query and add missing value', () => {
-      const bus: IBus = { id: 1566 };
-      const utilisateur: IUtilisateur = { id: 2179 };
-      bus.utilisateur = utilisateur;
-
-      const utilisateurCollection: IUtilisateur[] = [{ id: 2179 }];
-      jest.spyOn(utilisateurService, 'query').mockReturnValue(of(new HttpResponse({ body: utilisateurCollection })));
-      const expectedCollection: IUtilisateur[] = [utilisateur, ...utilisateurCollection];
-      jest.spyOn(utilisateurService, 'addUtilisateurToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ bus });
-      comp.ngOnInit();
-
-      expect(utilisateurService.query).toHaveBeenCalled();
-      expect(utilisateurService.addUtilisateurToCollectionIfMissing).toHaveBeenCalledWith(utilisateurCollection, utilisateur);
-      expect(comp.utilisateursCollection).toEqual(expectedCollection);
-    });
-
     it('should call Ligne query and add missing value', () => {
       const bus: IBus = { id: 1566 };
       const ligne: ILigne = { id: 18806 };
@@ -91,18 +73,40 @@ describe('Bus Management Update Component', () => {
       expect(comp.lignesSharedCollection).toEqual(expectedCollection);
     });
 
-    it('should update editForm', () => {
+    it('should call Utilisateur query and add missing value', () => {
       const bus: IBus = { id: 1566 };
-      const utilisateur: IUtilisateur = { id: 2179 };
-      bus.utilisateur = utilisateur;
-      const ligne: ILigne = { id: 18806 };
-      bus.ligne = ligne;
+      const chauffeur: IUtilisateur = { id: 2179 };
+      bus.chauffeur = chauffeur;
+
+      const utilisateurCollection: IUtilisateur[] = [{ id: 2179 }];
+      jest.spyOn(utilisateurService, 'query').mockReturnValue(of(new HttpResponse({ body: utilisateurCollection })));
+      const additionalUtilisateurs = [chauffeur];
+      const expectedCollection: IUtilisateur[] = [...additionalUtilisateurs, ...utilisateurCollection];
+      jest.spyOn(utilisateurService, 'addUtilisateurToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ bus });
       comp.ngOnInit();
 
-      expect(comp.utilisateursCollection).toContainEqual(utilisateur);
+      expect(utilisateurService.query).toHaveBeenCalled();
+      expect(utilisateurService.addUtilisateurToCollectionIfMissing).toHaveBeenCalledWith(
+        utilisateurCollection,
+        ...additionalUtilisateurs.map(expect.objectContaining),
+      );
+      expect(comp.utilisateursSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('should update editForm', () => {
+      const bus: IBus = { id: 1566 };
+      const ligne: ILigne = { id: 18806 };
+      bus.ligne = ligne;
+      const chauffeur: IUtilisateur = { id: 2179 };
+      bus.chauffeur = chauffeur;
+
+      activatedRoute.data = of({ bus });
+      comp.ngOnInit();
+
       expect(comp.lignesSharedCollection).toContainEqual(ligne);
+      expect(comp.utilisateursSharedCollection).toContainEqual(chauffeur);
       expect(comp.bus).toEqual(bus);
     });
   });
@@ -176,16 +180,6 @@ describe('Bus Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('compareUtilisateur', () => {
-      it('should forward to utilisateurService', () => {
-        const entity = { id: 2179 };
-        const entity2 = { id: 31928 };
-        jest.spyOn(utilisateurService, 'compareUtilisateur');
-        comp.compareUtilisateur(entity, entity2);
-        expect(utilisateurService.compareUtilisateur).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
     describe('compareLigne', () => {
       it('should forward to ligneService', () => {
         const entity = { id: 18806 };
@@ -193,6 +187,16 @@ describe('Bus Management Update Component', () => {
         jest.spyOn(ligneService, 'compareLigne');
         comp.compareLigne(entity, entity2);
         expect(ligneService.compareLigne).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareUtilisateur', () => {
+      it('should forward to utilisateurService', () => {
+        const entity = { id: 2179 };
+        const entity2 = { id: 31928 };
+        jest.spyOn(utilisateurService, 'compareUtilisateur');
+        comp.compareUtilisateur(entity, entity2);
+        expect(utilisateurService.compareUtilisateur).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

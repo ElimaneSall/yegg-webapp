@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type ArretFormGroupInput = IArret | PartialWithRequiredKeyOf<NewArret>;
 
-type ArretFormDefaults = Pick<NewArret, 'id' | 'actif'>;
+type ArretFormDefaults = Pick<NewArret, 'id' | 'accessiblePMR' | 'actif'>;
 
 type ArretFormGroupContent = {
   id: FormControl<IArret['id'] | NewArret['id']>;
@@ -22,9 +22,15 @@ type ArretFormGroupContent = {
   code: FormControl<IArret['code']>;
   latitude: FormControl<IArret['latitude']>;
   longitude: FormControl<IArret['longitude']>;
+  altitude: FormControl<IArret['altitude']>;
   adresse: FormControl<IArret['adresse']>;
+  ville: FormControl<IArret['ville']>;
+  codePostal: FormControl<IArret['codePostal']>;
   zoneTarifaire: FormControl<IArret['zoneTarifaire']>;
   equipements: FormControl<IArret['equipements']>;
+  photo: FormControl<IArret['photo']>;
+  photoContentType: FormControl<IArret['photoContentType']>;
+  accessiblePMR: FormControl<IArret['accessiblePMR']>;
   actif: FormControl<IArret['actif']>;
 };
 
@@ -57,9 +63,15 @@ export class ArretFormService {
       longitude: new FormControl(arretRawValue.longitude, {
         validators: [Validators.required, Validators.min(-180), Validators.max(180)],
       }),
+      altitude: new FormControl(arretRawValue.altitude),
       adresse: new FormControl(arretRawValue.adresse),
+      ville: new FormControl(arretRawValue.ville),
+      codePostal: new FormControl(arretRawValue.codePostal),
       zoneTarifaire: new FormControl(arretRawValue.zoneTarifaire),
       equipements: new FormControl(arretRawValue.equipements),
+      photo: new FormControl(arretRawValue.photo),
+      photoContentType: new FormControl(arretRawValue.photoContentType),
+      accessiblePMR: new FormControl(arretRawValue.accessiblePMR),
       actif: new FormControl(arretRawValue.actif, {
         validators: [Validators.required],
       }),
@@ -83,6 +95,7 @@ export class ArretFormService {
   private getFormDefaults(): ArretFormDefaults {
     return {
       id: null,
+      accessiblePMR: false,
       actif: false,
     };
   }

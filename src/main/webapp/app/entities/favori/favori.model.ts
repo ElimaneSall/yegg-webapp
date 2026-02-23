@@ -1,13 +1,15 @@
+import dayjs from 'dayjs/esm';
 import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
+import { FavoriteType } from 'app/entities/enumerations/favorite-type.model';
 
 export interface IFavori {
   id: number;
-  type?: string | null;
+  type?: keyof typeof FavoriteType | null;
   cibleId?: number | null;
   nomPersonnalise?: string | null;
   ordre?: number | null;
-  alerteActive?: boolean | null;
-  alerteSeuil?: number | null;
+  dateAjout?: dayjs.Dayjs | null;
+  dernierAcces?: dayjs.Dayjs | null;
   utilisateur?: Pick<IUtilisateur, 'id'> | null;
 }
 

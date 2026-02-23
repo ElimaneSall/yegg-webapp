@@ -27,13 +27,31 @@
           <dd>
             <span>{{ busRef.modele }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.bus.constructeur">Constructeur</span></dt>
+          <dd>
+            <span>{{ busRef.constructeur }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.bus.capacite">Capacite</span></dt>
           <dd>
             <span>{{ busRef.capacite }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.bus.capaciteDebout">Capacite Debout</span></dt>
+          <dd>
+            <span>{{ busRef.capaciteDebout }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</span></dt>
           <dd>
             <span>{{ busRef.anneeFabrication }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.energie">Energie</span></dt>
+          <dd>
+            <span [jhiTranslate]="'yeggApp.EnergyType.' + (busRef.energie ?? 'null')">{{
+              { null: '', DIESEL: 'DIESEL', ELECTRIC: 'ELECTRIC', HYBRID: 'HYBRID', CNG: 'CNG' }[busRef.energie ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.autonomieKm">Autonomie Km</span></dt>
+          <dd>
+            <span>{{ busRef.autonomieKm }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.bus.gpsDeviceId">Gps Device Id</span></dt>
           <dd>
@@ -73,21 +91,42 @@
           </dd>
           <dt><span jhiTranslate="yeggApp.bus.statut">Statut</span></dt>
           <dd>
-            <span>{{ busRef.statut }}</span>
+            <span [jhiTranslate]="'yeggApp.BusStatus.' + (busRef.statut ?? 'null')">{{
+              {
+                null: '',
+                IN_SERVICE: 'IN_SERVICE',
+                OUT_OF_SERVICE: 'OUT_OF_SERVICE',
+                BROKEN_DOWN: 'BROKEN_DOWN',
+                UNDER_MAINTENANCE: 'UNDER_MAINTENANCE',
+                ON_BREAK: 'ON_BREAK',
+              }[busRef.statut ?? 'null']
+            }}</span>
           </dd>
-          <dt><span jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</span></dt>
+          <dt><span jhiTranslate="yeggApp.bus.dateMiseEnService">Date Mise En Service</span></dt>
           <dd>
-            @if (bus()!.utilisateur) {
-              <div>
-                <a [routerLink]="['/utilisateur', bus()!.utilisateur?.id, 'view']">{{ busRef.utilisateur?.id }}</a>
-              </div>
-            }
+            <span>{{ busRef.dateMiseEnService | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.dateDernierEntretien">Date Dernier Entretien</span></dt>
+          <dd>
+            <span>{{ busRef.dateDernierEntretien | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.prochainEntretienKm">Prochain Entretien Km</span></dt>
+          <dd>
+            <span>{{ busRef.prochainEntretienKm }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.bus.ligne">Ligne</span></dt>
           <dd>
             @if (bus()!.ligne) {
               <div>
                 <a [routerLink]="['/ligne', bus()!.ligne?.id, 'view']">{{ busRef.ligne?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="yeggApp.bus.chauffeur">Chauffeur</span></dt>
+          <dd>
+            @if (bus()!.chauffeur) {
+              <div>
+                <a [routerLink]="['/utilisateur', bus()!.chauffeur?.id, 'view']">{{ busRef.chauffeur?.id }}</a>
               </div>
             }
           </dd>

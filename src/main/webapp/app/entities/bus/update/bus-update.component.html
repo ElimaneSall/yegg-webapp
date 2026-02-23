@@ -53,6 +53,18 @@
           <input type="text" class="form-control" name="modele" id="field_modele" data-cy="modele" formControlName="modele" />
         </div>
 
+        <div class="mb-3">
+          <label class="form-label" for="field_constructeur" jhiTranslate="yeggApp.bus.constructeur">Constructeur</label>
+          <input
+            type="text"
+            class="form-control"
+            name="constructeur"
+            id="field_constructeur"
+            data-cy="constructeur"
+            formControlName="constructeur"
+          />
+        </div>
+
         @let capaciteRef = editForm.get('capacite')!;
         <div class="mb-3">
           <label class="form-label" for="field_capacite" jhiTranslate="yeggApp.bus.capacite">Capacite</label>
@@ -82,6 +94,40 @@
           }
         </div>
 
+        @let capaciteDeboutRef = editForm.get('capaciteDebout')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_capaciteDebout" jhiTranslate="yeggApp.bus.capaciteDebout">Capacite Debout</label>
+          <input
+            type="number"
+            class="form-control"
+            name="capaciteDebout"
+            id="field_capaciteDebout"
+            data-cy="capaciteDebout"
+            formControlName="capaciteDebout"
+          />
+          @if (capaciteDeboutRef.invalid && (capaciteDeboutRef.dirty || capaciteDeboutRef.touched)) {
+            <div>
+              @if (editForm.get('capaciteDebout')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              @if (editForm.get('capaciteDebout')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '100' }"
+                  >Ce champ doit être inférieur à 100.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('capaciteDebout')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let anneeFabricationRef = editForm.get('anneeFabrication')!;
         <div class="mb-3">
           <label class="form-label" for="field_anneeFabrication" jhiTranslate="yeggApp.bus.anneeFabrication">Annee Fabrication</label>
           <input
@@ -91,6 +137,48 @@
             id="field_anneeFabrication"
             data-cy="anneeFabrication"
             formControlName="anneeFabrication"
+          />
+          @if (anneeFabricationRef.invalid && (anneeFabricationRef.dirty || anneeFabricationRef.touched)) {
+            <div>
+              @if (editForm.get('anneeFabrication')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1990' }"
+                  >Ce champ doit être supérieur à 1990.</small
+                >
+              }
+              @if (editForm.get('anneeFabrication')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '2100' }"
+                  >Ce champ doit être inférieur à 2100.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('anneeFabrication')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_energie" jhiTranslate="yeggApp.bus.energie">Energie</label>
+          <select class="form-control" name="energie" formControlName="energie" id="field_energie" data-cy="energie">
+            <option [ngValue]="null">{{ 'yeggApp.EnergyType.null' | translate }}</option>
+            @for (energyType of energyTypeValues; track $index) {
+              <option [value]="energyType">{{ 'yeggApp.EnergyType.' + energyType | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_autonomieKm" jhiTranslate="yeggApp.bus.autonomieKm">Autonomie Km</label>
+          <input
+            type="number"
+            class="form-control"
+            name="autonomieKm"
+            id="field_autonomieKm"
+            data-cy="autonomieKm"
+            formControlName="autonomieKm"
           />
         </div>
 
@@ -250,7 +338,12 @@
         @let statutRef = editForm.get('statut')!;
         <div class="mb-3">
           <label class="form-label" for="field_statut" jhiTranslate="yeggApp.bus.statut">Statut</label>
-          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          <select class="form-control" name="statut" formControlName="statut" id="field_statut" data-cy="statut">
+            <option [ngValue]="null">{{ 'yeggApp.BusStatus.null' | translate }}</option>
+            @for (busStatus of busStatusValues; track $index) {
+              <option [value]="busStatus">{{ 'yeggApp.BusStatus.' + busStatus | translate }}</option>
+            }
+          </select>
           @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
             <div>
               @if (editForm.get('statut')?.errors?.required) {
@@ -261,20 +354,57 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_utilisateur" jhiTranslate="yeggApp.bus.utilisateur">Utilisateur</label>
-          <select
-            class="form-control"
-            id="field_utilisateur"
-            data-cy="utilisateur"
-            name="utilisateur"
-            formControlName="utilisateur"
-            [compareWith]="compareUtilisateur"
+          <label class="form-label" for="field_dateMiseEnService" jhiTranslate="yeggApp.bus.dateMiseEnService">Date Mise En Service</label>
+          <div class="input-group">
+            <input
+              id="field_dateMiseEnService"
+              data-cy="dateMiseEnService"
+              type="text"
+              class="form-control"
+              name="dateMiseEnService"
+              ngbDatepicker
+              #dateMiseEnServiceDp="ngbDatepicker"
+              formControlName="dateMiseEnService"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateMiseEnServiceDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateDernierEntretien" jhiTranslate="yeggApp.bus.dateDernierEntretien"
+            >Date Dernier Entretien</label
           >
-            <option [ngValue]="null"></option>
-            @for (utilisateurOption of utilisateursCollection; track $index) {
-              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
-            }
-          </select>
+          <div class="input-group">
+            <input
+              id="field_dateDernierEntretien"
+              data-cy="dateDernierEntretien"
+              type="text"
+              class="form-control"
+              name="dateDernierEntretien"
+              ngbDatepicker
+              #dateDernierEntretienDp="ngbDatepicker"
+              formControlName="dateDernierEntretien"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateDernierEntretienDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_prochainEntretienKm" jhiTranslate="yeggApp.bus.prochainEntretienKm"
+            >Prochain Entretien Km</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="prochainEntretienKm"
+            id="field_prochainEntretienKm"
+            data-cy="prochainEntretienKm"
+            formControlName="prochainEntretienKm"
+          />
         </div>
 
         <div class="mb-3">
@@ -283,6 +413,23 @@
             <option [ngValue]="null"></option>
             @for (ligneOption of lignesSharedCollection; track $index) {
               <option [ngValue]="ligneOption">{{ ligneOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_chauffeur" jhiTranslate="yeggApp.bus.chauffeur">Chauffeur</label>
+          <select
+            class="form-control"
+            id="field_chauffeur"
+            data-cy="chauffeur"
+            name="chauffeur"
+            formControlName="chauffeur"
+            [compareWith]="compareUtilisateur"
+          >
+            <option [ngValue]="null"></option>
+            @for (utilisateurOption of utilisateursSharedCollection; track $index) {
+              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
             }
           </select>
         </div>

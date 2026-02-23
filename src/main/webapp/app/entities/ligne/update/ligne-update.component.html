@@ -64,21 +64,23 @@
           }
         </div>
 
-        @let couleurRef = editForm.get('couleur')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_description" jhiTranslate="yeggApp.ligne.description">Description</label>
+          <textarea
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          ></textarea>
+        </div>
+
         <div class="mb-3">
           <label class="form-label" for="field_couleur" jhiTranslate="yeggApp.ligne.couleur">Couleur</label>
           <input type="text" class="form-control" name="couleur" id="field_couleur" data-cy="couleur" formControlName="couleur" />
-          @if (couleurRef.invalid && (couleurRef.dirty || couleurRef.touched)) {
-            <div>
-              @if (editForm.get('couleur')?.errors?.pattern) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Couleur' }"
-                  >Ce champ doit suivre l&apos;expression régulière Couleur.</small
-                >
-              }
-            </div>
-          }
         </div>
 
+        @let distanceKmRef = editForm.get('distanceKm')!;
         <div class="mb-3">
           <label class="form-label" for="field_distanceKm" jhiTranslate="yeggApp.ligne.distanceKm">Distance Km</label>
           <input
@@ -89,8 +91,24 @@
             data-cy="distanceKm"
             formControlName="distanceKm"
           />
+          @if (distanceKmRef.invalid && (distanceKmRef.dirty || distanceKmRef.touched)) {
+            <div>
+              @if (editForm.get('distanceKm')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('distanceKm')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
         </div>
 
+        @let dureeMoyenneRef = editForm.get('dureeMoyenne')!;
         <div class="mb-3">
           <label class="form-label" for="field_dureeMoyenne" jhiTranslate="yeggApp.ligne.dureeMoyenne">Duree Moyenne</label>
           <input
@@ -101,15 +119,119 @@
             data-cy="dureeMoyenne"
             formControlName="dureeMoyenne"
           />
+          @if (dureeMoyenneRef.invalid && (dureeMoyenneRef.dirty || dureeMoyenneRef.touched)) {
+            <div>
+              @if (editForm.get('dureeMoyenne')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Ce champ doit être supérieur à 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('dureeMoyenne')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let frequenceRef = editForm.get('frequence')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_frequence" jhiTranslate="yeggApp.ligne.frequence">Frequence</label>
+          <input type="number" class="form-control" name="frequence" id="field_frequence" data-cy="frequence" formControlName="frequence" />
+          @if (frequenceRef.invalid && (frequenceRef.dirty || frequenceRef.touched)) {
+            <div>
+              @if (editForm.get('frequence')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Ce champ doit être supérieur à 1.</small
+                >
+              }
+              @if (editForm.get('frequence')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '60' }"
+                  >Ce champ doit être inférieur à 60.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('frequence')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Ce champ doit être un nombre.</small
+              >
+            </div>
+          }
         </div>
 
         @let statutRef = editForm.get('statut')!;
         <div class="mb-3">
           <label class="form-label" for="field_statut" jhiTranslate="yeggApp.ligne.statut">Statut</label>
-          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          <select class="form-control" name="statut" formControlName="statut" id="field_statut" data-cy="statut">
+            <option [ngValue]="null">{{ 'yeggApp.LineStatus.null' | translate }}</option>
+            @for (lineStatus of lineStatusValues; track $index) {
+              <option [value]="lineStatus">{{ 'yeggApp.LineStatus.' + lineStatus | translate }}</option>
+            }
+          </select>
           @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
             <div>
               @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_joursFeries" jhiTranslate="yeggApp.ligne.joursFeries">Jours Feries</label>
+          <textarea
+            class="form-control"
+            name="joursFeries"
+            id="field_joursFeries"
+            data-cy="joursFeries"
+            formControlName="joursFeries"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateDebut" jhiTranslate="yeggApp.ligne.dateDebut">Date Debut</label>
+          <div class="input-group">
+            <input
+              id="field_dateDebut"
+              data-cy="dateDebut"
+              type="text"
+              class="form-control"
+              name="dateDebut"
+              ngbDatepicker
+              #dateDebutDp="ngbDatepicker"
+              formControlName="dateDebut"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateDebutDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateFin" jhiTranslate="yeggApp.ligne.dateFin">Date Fin</label>
+          <div class="input-group">
+            <input
+              id="field_dateFin"
+              data-cy="dateFin"
+              type="text"
+              class="form-control"
+              name="dateFin"
+              ngbDatepicker
+              #dateFinDp="ngbDatepicker"
+              formControlName="dateFin"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateFinDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        @let actifRef = editForm.get('actif')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="yeggApp.ligne.actif">Actif</label>
+          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
+          @if (actifRef.invalid && (actifRef.dirty || actifRef.touched)) {
+            <div>
+              @if (editForm.get('actif')?.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
               }
             </div>

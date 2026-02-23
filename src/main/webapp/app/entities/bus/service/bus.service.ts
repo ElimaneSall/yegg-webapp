@@ -5,15 +5,18 @@ import { Observable, map } from 'rxjs';
 import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IBus, NewBus } from '../bus.model';
 
 export type PartialUpdateBus = Partial<IBus> & Pick<IBus, 'id'>;
 
-type RestOf<T extends IBus | NewBus> = Omit<T, 'gpsLastPing' | 'positionUpdatedAt'> & {
+type RestOf<T extends IBus | NewBus> = Omit<T, 'gpsLastPing' | 'positionUpdatedAt' | 'dateMiseEnService' | 'dateDernierEntretien'> & {
   gpsLastPing?: string | null;
   positionUpdatedAt?: string | null;
+  dateMiseEnService?: string | null;
+  dateDernierEntretien?: string | null;
 };
 
 export type RestBus = RestOf<IBus>;
@@ -98,6 +101,8 @@ export class BusService {
       ...bus,
       gpsLastPing: bus.gpsLastPing?.toJSON() ?? null,
       positionUpdatedAt: bus.positionUpdatedAt?.toJSON() ?? null,
+      dateMiseEnService: bus.dateMiseEnService?.format(DATE_FORMAT) ?? null,
+      dateDernierEntretien: bus.dateDernierEntretien?.format(DATE_FORMAT) ?? null,
     };
   }
 
@@ -106,6 +111,8 @@ export class BusService {
       ...restBus,
       gpsLastPing: restBus.gpsLastPing ? dayjs(restBus.gpsLastPing) : undefined,
       positionUpdatedAt: restBus.positionUpdatedAt ? dayjs(restBus.positionUpdatedAt) : undefined,
+      dateMiseEnService: restBus.dateMiseEnService ? dayjs(restBus.dateMiseEnService) : undefined,
+      dateDernierEntretien: restBus.dateDernierEntretien ? dayjs(restBus.dateDernierEntretien) : undefined,
     };
   }
 

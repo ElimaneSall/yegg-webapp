@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
+import sn.yegg.app.domain.enumeration.TrackingSource;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 
@@ -20,6 +21,23 @@ import tech.jhipster.service.filter.*;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class TrackingCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering TrackingSource
+     */
+    public static class TrackingSourceFilter extends Filter<TrackingSource> {
+
+        public TrackingSourceFilter() {}
+
+        public TrackingSourceFilter(TrackingSourceFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public TrackingSourceFilter copy() {
+            return new TrackingSourceFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -32,9 +50,13 @@ public class TrackingCriteria implements Serializable, Criteria {
 
     private IntegerFilter cap;
 
+    private IntegerFilter precision;
+
     private InstantFilter timestamp;
 
-    private StringFilter source;
+    private TrackingSourceFilter source;
+
+    private StringFilter evenement;
 
     private LongFilter busId;
 
@@ -48,8 +70,10 @@ public class TrackingCriteria implements Serializable, Criteria {
         this.longitude = other.optionalLongitude().map(BigDecimalFilter::copy).orElse(null);
         this.vitesse = other.optionalVitesse().map(BigDecimalFilter::copy).orElse(null);
         this.cap = other.optionalCap().map(IntegerFilter::copy).orElse(null);
+        this.precision = other.optionalPrecision().map(IntegerFilter::copy).orElse(null);
         this.timestamp = other.optionalTimestamp().map(InstantFilter::copy).orElse(null);
-        this.source = other.optionalSource().map(StringFilter::copy).orElse(null);
+        this.source = other.optionalSource().map(TrackingSourceFilter::copy).orElse(null);
+        this.evenement = other.optionalEvenement().map(StringFilter::copy).orElse(null);
         this.busId = other.optionalBusId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
@@ -154,6 +178,25 @@ public class TrackingCriteria implements Serializable, Criteria {
         this.cap = cap;
     }
 
+    public IntegerFilter getPrecision() {
+        return precision;
+    }
+
+    public Optional<IntegerFilter> optionalPrecision() {
+        return Optional.ofNullable(precision);
+    }
+
+    public IntegerFilter precision() {
+        if (precision == null) {
+            setPrecision(new IntegerFilter());
+        }
+        return precision;
+    }
+
+    public void setPrecision(IntegerFilter precision) {
+        this.precision = precision;
+    }
+
     public InstantFilter getTimestamp() {
         return timestamp;
     }
@@ -173,23 +216,42 @@ public class TrackingCriteria implements Serializable, Criteria {
         this.timestamp = timestamp;
     }
 
-    public StringFilter getSource() {
+    public TrackingSourceFilter getSource() {
         return source;
     }
 
-    public Optional<StringFilter> optionalSource() {
+    public Optional<TrackingSourceFilter> optionalSource() {
         return Optional.ofNullable(source);
     }
 
-    public StringFilter source() {
+    public TrackingSourceFilter source() {
         if (source == null) {
-            setSource(new StringFilter());
+            setSource(new TrackingSourceFilter());
         }
         return source;
     }
 
-    public void setSource(StringFilter source) {
+    public void setSource(TrackingSourceFilter source) {
         this.source = source;
+    }
+
+    public StringFilter getEvenement() {
+        return evenement;
+    }
+
+    public Optional<StringFilter> optionalEvenement() {
+        return Optional.ofNullable(evenement);
+    }
+
+    public StringFilter evenement() {
+        if (evenement == null) {
+            setEvenement(new StringFilter());
+        }
+        return evenement;
+    }
+
+    public void setEvenement(StringFilter evenement) {
+        this.evenement = evenement;
     }
 
     public LongFilter getBusId() {
@@ -245,8 +307,10 @@ public class TrackingCriteria implements Serializable, Criteria {
             Objects.equals(longitude, that.longitude) &&
             Objects.equals(vitesse, that.vitesse) &&
             Objects.equals(cap, that.cap) &&
+            Objects.equals(precision, that.precision) &&
             Objects.equals(timestamp, that.timestamp) &&
             Objects.equals(source, that.source) &&
+            Objects.equals(evenement, that.evenement) &&
             Objects.equals(busId, that.busId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -254,7 +318,7 @@ public class TrackingCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, latitude, longitude, vitesse, cap, timestamp, source, busId, distinct);
+        return Objects.hash(id, latitude, longitude, vitesse, cap, precision, timestamp, source, evenement, busId, distinct);
     }
 
     // prettier-ignore
@@ -266,8 +330,10 @@ public class TrackingCriteria implements Serializable, Criteria {
             optionalLongitude().map(f -> "longitude=" + f + ", ").orElse("") +
             optionalVitesse().map(f -> "vitesse=" + f + ", ").orElse("") +
             optionalCap().map(f -> "cap=" + f + ", ").orElse("") +
+            optionalPrecision().map(f -> "precision=" + f + ", ").orElse("") +
             optionalTimestamp().map(f -> "timestamp=" + f + ", ").orElse("") +
             optionalSource().map(f -> "source=" + f + ", ").orElse("") +
+            optionalEvenement().map(f -> "evenement=" + f + ", ").orElse("") +
             optionalBusId().map(f -> "busId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";

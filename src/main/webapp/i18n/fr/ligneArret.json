@@ -21,6 +21,8 @@
       "ordre": "Ordre",
       "tempsTrajetDepart": "Temps Trajet Depart",
       "distanceDepart": "Distance Depart",
+      "tempsArretMoyen": "Temps Arret Moyen",
+      "arretPhysique": "Arret Physique",
       "ligne": "Ligne",
       "arret": "Arret"
     }

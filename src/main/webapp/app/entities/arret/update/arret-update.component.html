@@ -100,8 +100,30 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_altitude" jhiTranslate="yeggApp.arret.altitude">Altitude</label>
+          <input type="number" class="form-control" name="altitude" id="field_altitude" data-cy="altitude" formControlName="altitude" />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="field_adresse" jhiTranslate="yeggApp.arret.adresse">Adresse</label>
           <input type="text" class="form-control" name="adresse" id="field_adresse" data-cy="adresse" formControlName="adresse" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ville" jhiTranslate="yeggApp.arret.ville">Ville</label>
+          <input type="text" class="form-control" name="ville" id="field_ville" data-cy="ville" formControlName="ville" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_codePostal" jhiTranslate="yeggApp.arret.codePostal">Code Postal</label>
+          <input
+            type="text"
+            class="form-control"
+            name="codePostal"
+            id="field_codePostal"
+            data-cy="codePostal"
+            formControlName="codePostal"
+          />
         </div>
 
         <div class="mb-3">
@@ -125,6 +147,52 @@
             data-cy="equipements"
             formControlName="equipements"
           ></textarea>
+        </div>
+
+        @let photoRef = editForm.get('photo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_photo" jhiTranslate="yeggApp.arret.photo">Photo</label>
+          <div>
+            @if (photoRef.value) {
+              <div class="form-text text-danger clearfix">
+                <span class="pull-start">{{ editForm.get('photoContentType')!.value }}, {{ byteSize(photoRef.value!) }}</span>
+                <button
+                  type="button"
+                  (click)="editForm.patchValue({ photo: undefined, photoContentType: undefined })"
+                  class="btn btn-secondary btn-xs pull-end"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                </button>
+              </div>
+            }
+            <input
+              type="file"
+              id="file_photo"
+              data-cy="photo"
+              (change)="setFileData($event, 'photo', false)"
+              jhiTranslate="entity.action.addblob"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="photoContentType"
+            id="field_photoContentType"
+            formControlName="photoContentType"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_accessiblePMR" jhiTranslate="yeggApp.arret.accessiblePMR">Accessible PMR</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="accessiblePMR"
+            id="field_accessiblePMR"
+            data-cy="accessiblePMR"
+            formControlName="accessiblePMR"
+          />
         </div>
 
         @let actifRef = editForm.get('actif')!;

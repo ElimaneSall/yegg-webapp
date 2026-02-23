@@ -55,7 +55,9 @@ public class LigneArretAsserts {
                     .as("check distanceDepart")
                     .usingComparator(bigDecimalCompareTo)
                     .isEqualTo(expected.getDistanceDepart())
-            );
+            )
+            .satisfies(a -> assertThat(a.getTempsArretMoyen()).as("check tempsArretMoyen").isEqualTo(expected.getTempsArretMoyen()))
+            .satisfies(a -> assertThat(a.getArretPhysique()).as("check arretPhysique").isEqualTo(expected.getArretPhysique()));
     }
 
     /**

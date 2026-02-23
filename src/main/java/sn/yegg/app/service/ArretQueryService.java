@@ -78,8 +78,12 @@ public class ArretQueryService extends QueryService<Arret> {
                 buildStringSpecification(criteria.getCode(), Arret_.code),
                 buildRangeSpecification(criteria.getLatitude(), Arret_.latitude),
                 buildRangeSpecification(criteria.getLongitude(), Arret_.longitude),
+                buildRangeSpecification(criteria.getAltitude(), Arret_.altitude),
                 buildStringSpecification(criteria.getAdresse(), Arret_.adresse),
+                buildStringSpecification(criteria.getVille(), Arret_.ville),
+                buildStringSpecification(criteria.getCodePostal(), Arret_.codePostal),
                 buildStringSpecification(criteria.getZoneTarifaire(), Arret_.zoneTarifaire),
+                buildSpecification(criteria.getAccessiblePMR(), Arret_.accessiblePMR),
                 buildSpecification(criteria.getActif(), Arret_.actif),
                 buildSpecification(criteria.getLigneArretsId(), root -> root.join(Arret_.ligneArrets, JoinType.LEFT).get(LigneArret_.id))
             );

@@ -5,10 +5,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { IFavori } from '../favori.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../favori.test-samples';
 
-import { FavoriService } from './favori.service';
+import { FavoriService, RestFavori } from './favori.service';
 
-const requireRestSample: IFavori = {
+const requireRestSample: RestFavori = {
   ...sampleWithRequiredData,
+  dateAjout: sampleWithRequiredData.dateAjout?.toJSON(),
+  dernierAcces: sampleWithRequiredData.dernierAcces?.toJSON(),
 };
 
 describe('Favori Service', () => {

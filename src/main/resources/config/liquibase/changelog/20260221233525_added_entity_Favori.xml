@@ -26,10 +26,10 @@
             <column name="ordre" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="alerte_active" type="boolean">
-                <constraints nullable="true" />
+            <column name="date_ajout" type="${datetimeType}">
+                <constraints nullable="false" />
             </column>
-            <column name="alerte_seuil" type="integer">
+            <column name="dernier_acces" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
             <column name="utilisateur_id" type="bigint">
@@ -37,6 +37,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+        <dropDefaultValue tableName="favori" columnName="date_ajout" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="favori" columnName="dernier_acces" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -60,8 +62,8 @@
             <column name="cible_id" type="numeric"/>
             <column name="nom_personnalise" type="string"/>
             <column name="ordre" type="numeric"/>
-            <column name="alerte_active" type="boolean"/>
-            <column name="alerte_seuil" type="numeric"/>
+            <column name="date_ajout" type="date"/>
+            <column name="dernier_acces" type="date"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

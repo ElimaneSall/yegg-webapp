@@ -32,9 +32,17 @@ public class ArretCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter longitude;
 
+    private IntegerFilter altitude;
+
     private StringFilter adresse;
 
+    private StringFilter ville;
+
+    private StringFilter codePostal;
+
     private StringFilter zoneTarifaire;
+
+    private BooleanFilter accessiblePMR;
 
     private BooleanFilter actif;
 
@@ -50,8 +58,12 @@ public class ArretCriteria implements Serializable, Criteria {
         this.code = other.optionalCode().map(StringFilter::copy).orElse(null);
         this.latitude = other.optionalLatitude().map(BigDecimalFilter::copy).orElse(null);
         this.longitude = other.optionalLongitude().map(BigDecimalFilter::copy).orElse(null);
+        this.altitude = other.optionalAltitude().map(IntegerFilter::copy).orElse(null);
         this.adresse = other.optionalAdresse().map(StringFilter::copy).orElse(null);
+        this.ville = other.optionalVille().map(StringFilter::copy).orElse(null);
+        this.codePostal = other.optionalCodePostal().map(StringFilter::copy).orElse(null);
         this.zoneTarifaire = other.optionalZoneTarifaire().map(StringFilter::copy).orElse(null);
+        this.accessiblePMR = other.optionalAccessiblePMR().map(BooleanFilter::copy).orElse(null);
         this.actif = other.optionalActif().map(BooleanFilter::copy).orElse(null);
         this.ligneArretsId = other.optionalLigneArretsId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -157,6 +169,25 @@ public class ArretCriteria implements Serializable, Criteria {
         this.longitude = longitude;
     }
 
+    public IntegerFilter getAltitude() {
+        return altitude;
+    }
+
+    public Optional<IntegerFilter> optionalAltitude() {
+        return Optional.ofNullable(altitude);
+    }
+
+    public IntegerFilter altitude() {
+        if (altitude == null) {
+            setAltitude(new IntegerFilter());
+        }
+        return altitude;
+    }
+
+    public void setAltitude(IntegerFilter altitude) {
+        this.altitude = altitude;
+    }
+
     public StringFilter getAdresse() {
         return adresse;
     }
@@ -176,6 +207,44 @@ public class ArretCriteria implements Serializable, Criteria {
         this.adresse = adresse;
     }
 
+    public StringFilter getVille() {
+        return ville;
+    }
+
+    public Optional<StringFilter> optionalVille() {
+        return Optional.ofNullable(ville);
+    }
+
+    public StringFilter ville() {
+        if (ville == null) {
+            setVille(new StringFilter());
+        }
+        return ville;
+    }
+
+    public void setVille(StringFilter ville) {
+        this.ville = ville;
+    }
+
+    public StringFilter getCodePostal() {
+        return codePostal;
+    }
+
+    public Optional<StringFilter> optionalCodePostal() {
+        return Optional.ofNullable(codePostal);
+    }
+
+    public StringFilter codePostal() {
+        if (codePostal == null) {
+            setCodePostal(new StringFilter());
+        }
+        return codePostal;
+    }
+
+    public void setCodePostal(StringFilter codePostal) {
+        this.codePostal = codePostal;
+    }
+
     public StringFilter getZoneTarifaire() {
         return zoneTarifaire;
     }
@@ -193,6 +262,25 @@ public class ArretCriteria implements Serializable, Criteria {
 
     public void setZoneTarifaire(StringFilter zoneTarifaire) {
         this.zoneTarifaire = zoneTarifaire;
+    }
+
+    public BooleanFilter getAccessiblePMR() {
+        return accessiblePMR;
+    }
+
+    public Optional<BooleanFilter> optionalAccessiblePMR() {
+        return Optional.ofNullable(accessiblePMR);
+    }
+
+    public BooleanFilter accessiblePMR() {
+        if (accessiblePMR == null) {
+            setAccessiblePMR(new BooleanFilter());
+        }
+        return accessiblePMR;
+    }
+
+    public void setAccessiblePMR(BooleanFilter accessiblePMR) {
+        this.accessiblePMR = accessiblePMR;
     }
 
     public BooleanFilter getActif() {
@@ -267,8 +355,12 @@ public class ArretCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longitude, that.longitude) &&
+            Objects.equals(altitude, that.altitude) &&
             Objects.equals(adresse, that.adresse) &&
+            Objects.equals(ville, that.ville) &&
+            Objects.equals(codePostal, that.codePostal) &&
             Objects.equals(zoneTarifaire, that.zoneTarifaire) &&
+            Objects.equals(accessiblePMR, that.accessiblePMR) &&
             Objects.equals(actif, that.actif) &&
             Objects.equals(ligneArretsId, that.ligneArretsId) &&
             Objects.equals(distinct, that.distinct)
@@ -277,7 +369,22 @@ public class ArretCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, code, latitude, longitude, adresse, zoneTarifaire, actif, ligneArretsId, distinct);
+        return Objects.hash(
+            id,
+            nom,
+            code,
+            latitude,
+            longitude,
+            altitude,
+            adresse,
+            ville,
+            codePostal,
+            zoneTarifaire,
+            accessiblePMR,
+            actif,
+            ligneArretsId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -289,8 +396,12 @@ public class ArretCriteria implements Serializable, Criteria {
             optionalCode().map(f -> "code=" + f + ", ").orElse("") +
             optionalLatitude().map(f -> "latitude=" + f + ", ").orElse("") +
             optionalLongitude().map(f -> "longitude=" + f + ", ").orElse("") +
+            optionalAltitude().map(f -> "altitude=" + f + ", ").orElse("") +
             optionalAdresse().map(f -> "adresse=" + f + ", ").orElse("") +
+            optionalVille().map(f -> "ville=" + f + ", ").orElse("") +
+            optionalCodePostal().map(f -> "codePostal=" + f + ", ").orElse("") +
             optionalZoneTarifaire().map(f -> "zoneTarifaire=" + f + ", ").orElse("") +
+            optionalAccessiblePMR().map(f -> "accessiblePMR=" + f + ", ").orElse("") +
             optionalActif().map(f -> "actif=" + f + ", ").orElse("") +
             optionalLigneArretsId().map(f -> "ligneArretsId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +

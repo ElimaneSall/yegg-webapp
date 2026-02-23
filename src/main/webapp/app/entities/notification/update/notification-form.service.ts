@@ -19,7 +19,9 @@ type NotificationFormGroupInput = INotification | PartialWithRequiredKeyOf<NewNo
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends INotification | NewNotification> = Omit<T, 'dateLecture'> & {
+type FormValueOf<T extends INotification | NewNotification> = Omit<T, 'dateCreation' | 'dateEnvoi' | 'dateLecture'> & {
+  dateCreation?: string | null;
+  dateEnvoi?: string | null;
   dateLecture?: string | null;
 };
 
@@ -27,7 +29,7 @@ type NotificationFormRawValue = FormValueOf<INotification>;
 
 type NewNotificationFormRawValue = FormValueOf<NewNotification>;
 
-type NotificationFormDefaults = Pick<NewNotification, 'id' | 'lu' | 'dateLecture'>;
+type NotificationFormDefaults = Pick<NewNotification, 'id' | 'dateCreation' | 'dateEnvoi' | 'lu' | 'dateLecture'>;
 
 type NotificationFormGroupContent = {
   id: FormControl<NotificationFormRawValue['id'] | NewNotification['id']>;
@@ -37,6 +39,8 @@ type NotificationFormGroupContent = {
   donnees: FormControl<NotificationFormRawValue['donnees']>;
   priorite: FormControl<NotificationFormRawValue['priorite']>;
   statut: FormControl<NotificationFormRawValue['statut']>;
+  dateCreation: FormControl<NotificationFormRawValue['dateCreation']>;
+  dateEnvoi: FormControl<NotificationFormRawValue['dateEnvoi']>;
   lu: FormControl<NotificationFormRawValue['lu']>;
   dateLecture: FormControl<NotificationFormRawValue['dateLecture']>;
   utilisateur: FormControl<NotificationFormRawValue['utilisateur']>;
@@ -59,7 +63,9 @@ export class NotificationFormService {
           validators: [Validators.required],
         },
       ),
-      type: new FormControl(notificationRawValue.type),
+      type: new FormControl(notificationRawValue.type, {
+        validators: [Validators.required],
+      }),
       titre: new FormControl(notificationRawValue.titre, {
         validators: [Validators.required],
       }),
@@ -68,7 +74,13 @@ export class NotificationFormService {
       }),
       donnees: new FormControl(notificationRawValue.donnees),
       priorite: new FormControl(notificationRawValue.priorite),
-      statut: new FormControl(notificationRawValue.statut),
+      statut: new FormControl(notificationRawValue.statut, {
+        validators: [Validators.required],
+      }),
+      dateCreation: new FormControl(notificationRawValue.dateCreation, {
+        validators: [Validators.required],
+      }),
+      dateEnvoi: new FormControl(notificationRawValue.dateEnvoi),
       lu: new FormControl(notificationRawValue.lu),
       dateLecture: new FormControl(notificationRawValue.dateLecture),
       utilisateur: new FormControl(notificationRawValue.utilisateur),
@@ -94,6 +106,8 @@ export class NotificationFormService {
 
     return {
       id: null,
+      dateCreation: currentTime,
+      dateEnvoi: currentTime,
       lu: false,
       dateLecture: currentTime,
     };
@@ -104,6 +118,8 @@ export class NotificationFormService {
   ): INotification | NewNotification {
     return {
       ...rawNotification,
+      dateCreation: dayjs(rawNotification.dateCreation, DATE_TIME_FORMAT),
+      dateEnvoi: dayjs(rawNotification.dateEnvoi, DATE_TIME_FORMAT),
       dateLecture: dayjs(rawNotification.dateLecture, DATE_TIME_FORMAT),
     };
   }
@@ -113,6 +129,8 @@ export class NotificationFormService {
   ): NotificationFormRawValue | PartialWithRequiredKeyOf<NewNotificationFormRawValue> {
     return {
       ...notification,
+      dateCreation: notification.dateCreation ? notification.dateCreation.format(DATE_TIME_FORMAT) : undefined,
+      dateEnvoi: notification.dateEnvoi ? notification.dateEnvoi.format(DATE_TIME_FORMAT) : undefined,
       dateLecture: notification.dateLecture ? notification.dateLecture.format(DATE_TIME_FORMAT) : undefined,
     };
   }

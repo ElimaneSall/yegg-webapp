@@ -7,10 +7,12 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
-import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
 import { ILigne } from 'app/entities/ligne/ligne.model';
 import { LigneService } from 'app/entities/ligne/service/ligne.service';
+import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
+import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
+import { EnergyType } from 'app/entities/enumerations/energy-type.model';
+import { BusStatus } from 'app/entities/enumerations/bus-status.model';
 import { BusService } from '../service/bus.service';
 import { IBus } from '../bus.model';
 import { BusFormGroup, BusFormService } from './bus-form.service';
@@ -23,22 +25,24 @@ import { BusFormGroup, BusFormService } from './bus-form.service';
 export class BusUpdateComponent implements OnInit {
   isSaving = false;
   bus: IBus | null = null;
+  energyTypeValues = Object.keys(EnergyType);
+  busStatusValues = Object.keys(BusStatus);
 
-  utilisateursCollection: IUtilisateur[] = [];
   lignesSharedCollection: ILigne[] = [];
+  utilisateursSharedCollection: IUtilisateur[] = [];
 
   protected busService = inject(BusService);
   protected busFormService = inject(BusFormService);
-  protected utilisateurService = inject(UtilisateurService);
   protected ligneService = inject(LigneService);
+  protected utilisateurService = inject(UtilisateurService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: BusFormGroup = this.busFormService.createBusFormGroup();
 
-  compareUtilisateur = (o1: IUtilisateur | null, o2: IUtilisateur | null): boolean => this.utilisateurService.compareUtilisateur(o1, o2);
-
   compareLigne = (o1: ILigne | null, o2: ILigne | null): boolean => this.ligneService.compareLigne(o1, o2);
+
+  compareUtilisateur = (o1: IUtilisateur | null, o2: IUtilisateur | null): boolean => this.utilisateurService.compareUtilisateur(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bus }) => {
@@ -88,28 +92,28 @@ export class BusUpdateComponent implements OnInit {
     this.bus = bus;
     this.busFormService.resetForm(this.editForm, bus);
 
-    this.utilisateursCollection = this.utilisateurService.addUtilisateurToCollectionIfMissing<IUtilisateur>(
-      this.utilisateursCollection,
-      bus.utilisateur,
-    );
     this.lignesSharedCollection = this.ligneService.addLigneToCollectionIfMissing<ILigne>(this.lignesSharedCollection, bus.ligne);
+    this.utilisateursSharedCollection = this.utilisateurService.addUtilisateurToCollectionIfMissing<IUtilisateur>(
+      this.utilisateursSharedCollection,
+      bus.chauffeur,
+    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.utilisateurService
-      .query({ 'busId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IUtilisateur[]>) => res.body ?? []))
-      .pipe(
-        map((utilisateurs: IUtilisateur[]) =>
-          this.utilisateurService.addUtilisateurToCollectionIfMissing<IUtilisateur>(utilisateurs, this.bus?.utilisateur),
-        ),
-      )
-      .subscribe((utilisateurs: IUtilisateur[]) => (this.utilisateursCollection = utilisateurs));
-
     this.ligneService
       .query()
       .pipe(map((res: HttpResponse<ILigne[]>) => res.body ?? []))
       .pipe(map((lignes: ILigne[]) => this.ligneService.addLigneToCollectionIfMissing<ILigne>(lignes, this.bus?.ligne)))
       .subscribe((lignes: ILigne[]) => (this.lignesSharedCollection = lignes));
+
+    this.utilisateurService
+      .query()
+      .pipe(map((res: HttpResponse<IUtilisateur[]>) => res.body ?? []))
+      .pipe(
+        map((utilisateurs: IUtilisateur[]) =>
+          this.utilisateurService.addUtilisateurToCollectionIfMissing<IUtilisateur>(utilisateurs, this.bus?.chauffeur),
+        ),
+      )
+      .subscribe((utilisateurs: IUtilisateur[]) => (this.utilisateursSharedCollection = utilisateurs));
   }
 }

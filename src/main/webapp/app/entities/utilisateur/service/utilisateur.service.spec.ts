@@ -10,6 +10,8 @@ import { RestUtilisateur, UtilisateurService } from './utilisateur.service';
 
 const requireRestSample: RestUtilisateur = {
   ...sampleWithRequiredData,
+  dateCreation: sampleWithRequiredData.dateCreation?.toJSON(),
+  derniereConnexion: sampleWithRequiredData.derniereConnexion?.toJSON(),
   dateEmbauche: sampleWithRequiredData.dateEmbauche?.format(DATE_FORMAT),
 };
 

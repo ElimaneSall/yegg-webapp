@@ -80,7 +80,11 @@ public class LigneQueryService extends QueryService<Ligne> {
                 buildStringSpecification(criteria.getCouleur(), Ligne_.couleur),
                 buildRangeSpecification(criteria.getDistanceKm(), Ligne_.distanceKm),
                 buildRangeSpecification(criteria.getDureeMoyenne(), Ligne_.dureeMoyenne),
-                buildStringSpecification(criteria.getStatut(), Ligne_.statut),
+                buildRangeSpecification(criteria.getFrequence(), Ligne_.frequence),
+                buildSpecification(criteria.getStatut(), Ligne_.statut),
+                buildRangeSpecification(criteria.getDateDebut(), Ligne_.dateDebut),
+                buildRangeSpecification(criteria.getDateFin(), Ligne_.dateFin),
+                buildSpecification(criteria.getActif(), Ligne_.actif),
                 buildSpecification(criteria.getLigneArretsId(), root -> root.join(Ligne_.ligneArrets, JoinType.LEFT).get(LigneArret_.id)),
                 buildSpecification(criteria.getOperateurId(), root -> root.join(Ligne_.operateur, JoinType.LEFT).get(Operateur_.id))
             );

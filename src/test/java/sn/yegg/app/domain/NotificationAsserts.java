@@ -53,6 +53,8 @@ public class NotificationAsserts {
             .satisfies(a -> assertThat(a.getDonnees()).as("check donnees").isEqualTo(expected.getDonnees()))
             .satisfies(a -> assertThat(a.getPriorite()).as("check priorite").isEqualTo(expected.getPriorite()))
             .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()))
+            .satisfies(a -> assertThat(a.getDateCreation()).as("check dateCreation").isEqualTo(expected.getDateCreation()))
+            .satisfies(a -> assertThat(a.getDateEnvoi()).as("check dateEnvoi").isEqualTo(expected.getDateEnvoi()))
             .satisfies(a -> assertThat(a.getLu()).as("check lu").isEqualTo(expected.getLu()))
             .satisfies(a -> assertThat(a.getDateLecture()).as("check dateLecture").isEqualTo(expected.getDateLecture()));
     }

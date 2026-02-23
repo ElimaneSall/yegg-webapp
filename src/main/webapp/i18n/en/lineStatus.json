@@ -1,0 +1,11 @@
+{
+  "yeggApp": {
+    "LineStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "SUSPENDED": "SUSPENDED",
+      "CLOSED": "CLOSED",
+      "UNDER_CONSTRUCTION": "UNDER_CONSTRUCTION"
+    }
+  }
+}

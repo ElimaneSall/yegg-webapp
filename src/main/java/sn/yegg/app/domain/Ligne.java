@@ -5,10 +5,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import sn.yegg.app.domain.enumeration.LineStatus;
 
 /**
  * A Ligne.
@@ -28,7 +30,7 @@ public class Ligne implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 10)
-    @Column(name = "numero", length = 10, nullable = false)
+    @Column(name = "numero", length = 10, nullable = false, unique = true)
     private String numero;
 
     @NotNull
@@ -39,19 +41,44 @@ public class Ligne implements Serializable {
     @Column(name = "direction", nullable = false)
     private String direction;
 
-    @Pattern(regexp = "^#[0-9A-Fa-f]{6}$")
+    @Lob
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "couleur")
     private String couleur;
 
+    @DecimalMin(value = "0")
     @Column(name = "distance_km", precision = 21, scale = 2)
     private BigDecimal distanceKm;
 
+    @Min(value = 0)
     @Column(name = "duree_moyenne")
     private Integer dureeMoyenne;
 
+    @Min(value = 1)
+    @Max(value = 60)
+    @Column(name = "frequence")
+    private Integer frequence;
+
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "statut", nullable = false)
-    private String statut;
+    private LineStatus statut;
+
+    @Lob
+    @Column(name = "jours_feries")
+    private String joursFeries;
+
+    @Column(name = "date_debut")
+    private LocalDate dateDebut;
+
+    @Column(name = "date_fin")
+    private LocalDate dateFin;
+
+    @NotNull
+    @Column(name = "actif", nullable = false)
+    private Boolean actif;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ligne")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -116,6 +143,19 @@ public class Ligne implements Serializable {
         this.direction = direction;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Ligne description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCouleur() {
         return this.couleur;
     }
@@ -155,17 +195,82 @@ public class Ligne implements Serializable {
         this.dureeMoyenne = dureeMoyenne;
     }
 
-    public String getStatut() {
+    public Integer getFrequence() {
+        return this.frequence;
+    }
+
+    public Ligne frequence(Integer frequence) {
+        this.setFrequence(frequence);
+        return this;
+    }
+
+    public void setFrequence(Integer frequence) {
+        this.frequence = frequence;
+    }
+
+    public LineStatus getStatut() {
         return this.statut;
     }
 
-    public Ligne statut(String statut) {
+    public Ligne statut(LineStatus statut) {
         this.setStatut(statut);
         return this;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(LineStatus statut) {
         this.statut = statut;
+    }
+
+    public String getJoursFeries() {
+        return this.joursFeries;
+    }
+
+    public Ligne joursFeries(String joursFeries) {
+        this.setJoursFeries(joursFeries);
+        return this;
+    }
+
+    public void setJoursFeries(String joursFeries) {
+        this.joursFeries = joursFeries;
+    }
+
+    public LocalDate getDateDebut() {
+        return this.dateDebut;
+    }
+
+    public Ligne dateDebut(LocalDate dateDebut) {
+        this.setDateDebut(dateDebut);
+        return this;
+    }
+
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public LocalDate getDateFin() {
+        return this.dateFin;
+    }
+
+    public Ligne dateFin(LocalDate dateFin) {
+        this.setDateFin(dateFin);
+        return this;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public Boolean getActif() {
+        return this.actif;
+    }
+
+    public Ligne actif(Boolean actif) {
+        this.setActif(actif);
+        return this;
+    }
+
+    public void setActif(Boolean actif) {
+        this.actif = actif;
     }
 
     public Set<LigneArret> getLigneArrets() {
@@ -239,10 +344,16 @@ public class Ligne implements Serializable {
             ", numero='" + getNumero() + "'" +
             ", nom='" + getNom() + "'" +
             ", direction='" + getDirection() + "'" +
+            ", description='" + getDescription() + "'" +
             ", couleur='" + getCouleur() + "'" +
             ", distanceKm=" + getDistanceKm() +
             ", dureeMoyenne=" + getDureeMoyenne() +
+            ", frequence=" + getFrequence() +
             ", statut='" + getStatut() + "'" +
+            ", joursFeries='" + getJoursFeries() + "'" +
+            ", dateDebut='" + getDateDebut() + "'" +
+            ", dateFin='" + getDateFin() + "'" +
+            ", actif='" + getActif() + "'" +
             "}";
     }
 }

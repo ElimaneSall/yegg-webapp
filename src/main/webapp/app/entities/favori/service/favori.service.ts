@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -8,6 +10,17 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { IFavori, NewFavori } from '../favori.model';
 
 export type PartialUpdateFavori = Partial<IFavori> & Pick<IFavori, 'id'>;
+
+type RestOf<T extends IFavori | NewFavori> = Omit<T, 'dateAjout' | 'dernierAcces'> & {
+  dateAjout?: string | null;
+  dernierAcces?: string | null;
+};
+
+export type RestFavori = RestOf<IFavori>;
+
+export type NewRestFavori = RestOf<NewFavori>;
+
+export type PartialUpdateRestFavori = RestOf<PartialUpdateFavori>;
 
 export type EntityResponseType = HttpResponse<IFavori>;
 export type EntityArrayResponseType = HttpResponse<IFavori[]>;
@@ -20,24 +33,37 @@ export class FavoriService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/favoris');
 
   create(favori: NewFavori): Observable<EntityResponseType> {
-    return this.http.post<IFavori>(this.resourceUrl, favori, { observe: 'response' });
+    const copy = this.convertDateFromClient(favori);
+    return this.http
+      .post<RestFavori>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(favori: IFavori): Observable<EntityResponseType> {
-    return this.http.put<IFavori>(`${this.resourceUrl}/${this.getFavoriIdentifier(favori)}`, favori, { observe: 'response' });
+    const copy = this.convertDateFromClient(favori);
+    return this.http
+      .put<RestFavori>(`${this.resourceUrl}/${this.getFavoriIdentifier(favori)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   partialUpdate(favori: PartialUpdateFavori): Observable<EntityResponseType> {
-    return this.http.patch<IFavori>(`${this.resourceUrl}/${this.getFavoriIdentifier(favori)}`, favori, { observe: 'response' });
+    const copy = this.convertDateFromClient(favori);
+    return this.http
+      .patch<RestFavori>(`${this.resourceUrl}/${this.getFavoriIdentifier(favori)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IFavori>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<RestFavori>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IFavori[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<RestFavori[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -70,5 +96,33 @@ export class FavoriService {
       return [...favorisToAdd, ...favoriCollection];
     }
     return favoriCollection;
+  }
+
+  protected convertDateFromClient<T extends IFavori | NewFavori | PartialUpdateFavori>(favori: T): RestOf<T> {
+    return {
+      ...favori,
+      dateAjout: favori.dateAjout?.toJSON() ?? null,
+      dernierAcces: favori.dernierAcces?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restFavori: RestFavori): IFavori {
+    return {
+      ...restFavori,
+      dateAjout: restFavori.dateAjout ? dayjs(restFavori.dateAjout) : undefined,
+      dernierAcces: restFavori.dernierAcces ? dayjs(restFavori.dernierAcces) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestFavori>): HttpResponse<IFavori> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
+    });
+  }
+
+  protected convertResponseArrayFromServer(res: HttpResponse<RestFavori[]>): HttpResponse<IFavori[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

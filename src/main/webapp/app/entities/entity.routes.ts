@@ -56,6 +56,31 @@ const routes: Routes = [
     data: { pageTitle: 'yeggApp.ligneArret.home.title' },
     loadChildren: () => import('./ligne-arret/ligne-arret.routes'),
   },
+  {
+    path: 'alerte-approche',
+    data: { pageTitle: 'yeggApp.alerteApproche.home.title' },
+    loadChildren: () => import('./alerte-approche/alerte-approche.routes'),
+  },
+  {
+    path: 'alerte-ligne-arret',
+    data: { pageTitle: 'yeggApp.alerteLigneArret.home.title' },
+    loadChildren: () => import('./alerte-ligne-arret/alerte-ligne-arret.routes'),
+  },
+  {
+    path: 'historique-alerte',
+    data: { pageTitle: 'yeggApp.historiqueAlerte.home.title' },
+    loadChildren: () => import('./historique-alerte/historique-alerte.routes'),
+  },
+  {
+    path: 'feedback',
+    data: { pageTitle: 'yeggApp.feedback.home.title' },
+    loadChildren: () => import('./feedback/feedback.routes'),
+  },
+  {
+    path: 'rapport',
+    data: { pageTitle: 'yeggApp.rapport.home.title' },
+    loadChildren: () => import('./rapport/rapport.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

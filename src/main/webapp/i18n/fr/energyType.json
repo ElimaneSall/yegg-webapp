@@ -1,0 +1,11 @@
+{
+  "yeggApp": {
+    "EnergyType": {
+      "null": "",
+      "DIESEL": "DIESEL",
+      "ELECTRIC": "ELECTRIC",
+      "HYBRID": "HYBRID",
+      "CNG": "CNG"
+    }
+  }
+}

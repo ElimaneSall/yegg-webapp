@@ -8,37 +8,7 @@
 
     <!--
         Added the entity Operateur.
-    -->
-    <changeSet id="20260221233518-1" author="jhipster">
-        <createTable tableName="operateur">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="nom" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="email" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_operateur__email" />
-            </column>
-            <column name="telephone" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="adresse" type="${clobType}">
-                <constraints nullable="true" />
-            </column>
-            <column name="logo" type="${blobType}">
-                <constraints nullable="true" />
-            </column>
-            <column name="logo_content_type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="actif" type="boolean">
-                <constraints nullable="false" />
-            </column>
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
-        </createTable>
-    </changeSet>
-
+    -->c
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--
@@ -62,6 +32,9 @@
             <column name="adresse" type="clob"/>
             <column name="logo" type="blob"/>
             <column name="logo_content_type" type="string"/>
+            <column name="site_web" type="string"/>
+            <column name="siret" type="string"/>
+            <column name="date_creation" type="date"/>
             <column name="actif" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

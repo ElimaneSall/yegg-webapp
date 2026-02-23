@@ -1,0 +1,33 @@
+{
+  "yeggApp": {
+    "historiqueAlerte": {
+      "home": {
+        "title": "Historique Alertes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Historique Alerte",
+        "createOrEditLabel": "Create or edit a Historique Alerte",
+        "notFound": "No Historique Alertes found"
+      },
+      "created": "A new Historique Alerte is created with identifier {{ param }}",
+      "updated": "A Historique Alerte is updated with identifier {{ param }}",
+      "deleted": "A Historique Alerte is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Historique Alerte {{ id }}?"
+      },
+      "detail": {
+        "title": "Historique Alerte"
+      },
+      "id": "ID",
+      "dateDeclenchement": "Date Declenchement",
+      "busNumero": "Bus Numero",
+      "distanceReelle": "Distance Reelle",
+      "tempsReel": "Temps Reel",
+      "typeDeclenchement": "Type Declenchement",
+      "notificationEnvoyee": "Notification Envoyee",
+      "dateLecture": "Date Lecture",
+      "bus": "Bus",
+      "alerteApproche": "Alerte Approche",
+      "utilisateur": "Utilisateur"
+    }
+  }
+}

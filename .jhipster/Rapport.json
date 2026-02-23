@@ -1,0 +1,67 @@
+{
+  "annotations": {
+    "changelogDate": "20260223002349"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "ReportType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MONTHLY,WEEKLY,CUSTOM"
+    },
+    {
+      "fieldName": "periodeDebut",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "periodeFin",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "format",
+      "fieldType": "ReportFormat",
+      "fieldValues": "PDF,EXCEL,CSV"
+    },
+    {
+      "fieldName": "contenu",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "dateGeneration",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "generePar",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Rapport",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "operateur",
+      "relationshipName": "operateur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "utilisateur",
+      "relationshipName": "admin",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

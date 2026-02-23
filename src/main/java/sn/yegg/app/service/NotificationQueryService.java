@@ -74,10 +74,12 @@ public class NotificationQueryService extends QueryService<Notification> {
             specification = Specification.allOf(
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null,
                 buildRangeSpecification(criteria.getId(), Notification_.id),
-                buildStringSpecification(criteria.getType(), Notification_.type),
+                buildSpecification(criteria.getType(), Notification_.type),
                 buildStringSpecification(criteria.getTitre(), Notification_.titre),
-                buildStringSpecification(criteria.getPriorite(), Notification_.priorite),
-                buildStringSpecification(criteria.getStatut(), Notification_.statut),
+                buildSpecification(criteria.getPriorite(), Notification_.priorite),
+                buildSpecification(criteria.getStatut(), Notification_.statut),
+                buildRangeSpecification(criteria.getDateCreation(), Notification_.dateCreation),
+                buildRangeSpecification(criteria.getDateEnvoi(), Notification_.dateEnvoi),
                 buildSpecification(criteria.getLu(), Notification_.lu),
                 buildRangeSpecification(criteria.getDateLecture(), Notification_.dateLecture),
                 buildSpecification(criteria.getUtilisateurId(), root ->

@@ -12,6 +12,9 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IUtilisateur } from 'app/entities/utilisateur/utilisateur.model';
 import { UtilisateurService } from 'app/entities/utilisateur/service/utilisateur.service';
+import { NotificationType } from 'app/entities/enumerations/notification-type.model';
+import { Priority } from 'app/entities/enumerations/priority.model';
+import { NotificationStatus } from 'app/entities/enumerations/notification-status.model';
 import { NotificationService } from '../service/notification.service';
 import { INotification } from '../notification.model';
 import { NotificationFormGroup, NotificationFormService } from './notification-form.service';
@@ -24,6 +27,9 @@ import { NotificationFormGroup, NotificationFormService } from './notification-f
 export class NotificationUpdateComponent implements OnInit {
   isSaving = false;
   notification: INotification | null = null;
+  notificationTypeValues = Object.keys(NotificationType);
+  priorityValues = Object.keys(Priority);
+  notificationStatusValues = Object.keys(NotificationStatus);
 
   utilisateursSharedCollection: IUtilisateur[] = [];
 

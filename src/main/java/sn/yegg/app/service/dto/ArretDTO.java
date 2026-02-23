@@ -30,12 +30,25 @@ public class ArretDTO implements Serializable {
     @DecimalMax(value = "180")
     private BigDecimal longitude;
 
+    private Integer altitude;
+
     private String adresse;
+
+    private String ville;
+
+    private String codePostal;
 
     private String zoneTarifaire;
 
     @Lob
     private String equipements;
+
+    @Lob
+    private byte[] photo;
+
+    private String photoContentType;
+
+    private Boolean accessiblePMR;
 
     @NotNull
     private Boolean actif;
@@ -80,12 +93,36 @@ public class ArretDTO implements Serializable {
         this.longitude = longitude;
     }
 
+    public Integer getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Integer altitude) {
+        this.altitude = altitude;
+    }
+
     public String getAdresse() {
         return adresse;
     }
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getZoneTarifaire() {
@@ -102,6 +139,30 @@ public class ArretDTO implements Serializable {
 
     public void setEquipements(String equipements) {
         this.equipements = equipements;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+    }
+
+    public Boolean getAccessiblePMR() {
+        return accessiblePMR;
+    }
+
+    public void setAccessiblePMR(Boolean accessiblePMR) {
+        this.accessiblePMR = accessiblePMR;
     }
 
     public Boolean getActif() {
@@ -142,9 +203,14 @@ public class ArretDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", latitude=" + getLatitude() +
             ", longitude=" + getLongitude() +
+            ", altitude=" + getAltitude() +
             ", adresse='" + getAdresse() + "'" +
+            ", ville='" + getVille() + "'" +
+            ", codePostal='" + getCodePostal() + "'" +
             ", zoneTarifaire='" + getZoneTarifaire() + "'" +
             ", equipements='" + getEquipements() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", accessiblePMR='" + getAccessiblePMR() + "'" +
             ", actif='" + getActif() + "'" +
             "}";
     }

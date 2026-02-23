@@ -3,6 +3,7 @@ package sn.yegg.app.service.dto;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -19,7 +20,6 @@ public class OperateurDTO implements Serializable {
     @NotNull
     private String email;
 
-    @Pattern(regexp = "^[0-9]{9,15}$")
     private String telephone;
 
     @Lob
@@ -29,6 +29,13 @@ public class OperateurDTO implements Serializable {
     private byte[] logo;
 
     private String logoContentType;
+
+    private String siteWeb;
+
+    private String siret;
+
+    @NotNull
+    private Instant dateCreation;
 
     @NotNull
     private Boolean actif;
@@ -89,6 +96,30 @@ public class OperateurDTO implements Serializable {
         this.logoContentType = logoContentType;
     }
 
+    public String getSiteWeb() {
+        return siteWeb;
+    }
+
+    public void setSiteWeb(String siteWeb) {
+        this.siteWeb = siteWeb;
+    }
+
+    public String getSiret() {
+        return siret;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+
+    public Instant getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Instant dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
     public Boolean getActif() {
         return actif;
     }
@@ -128,6 +159,9 @@ public class OperateurDTO implements Serializable {
             ", telephone='" + getTelephone() + "'" +
             ", adresse='" + getAdresse() + "'" +
             ", logo='" + getLogo() + "'" +
+            ", siteWeb='" + getSiteWeb() + "'" +
+            ", siret='" + getSiret() + "'" +
+            ", dateCreation='" + getDateCreation() + "'" +
             ", actif='" + getActif() + "'" +
             "}";
     }

@@ -1,64 +1,118 @@
+// src/main/webapp/app/entities/entity-navbar-items.ts
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
+import {
+  faBuilding,
+  faRoad,
+  faMapPin,
+  faBus,
+  faMap,
+  faUsers,
+  faBell,
+  faHistory,
+  faEnvelope,
+  faStar,
+  faLink,
+  faComment,
+  faFileAlt,
+  faChartBar,
+  faClock,
+  faExclamationTriangle,
+  faRoute,
+  faUserCog,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const EntityNavbarItems: NavbarItem[] = [
+  // Réseau
   {
-    name: 'Opérateurs',
+    name: 'Opérateur',
     route: '/operateur',
     translationKey: 'global.menu.entities.operateur',
-    icon: 'building', // Maintenant disponible avec l'import ci-dessus
+    icon: faBuilding,
   },
   {
-    name: 'Lignes',
+    name: 'Ligne',
     route: '/ligne',
     translationKey: 'global.menu.entities.ligne',
-    icon: 'road', // Maintenant disponible
+    icon: faRoad,
   },
   {
-    name: 'Arrêts',
+    name: 'Arrêt',
     route: '/arret',
     translationKey: 'global.menu.entities.arret',
-    icon: 'map-pin', // Maintenant disponible
+    icon: faMapPin,
   },
+  {
+    name: 'LigneArret',
+    route: '/ligne-arret',
+    translationKey: 'global.menu.entities.ligneArret',
+    icon: faLink,
+  },
+
+  // Véhicules
   {
     name: 'Bus',
     route: '/bus',
     translationKey: 'global.menu.entities.bus',
-    icon: 'bus', // Maintenant disponible
+    icon: faBus,
   },
   {
-    name: 'Utilisateurs',
-    route: '/utilisateur',
-    translationKey: 'global.menu.entities.utilisateur',
-    icon: 'users', // Maintenant disponible
-  },
-  {
-    name: 'Trackings',
+    name: 'Tracking',
     route: '/tracking',
     translationKey: 'global.menu.entities.tracking',
-    icon: 'map', // Maintenant disponible
+    icon: faMap,
+  },
+
+  // Utilisateurs
+  {
+    name: 'Utilisateur',
+    route: '/utilisateur',
+    translationKey: 'global.menu.entities.utilisateur',
+    icon: faUsers,
   },
   {
-    name: 'Alertes',
-    route: '/alerte',
-    translationKey: 'global.menu.entities.alerte',
-    icon: 'bell', // Maintenant disponible
-  },
-  {
-    name: 'Favoris',
+    name: 'Favori',
     route: '/favori',
     translationKey: 'global.menu.entities.favori',
-    icon: 'star', // Maintenant disponible
+    icon: faStar,
+  },
+
+  // Alertes
+  {
+    name: 'AlerteApproche',
+    route: '/alerte-approche',
+    translationKey: 'global.menu.entities.alerteApproche',
+    icon: faBell,
   },
   {
-    name: 'Notifications',
+    name: 'AlerteLigneArret',
+    route: '/alerte-ligne-arret',
+    translationKey: 'global.menu.entities.alerteLigneArret',
+    icon: faBell,
+  },
+  {
+    name: 'HistoriqueAlerte',
+    route: '/historique-alerte',
+    translationKey: 'global.menu.entities.historiqueAlerte',
+    icon: faHistory,
+  },
+  {
+    name: 'Notification',
     route: '/notification',
     translationKey: 'global.menu.entities.notification',
-    icon: 'envelope', // Maintenant disponible
+    icon: faEnvelope,
+  },
+
+  // Feedback & Rapports
+  {
+    name: 'Feedback',
+    route: '/feedback',
+    translationKey: 'global.menu.entities.feedback',
+    icon: faComment,
   },
   {
-    name: 'Lignes-Arrêts',
-    route: '/ligne-arret',
-    translationKey: 'global.menu.entities.ligneArret',
-    icon: 'link', // Maintenant disponible
+    name: 'Rapport',
+    route: '/rapport',
+    translationKey: 'global.menu.entities.rapport',
+    icon: faFileAlt,
   },
 ];

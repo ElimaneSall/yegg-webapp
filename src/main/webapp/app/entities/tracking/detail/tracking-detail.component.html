@@ -31,13 +31,27 @@
           <dd>
             <span>{{ trackingRef.cap }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.precision">Precision</span></dt>
+          <dd>
+            <span>{{ trackingRef.precision }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.tracking.timestamp">Timestamp</span></dt>
           <dd>
             <span>{{ trackingRef.timestamp | formatMediumDatetime }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.tracking.source">Source</span></dt>
           <dd>
-            <span>{{ trackingRef.source }}</span>
+            <span [jhiTranslate]="'yeggApp.TrackingSource.' + (trackingRef.source ?? 'null')">{{
+              { null: '', ONBOARD_GPS: 'ONBOARD_GPS', DRIVER_APP: 'DRIVER_APP', MANUAL: 'MANUAL' }[trackingRef.source ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.evenement">Evenement</span></dt>
+          <dd>
+            <span>{{ trackingRef.evenement }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.tracking.commentaire">Commentaire</span></dt>
+          <dd>
+            <span>{{ trackingRef.commentaire }}</span>
           </dd>
           <dt><span jhiTranslate="yeggApp.tracking.bus">Bus</span></dt>
           <dd>

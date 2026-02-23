@@ -6,8 +6,11 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import sn.yegg.app.domain.enumeration.BusStatus;
+import sn.yegg.app.domain.enumeration.EnergyType;
 
 /**
  * A Bus.
@@ -36,14 +39,31 @@ public class Bus implements Serializable {
     @Column(name = "modele")
     private String modele;
 
+    @Column(name = "constructeur")
+    private String constructeur;
+
     @NotNull
     @Min(value = 1)
     @Max(value = 200)
     @Column(name = "capacite", nullable = false)
     private Integer capacite;
 
+    @Min(value = 0)
+    @Max(value = 100)
+    @Column(name = "capacite_debout")
+    private Integer capaciteDebout;
+
+    @Min(value = 1990)
+    @Max(value = 2100)
     @Column(name = "annee_fabrication")
     private Integer anneeFabrication;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "energie")
+    private EnergyType energie;
+
+    @Column(name = "autonomie_km")
+    private Integer autonomieKm;
 
     @Column(name = "gps_device_id", unique = true)
     private String gpsDeviceId;
@@ -77,17 +97,26 @@ public class Bus implements Serializable {
     private Instant positionUpdatedAt;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "statut", nullable = false)
-    private String statut;
+    private BusStatus statut;
 
-    @JsonIgnoreProperties(value = { "bus" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private Utilisateur utilisateur;
+    @Column(name = "date_mise_en_service")
+    private LocalDate dateMiseEnService;
+
+    @Column(name = "date_dernier_entretien")
+    private LocalDate dateDernierEntretien;
+
+    @Column(name = "prochain_entretien_km")
+    private Integer prochainEntretienKm;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "ligneArrets", "operateur" }, allowSetters = true)
     private Ligne ligne;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "favorises", "notifications", "feedbacks", "historiqueAlertes" }, allowSetters = true)
+    private Utilisateur chauffeur;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -143,6 +172,19 @@ public class Bus implements Serializable {
         this.modele = modele;
     }
 
+    public String getConstructeur() {
+        return this.constructeur;
+    }
+
+    public Bus constructeur(String constructeur) {
+        this.setConstructeur(constructeur);
+        return this;
+    }
+
+    public void setConstructeur(String constructeur) {
+        this.constructeur = constructeur;
+    }
+
     public Integer getCapacite() {
         return this.capacite;
     }
@@ -156,6 +198,19 @@ public class Bus implements Serializable {
         this.capacite = capacite;
     }
 
+    public Integer getCapaciteDebout() {
+        return this.capaciteDebout;
+    }
+
+    public Bus capaciteDebout(Integer capaciteDebout) {
+        this.setCapaciteDebout(capaciteDebout);
+        return this;
+    }
+
+    public void setCapaciteDebout(Integer capaciteDebout) {
+        this.capaciteDebout = capaciteDebout;
+    }
+
     public Integer getAnneeFabrication() {
         return this.anneeFabrication;
     }
@@ -167,6 +222,32 @@ public class Bus implements Serializable {
 
     public void setAnneeFabrication(Integer anneeFabrication) {
         this.anneeFabrication = anneeFabrication;
+    }
+
+    public EnergyType getEnergie() {
+        return this.energie;
+    }
+
+    public Bus energie(EnergyType energie) {
+        this.setEnergie(energie);
+        return this;
+    }
+
+    public void setEnergie(EnergyType energie) {
+        this.energie = energie;
+    }
+
+    public Integer getAutonomieKm() {
+        return this.autonomieKm;
+    }
+
+    public Bus autonomieKm(Integer autonomieKm) {
+        this.setAutonomieKm(autonomieKm);
+        return this;
+    }
+
+    public void setAutonomieKm(Integer autonomieKm) {
+        this.autonomieKm = autonomieKm;
     }
 
     public String getGpsDeviceId() {
@@ -286,30 +367,56 @@ public class Bus implements Serializable {
         this.positionUpdatedAt = positionUpdatedAt;
     }
 
-    public String getStatut() {
+    public BusStatus getStatut() {
         return this.statut;
     }
 
-    public Bus statut(String statut) {
+    public Bus statut(BusStatus statut) {
         this.setStatut(statut);
         return this;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(BusStatus statut) {
         this.statut = statut;
     }
 
-    public Utilisateur getUtilisateur() {
-        return this.utilisateur;
+    public LocalDate getDateMiseEnService() {
+        return this.dateMiseEnService;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
-    public Bus utilisateur(Utilisateur utilisateur) {
-        this.setUtilisateur(utilisateur);
+    public Bus dateMiseEnService(LocalDate dateMiseEnService) {
+        this.setDateMiseEnService(dateMiseEnService);
         return this;
+    }
+
+    public void setDateMiseEnService(LocalDate dateMiseEnService) {
+        this.dateMiseEnService = dateMiseEnService;
+    }
+
+    public LocalDate getDateDernierEntretien() {
+        return this.dateDernierEntretien;
+    }
+
+    public Bus dateDernierEntretien(LocalDate dateDernierEntretien) {
+        this.setDateDernierEntretien(dateDernierEntretien);
+        return this;
+    }
+
+    public void setDateDernierEntretien(LocalDate dateDernierEntretien) {
+        this.dateDernierEntretien = dateDernierEntretien;
+    }
+
+    public Integer getProchainEntretienKm() {
+        return this.prochainEntretienKm;
+    }
+
+    public Bus prochainEntretienKm(Integer prochainEntretienKm) {
+        this.setProchainEntretienKm(prochainEntretienKm);
+        return this;
+    }
+
+    public void setProchainEntretienKm(Integer prochainEntretienKm) {
+        this.prochainEntretienKm = prochainEntretienKm;
     }
 
     public Ligne getLigne() {
@@ -322,6 +429,19 @@ public class Bus implements Serializable {
 
     public Bus ligne(Ligne ligne) {
         this.setLigne(ligne);
+        return this;
+    }
+
+    public Utilisateur getChauffeur() {
+        return this.chauffeur;
+    }
+
+    public void setChauffeur(Utilisateur utilisateur) {
+        this.chauffeur = utilisateur;
+    }
+
+    public Bus chauffeur(Utilisateur utilisateur) {
+        this.setChauffeur(utilisateur);
         return this;
     }
 
@@ -352,8 +472,12 @@ public class Bus implements Serializable {
             ", numeroVehicule='" + getNumeroVehicule() + "'" +
             ", plaque='" + getPlaque() + "'" +
             ", modele='" + getModele() + "'" +
+            ", constructeur='" + getConstructeur() + "'" +
             ", capacite=" + getCapacite() +
+            ", capaciteDebout=" + getCapaciteDebout() +
             ", anneeFabrication=" + getAnneeFabrication() +
+            ", energie='" + getEnergie() + "'" +
+            ", autonomieKm=" + getAutonomieKm() +
             ", gpsDeviceId='" + getGpsDeviceId() + "'" +
             ", gpsStatus='" + getGpsStatus() + "'" +
             ", gpsLastPing='" + getGpsLastPing() + "'" +
@@ -364,6 +488,9 @@ public class Bus implements Serializable {
             ", currentCap=" + getCurrentCap() +
             ", positionUpdatedAt='" + getPositionUpdatedAt() + "'" +
             ", statut='" + getStatut() + "'" +
+            ", dateMiseEnService='" + getDateMiseEnService() + "'" +
+            ", dateDernierEntretien='" + getDateDernierEntretien() + "'" +
+            ", prochainEntretienKm=" + getProchainEntretienKm() +
             "}";
     }
 }

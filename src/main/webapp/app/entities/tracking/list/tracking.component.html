@@ -70,6 +70,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="precision">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.tracking.precision">Precision</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="timestamp">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.tracking.timestamp">Timestamp</span>
@@ -80,6 +87,20 @@
             <th scope="col" jhiSortBy="source">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.tracking.source">Source</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="evenement">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.tracking.evenement">Evenement</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="commentaire">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.tracking.commentaire">Commentaire</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
@@ -103,8 +124,13 @@
               <td>{{ tracking.longitude }}</td>
               <td>{{ tracking.vitesse }}</td>
               <td>{{ tracking.cap }}</td>
+              <td>{{ tracking.precision }}</td>
               <td>{{ tracking.timestamp | formatMediumDatetime }}</td>
-              <td>{{ tracking.source }}</td>
+              <td [jhiTranslate]="'yeggApp.TrackingSource.' + (tracking.source ?? 'null')">
+                {{ { null: '', ONBOARD_GPS: 'ONBOARD_GPS', DRIVER_APP: 'DRIVER_APP', MANUAL: 'MANUAL' }[tracking.source ?? 'null'] }}
+              </td>
+              <td>{{ tracking.evenement }}</td>
+              <td>{{ tracking.commentaire }}</td>
               <td>
                 @if (tracking.bus) {
                   <div>

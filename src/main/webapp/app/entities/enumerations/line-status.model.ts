@@ -1,0 +1,9 @@
+export enum LineStatus {
+  ACTIVE = 'ACTIVE',
+
+  SUSPENDED = 'SUSPENDED',
+
+  CLOSED = 'CLOSED',
+
+  UNDER_CONSTRUCTION = 'UNDER_CONSTRUCTION',
+}

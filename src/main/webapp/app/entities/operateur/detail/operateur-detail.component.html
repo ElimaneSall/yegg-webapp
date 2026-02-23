@@ -35,6 +35,18 @@
           <dd>
             <span>{{ operateurRef.logo }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.operateur.siteWeb">Site Web</span></dt>
+          <dd>
+            <span>{{ operateurRef.siteWeb }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.operateur.siret">Siret</span></dt>
+          <dd>
+            <span>{{ operateurRef.siret }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.operateur.dateCreation">Date Creation</span></dt>
+          <dd>
+            <span>{{ operateurRef.dateCreation | formatMediumDatetime }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.operateur.actif">Actif</span></dt>
           <dd>
             <span>{{ operateurRef.actif }}</span>

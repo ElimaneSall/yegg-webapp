@@ -1,10 +1,12 @@
 package sn.yegg.app.service.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.TrackingSource;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Tracking} entity.
@@ -26,10 +28,18 @@ public class TrackingDTO implements Serializable {
     @Max(value = 359)
     private Integer cap;
 
+    private Integer precision;
+
     @NotNull
     private Instant timestamp;
 
-    private String source;
+    @NotNull
+    private TrackingSource source;
+
+    private String evenement;
+
+    @Lob
+    private String commentaire;
 
     private BusDTO bus;
 
@@ -73,6 +83,14 @@ public class TrackingDTO implements Serializable {
         this.cap = cap;
     }
 
+    public Integer getPrecision() {
+        return precision;
+    }
+
+    public void setPrecision(Integer precision) {
+        this.precision = precision;
+    }
+
     public Instant getTimestamp() {
         return timestamp;
     }
@@ -81,12 +99,28 @@ public class TrackingDTO implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public String getSource() {
+    public TrackingSource getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSource(TrackingSource source) {
         this.source = source;
+    }
+
+    public String getEvenement() {
+        return evenement;
+    }
+
+    public void setEvenement(String evenement) {
+        this.evenement = evenement;
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 
     public BusDTO getBus() {
@@ -127,8 +161,11 @@ public class TrackingDTO implements Serializable {
             ", longitude=" + getLongitude() +
             ", vitesse=" + getVitesse() +
             ", cap=" + getCap() +
+            ", precision=" + getPrecision() +
             ", timestamp='" + getTimestamp() + "'" +
             ", source='" + getSource() + "'" +
+            ", evenement='" + getEvenement() + "'" +
+            ", commentaire='" + getCommentaire() + "'" +
             ", bus=" + getBus() +
             "}";
     }

@@ -1,21 +1,11 @@
-id;nom;code;latitude;longitude;adresse;zone_tarifaire;equipements;actif
-1;Aéroport International Blaise Diagne;DKR-AIR;14.736666;-17.493333;AIBD;Zone 5;Abribus, WiFi, Parking;true
-2;Gare Routière de Petersen;PET-GR;14.665000;-17.438333;Petersen, Dakar;Zone 1;Abribus, Toilettes;true
-3;Palais de Justice;PAL-JUS;14.677500;-17.441667;Palais, Dakar;Zone 1;Abribus;true
-4;Hôpital Fann;FAN-HOP;14.686667;-17.468333;Fann Résidence;Zone 2;Abribus;true
-5;Université Cheikh Anta Diop;UCAD;14.687778;-17.465556;UCAD, Fann;Zone 2;Abribus;true
-6;Place de l'Indépendance;PL-IND;14.665833;-17.432222;Centre Ville;Zone 1;Abribus;true
-7;Colobane;COL-MCH;14.679722;-17.445556;Colobane;Zone 2;Marché;true
-8;Parcelles Assainies Unité 8;PAU-U8;14.740000;-17.451944;Unité 8;Zone 3;Abribus, Marché;true
-9;Parcelles Assainies Unité 15;PAU-U15;14.735556;-17.461111;Unité 15;Zone 3;Abribus;true
-10;Thiaroye Gare;THI-GAR;14.750556;-17.378333;Thiaroye sur Mer;Zone 4;Gare Routière;true
-11;Médina Marché;MED-MCH;14.678056;-17.449444;Médina;Zone 1;Marché;true
-12;Ouakam RTS;OUA-RTS;14.720556;-17.485278;Ouakam;Zone 2;Abribus;true
-13;Diamniadio Tour;DIA-TOW;14.721389;-17.189722;Diamniadio;Zone 5;Abribus, Parking;true
-14;Rufisque Centre;RUF-CEN;14.716389;-17.271111;Rufisque;Zone 4;Abribus, Marché;true
-15;Pikine Technopole;PIK-TEC;14.751111;-17.394722;Pikine;Zone 4;Abribus;true
-16;Guédiawaye Marché;GUE-MCH;14.772222;-17.391944;Guédiawaye;Zone 4;Marché;true
-17;Keur Massar;KEU-MAS;14.787500;-17.316111;Keur Massar;Zone 4;Abribus;true
-18;Cambérène;CAM-BER;14.764722;-17.420556;Cambérène;Zone 3;Abribus;true
-19;Yeumbeul;YEU-MCH;14.770278;-17.360833;Yeumbeul;Zone 4;Marché;true
-20;HLM Grand Médine;HLM-GM;14.689444;-17.428333;HLM;Zone 2;Abribus;true
+id;nom;code;latitude;longitude;altitude;adresse;ville;code_postal;zone_tarifaire;equipements;photo;photo_content_type;accessible_pmr;actif
+1;novice volontiers du côté de;placide;3.01;46.58;9103;triangulaire;rectorat;tant gestionnaire puisque;derrière;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;true
+2;du fait que par rapport à;de peur que;55.28;36.07;21682;lors;loufoque en face de;hé;entre;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;false
+3;membre à vie parlementaire;négliger personnel;19.85;84.92;19671;main-d’œuvre afin que tellement;foule rapprocher;administration;beaucoup que;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;true
+4;étant donné que;conseil d’administration crac;36.75;8.66;26116;hormis;actionnaire du côté de plouf;foule;vroum constater équilibrer;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;true;false
+5;avare;interrompre vivace vu que;75.27;37.25;24390;vu que miam;sans espiègle;avant;électorat gigantesque quand;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;true;false
+6;dès que aimable biathlète;étrangler;71.79;95.44;7714;incalculable;devant disposer;outre à l'exception de spécialiste;ah;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;false
+7;délégation;en dehors de;20.07;177.14;4652;ronron de sorte que;efficace;d’autant que ouf;lunatique quelque smack;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;false
+8;hebdomadaire;coac coac;3.07;177.41;13093;quoique ha tellement;aïe ensemble prévoir;sur;miam;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;true
+9;population du Québec aigre complètement;aussi sans;-50.69;124.52;5019;peu assez moins;chef de cuisine même probablement;de sorte que même marron;équipe de recherche au point que;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;true
+10;ramener;électorat;-61.95;-39.64;30826;charitable établir équipe de recherche;élaborer;enfoncer;dès insulter;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.png;image/png;false;false

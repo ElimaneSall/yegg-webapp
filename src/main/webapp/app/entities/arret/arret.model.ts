@@ -4,9 +4,15 @@ export interface IArret {
   code?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  altitude?: number | null;
   adresse?: string | null;
+  ville?: string | null;
+  codePostal?: string | null;
   zoneTarifaire?: string | null;
   equipements?: string | null;
+  photo?: string | null;
+  photoContentType?: string | null;
+  accessiblePMR?: boolean | null;
   actif?: boolean | null;
 }
 

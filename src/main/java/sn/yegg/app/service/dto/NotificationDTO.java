@@ -5,6 +5,9 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+import sn.yegg.app.domain.enumeration.NotificationStatus;
+import sn.yegg.app.domain.enumeration.NotificationType;
+import sn.yegg.app.domain.enumeration.Priority;
 
 /**
  * A DTO for the {@link sn.yegg.app.domain.Notification} entity.
@@ -14,7 +17,8 @@ public class NotificationDTO implements Serializable {
 
     private Long id;
 
-    private String type;
+    @NotNull
+    private NotificationType type;
 
     @NotNull
     private String titre;
@@ -25,9 +29,15 @@ public class NotificationDTO implements Serializable {
     @Lob
     private String donnees;
 
-    private String priorite;
+    private Priority priorite;
 
-    private String statut;
+    @NotNull
+    private NotificationStatus statut;
+
+    @NotNull
+    private Instant dateCreation;
+
+    private Instant dateEnvoi;
 
     private Boolean lu;
 
@@ -43,11 +53,11 @@ public class NotificationDTO implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 
@@ -75,20 +85,36 @@ public class NotificationDTO implements Serializable {
         this.donnees = donnees;
     }
 
-    public String getPriorite() {
+    public Priority getPriorite() {
         return priorite;
     }
 
-    public void setPriorite(String priorite) {
+    public void setPriorite(Priority priorite) {
         this.priorite = priorite;
     }
 
-    public String getStatut() {
+    public NotificationStatus getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(NotificationStatus statut) {
         this.statut = statut;
+    }
+
+    public Instant getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Instant dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Instant getDateEnvoi() {
+        return dateEnvoi;
+    }
+
+    public void setDateEnvoi(Instant dateEnvoi) {
+        this.dateEnvoi = dateEnvoi;
     }
 
     public Boolean getLu() {
@@ -147,6 +173,8 @@ public class NotificationDTO implements Serializable {
             ", donnees='" + getDonnees() + "'" +
             ", priorite='" + getPriorite() + "'" +
             ", statut='" + getStatut() + "'" +
+            ", dateCreation='" + getDateCreation() + "'" +
+            ", dateEnvoi='" + getDateEnvoi() + "'" +
             ", lu='" + getLu() + "'" +
             ", dateLecture='" + getDateLecture() + "'" +
             ", utilisateur=" + getUtilisateur() +

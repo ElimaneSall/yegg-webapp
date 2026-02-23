@@ -6,15 +6,36 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "matricule",
+      "fieldName": "prenom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
       "fieldType": "String",
       "fieldValidateRules": ["unique"]
     },
     {
       "fieldName": "telephone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "motDePasse",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "UserRole",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PASSENGER,TOURIST,DRIVER,OPERATOR,ADMIN"
+    },
+    {
+      "fieldName": "matricule",
       "fieldType": "String",
-      "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^[0-9]{9,15}$"
+      "fieldValidateRules": ["unique"]
     },
     {
       "fieldName": "fcmToken",
@@ -25,8 +46,30 @@
       "fieldType": "Boolean"
     },
     {
+      "fieldName": "notificationsSms",
+      "fieldType": "Boolean"
+    },
+    {
       "fieldName": "langue",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "photo",
+      "fieldType": "Blob"
+    },
+    {
+      "fieldName": "dateCreation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "derniereConnexion",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "dateEmbauche",
@@ -34,7 +77,8 @@
     },
     {
       "fieldName": "numeroPermis",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -42,11 +86,32 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "bus",
+      "otherEntityName": "favori",
       "otherEntityRelationshipName": "utilisateur",
-      "relationshipName": "bus",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one"
+      "relationshipName": "favoris",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "notification",
+      "otherEntityRelationshipName": "utilisateur",
+      "relationshipName": "notifications",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "feedback",
+      "otherEntityRelationshipName": "utilisateur",
+      "relationshipName": "feedbacks",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "historiqueAlerte",
+      "otherEntityRelationshipName": "utilisateur",
+      "relationshipName": "historiqueAlertes",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

@@ -80,8 +80,8 @@ class FavoriCriteriaTest {
         favoriCriteria.cibleId();
         favoriCriteria.nomPersonnalise();
         favoriCriteria.ordre();
-        favoriCriteria.alerteActive();
-        favoriCriteria.alerteSeuil();
+        favoriCriteria.dateAjout();
+        favoriCriteria.dernierAcces();
         favoriCriteria.utilisateurId();
         favoriCriteria.distinct();
     }
@@ -94,8 +94,8 @@ class FavoriCriteriaTest {
                 condition.apply(criteria.getCibleId()) &&
                 condition.apply(criteria.getNomPersonnalise()) &&
                 condition.apply(criteria.getOrdre()) &&
-                condition.apply(criteria.getAlerteActive()) &&
-                condition.apply(criteria.getAlerteSeuil()) &&
+                condition.apply(criteria.getDateAjout()) &&
+                condition.apply(criteria.getDernierAcces()) &&
                 condition.apply(criteria.getUtilisateurId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
@@ -110,8 +110,8 @@ class FavoriCriteriaTest {
                 condition.apply(criteria.getCibleId(), copy.getCibleId()) &&
                 condition.apply(criteria.getNomPersonnalise(), copy.getNomPersonnalise()) &&
                 condition.apply(criteria.getOrdre(), copy.getOrdre()) &&
-                condition.apply(criteria.getAlerteActive(), copy.getAlerteActive()) &&
-                condition.apply(criteria.getAlerteSeuil(), copy.getAlerteSeuil()) &&
+                condition.apply(criteria.getDateAjout(), copy.getDateAjout()) &&
+                condition.apply(criteria.getDernierAcces(), copy.getDernierAcces()) &&
                 condition.apply(criteria.getUtilisateurId(), copy.getUtilisateurId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"

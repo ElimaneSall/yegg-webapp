@@ -18,14 +18,27 @@
         "title": "Utilisateur"
       },
       "id": "ID",
-      "matricule": "Matricule",
+      "prenom": "Prenom",
+      "nom": "Nom",
+      "email": "Email",
       "telephone": "Telephone",
+      "motDePasse": "Mot De Passe",
+      "role": "Role",
+      "matricule": "Matricule",
       "fcmToken": "Fcm Token",
       "notificationsPush": "Notifications Push",
+      "notificationsSms": "Notifications Sms",
       "langue": "Langue",
+      "photo": "Photo",
+      "dateCreation": "Date Creation",
+      "derniereConnexion": "Derniere Connexion",
+      "actif": "Actif",
       "dateEmbauche": "Date Embauche",
       "numeroPermis": "Numero Permis",
-      "bus": "Bus"
+      "favoris": "Favoris",
+      "notifications": "Notifications",
+      "feedbacks": "Feedbacks",
+      "historiqueAlertes": "Historique Alertes"
     }
   }
 }

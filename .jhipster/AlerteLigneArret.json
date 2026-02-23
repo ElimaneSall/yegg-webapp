@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20260223002346"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "sens",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "AlerteLigneArret",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "ligne",
+      "relationshipName": "ligne",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "arret",
+      "relationshipName": "arret",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "alerteApproche",
+      "otherEntityRelationshipName": "alerteLigneArret",
+      "relationshipName": "alerteApproche",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

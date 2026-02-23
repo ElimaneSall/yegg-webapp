@@ -1,0 +1,12 @@
+{
+  "yeggApp": {
+    "BusStatus": {
+      "null": "",
+      "IN_SERVICE": "IN_SERVICE",
+      "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+      "BROKEN_DOWN": "BROKEN_DOWN",
+      "UNDER_MAINTENANCE": "UNDER_MAINTENANCE",
+      "ON_BREAK": "ON_BREAK"
+    }
+  }
+}

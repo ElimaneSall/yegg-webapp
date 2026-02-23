@@ -7,10 +7,14 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IBus } from 'app/entities/bus/bus.model';
 import { BusService } from 'app/entities/bus/service/bus.service';
-import { ITracking } from '../tracking.model';
+import { TrackingSource } from 'app/entities/enumerations/tracking-source.model';
 import { TrackingService } from '../service/tracking.service';
+import { ITracking } from '../tracking.model';
 import { TrackingFormGroup, TrackingFormService } from './tracking-form.service';
 
 @Component({
@@ -21,9 +25,12 @@ import { TrackingFormGroup, TrackingFormService } from './tracking-form.service'
 export class TrackingUpdateComponent implements OnInit {
   isSaving = false;
   tracking: ITracking | null = null;
+  trackingSourceValues = Object.keys(TrackingSource);
 
   busesSharedCollection: IBus[] = [];
 
+  protected dataUtils = inject(DataUtils);
+  protected eventManager = inject(EventManager);
   protected trackingService = inject(TrackingService);
   protected trackingFormService = inject(TrackingFormService);
   protected busService = inject(BusService);
@@ -42,6 +49,21 @@ export class TrackingUpdateComponent implements OnInit {
       }
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('yeggApp.error', { ...err, key: `error.file.${err.key}` })),
     });
   }
 

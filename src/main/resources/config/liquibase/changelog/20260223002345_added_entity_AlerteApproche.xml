@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity AlerteApproche.
+    -->
+    <changeSet id="20260223002345-1" author="jhipster">
+        <createTable tableName="alerte_approche">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nom" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="seuil_distance" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="seuil_temps" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="type_seuil" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="jours_activation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="heure_debut" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="heure_fin" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="statut" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_creation" type="${datetimeType}">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_modification" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="dernier_declenchement" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="nombre_declenchements" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="utilisateur_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+        <dropDefaultValue tableName="alerte_approche" columnName="date_creation" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="alerte_approche" columnName="date_modification" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="alerte_approche" columnName="dernier_declenchement" columnDataType="${datetimeType}"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20260223002345-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/alerte_approche.csv"
+                  separator=";"
+                  tableName="alerte_approche"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="nom" type="string"/>
+            <column name="seuil_distance" type="numeric"/>
+            <column name="seuil_temps" type="numeric"/>
+            <column name="type_seuil" type="string"/>
+            <column name="jours_activation" type="string"/>
+            <column name="heure_debut" type="string"/>
+            <column name="heure_fin" type="string"/>
+            <column name="statut" type="string"/>
+            <column name="date_creation" type="date"/>
+            <column name="date_modification" type="date"/>
+            <column name="dernier_declenchement" type="date"/>
+            <column name="nombre_declenchements" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

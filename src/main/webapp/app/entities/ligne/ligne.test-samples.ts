@@ -1,3 +1,5 @@
+import dayjs from 'dayjs/esm';
+
 import { ILigne, NewLigne } from './ligne.model';
 
 export const sampleWithRequiredData: ILigne = {
@@ -5,17 +7,23 @@ export const sampleWithRequiredData: ILigne = {
   numero: 'si',
   nom: 'délégation à condition que',
   direction: 'collègue',
-  statut: 'préparer',
+  statut: 'SUSPENDED',
+  actif: false,
 };
 
 export const sampleWithPartialData: ILigne = {
-  id: 12315,
-  numero: 'aigre luna',
-  nom: 'hôte moderne exciter',
-  direction: 'commissionnaire',
-  distanceKm: 9935.17,
-  dureeMoyenne: 8957,
-  statut: 'malade quitte à lentement',
+  id: 27138,
+  numero: 'plaisanter',
+  nom: 'gigantesque',
+  direction: 'pacifique',
+  couleur: 'exciter vroum',
+  distanceKm: 8184.61,
+  dureeMoyenne: 9935,
+  statut: 'SUSPENDED',
+  joursFeries: '../fake-data/blob/hipster.txt',
+  dateDebut: dayjs('2026-02-21'),
+  dateFin: dayjs('2026-02-21'),
+  actif: true,
 };
 
 export const sampleWithFullData: ILigne = {
@@ -23,17 +31,24 @@ export const sampleWithFullData: ILigne = {
   numero: 'voler tsoi',
   nom: 'direction amorcer conseil d’administration',
   direction: 'ouille',
-  couleur: '#EA79bF',
-  distanceKm: 20707.14,
-  dureeMoyenne: 18629,
-  statut: "d'abord pendant que",
+  description: '../fake-data/blob/hipster.txt',
+  couleur: 'mature beaucoup',
+  distanceKm: 17492.3,
+  dureeMoyenne: 31670,
+  frequence: 44,
+  statut: 'CLOSED',
+  joursFeries: '../fake-data/blob/hipster.txt',
+  dateDebut: dayjs('2026-02-21'),
+  dateFin: dayjs('2026-02-21'),
+  actif: true,
 };
 
 export const sampleWithNewData: NewLigne = {
   numero: 'coin-coin ',
   nom: 'clientèle demain blablabla',
   direction: 'patientèle au-delà',
-  statut: 'au point que outre même si',
+  statut: 'UNDER_CONSTRUCTION',
+  actif: false,
   id: null,
 };
 

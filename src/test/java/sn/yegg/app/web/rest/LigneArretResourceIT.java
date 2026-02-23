@@ -50,6 +50,13 @@ class LigneArretResourceIT {
     private static final BigDecimal UPDATED_DISTANCE_DEPART = new BigDecimal(2);
     private static final BigDecimal SMALLER_DISTANCE_DEPART = new BigDecimal(1 - 1);
 
+    private static final Integer DEFAULT_TEMPS_ARRET_MOYEN = 1;
+    private static final Integer UPDATED_TEMPS_ARRET_MOYEN = 2;
+    private static final Integer SMALLER_TEMPS_ARRET_MOYEN = 1 - 1;
+
+    private static final Boolean DEFAULT_ARRET_PHYSIQUE = false;
+    private static final Boolean UPDATED_ARRET_PHYSIQUE = true;
+
     private static final String ENTITY_API_URL = "/api/ligne-arrets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -82,7 +89,12 @@ class LigneArretResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LigneArret createEntity() {
-        return new LigneArret().ordre(DEFAULT_ORDRE).tempsTrajetDepart(DEFAULT_TEMPS_TRAJET_DEPART).distanceDepart(DEFAULT_DISTANCE_DEPART);
+        return new LigneArret()
+            .ordre(DEFAULT_ORDRE)
+            .tempsTrajetDepart(DEFAULT_TEMPS_TRAJET_DEPART)
+            .distanceDepart(DEFAULT_DISTANCE_DEPART)
+            .tempsArretMoyen(DEFAULT_TEMPS_ARRET_MOYEN)
+            .arretPhysique(DEFAULT_ARRET_PHYSIQUE);
     }
 
     /**
@@ -92,7 +104,12 @@ class LigneArretResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LigneArret createUpdatedEntity() {
-        return new LigneArret().ordre(UPDATED_ORDRE).tempsTrajetDepart(UPDATED_TEMPS_TRAJET_DEPART).distanceDepart(UPDATED_DISTANCE_DEPART);
+        return new LigneArret()
+            .ordre(UPDATED_ORDRE)
+            .tempsTrajetDepart(UPDATED_TEMPS_TRAJET_DEPART)
+            .distanceDepart(UPDATED_DISTANCE_DEPART)
+            .tempsArretMoyen(UPDATED_TEMPS_ARRET_MOYEN)
+            .arretPhysique(UPDATED_ARRET_PHYSIQUE);
     }
 
     @BeforeEach
@@ -181,7 +198,9 @@ class LigneArretResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(ligneArret.getId().intValue())))
             .andExpect(jsonPath("$.[*].ordre").value(hasItem(DEFAULT_ORDRE)))
             .andExpect(jsonPath("$.[*].tempsTrajetDepart").value(hasItem(DEFAULT_TEMPS_TRAJET_DEPART)))
-            .andExpect(jsonPath("$.[*].distanceDepart").value(hasItem(sameNumber(DEFAULT_DISTANCE_DEPART))));
+            .andExpect(jsonPath("$.[*].distanceDepart").value(hasItem(sameNumber(DEFAULT_DISTANCE_DEPART))))
+            .andExpect(jsonPath("$.[*].tempsArretMoyen").value(hasItem(DEFAULT_TEMPS_ARRET_MOYEN)))
+            .andExpect(jsonPath("$.[*].arretPhysique").value(hasItem(DEFAULT_ARRET_PHYSIQUE)));
     }
 
     @Test
@@ -198,7 +217,9 @@ class LigneArretResourceIT {
             .andExpect(jsonPath("$.id").value(ligneArret.getId().intValue()))
             .andExpect(jsonPath("$.ordre").value(DEFAULT_ORDRE))
             .andExpect(jsonPath("$.tempsTrajetDepart").value(DEFAULT_TEMPS_TRAJET_DEPART))
-            .andExpect(jsonPath("$.distanceDepart").value(sameNumber(DEFAULT_DISTANCE_DEPART)));
+            .andExpect(jsonPath("$.distanceDepart").value(sameNumber(DEFAULT_DISTANCE_DEPART)))
+            .andExpect(jsonPath("$.tempsArretMoyen").value(DEFAULT_TEMPS_ARRET_MOYEN))
+            .andExpect(jsonPath("$.arretPhysique").value(DEFAULT_ARRET_PHYSIQUE));
     }
 
     @Test
@@ -461,6 +482,127 @@ class LigneArretResourceIT {
 
     @Test
     @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen equals to
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.equals=" + DEFAULT_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.equals=" + UPDATED_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen in
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.in=" + DEFAULT_TEMPS_ARRET_MOYEN + "," + UPDATED_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.in=" + UPDATED_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen is not null
+        defaultLigneArretFiltering("tempsArretMoyen.specified=true", "tempsArretMoyen.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen is greater than or equal to
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.greaterThanOrEqual=" + DEFAULT_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.greaterThanOrEqual=" + UPDATED_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen is less than or equal to
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.lessThanOrEqual=" + DEFAULT_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.lessThanOrEqual=" + SMALLER_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen is less than
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.lessThan=" + UPDATED_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.lessThan=" + DEFAULT_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByTempsArretMoyenIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where tempsArretMoyen is greater than
+        defaultLigneArretFiltering(
+            "tempsArretMoyen.greaterThan=" + SMALLER_TEMPS_ARRET_MOYEN,
+            "tempsArretMoyen.greaterThan=" + DEFAULT_TEMPS_ARRET_MOYEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByArretPhysiqueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where arretPhysique equals to
+        defaultLigneArretFiltering("arretPhysique.equals=" + DEFAULT_ARRET_PHYSIQUE, "arretPhysique.equals=" + UPDATED_ARRET_PHYSIQUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByArretPhysiqueIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where arretPhysique in
+        defaultLigneArretFiltering(
+            "arretPhysique.in=" + DEFAULT_ARRET_PHYSIQUE + "," + UPDATED_ARRET_PHYSIQUE,
+            "arretPhysique.in=" + UPDATED_ARRET_PHYSIQUE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllLigneArretsByArretPhysiqueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLigneArret = ligneArretRepository.saveAndFlush(ligneArret);
+
+        // Get all the ligneArretList where arretPhysique is not null
+        defaultLigneArretFiltering("arretPhysique.specified=true", "arretPhysique.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllLigneArretsByLigneIsEqualToSomething() throws Exception {
         Ligne ligne;
         if (TestUtil.findAll(em, Ligne.class).isEmpty()) {
@@ -519,7 +661,9 @@ class LigneArretResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(ligneArret.getId().intValue())))
             .andExpect(jsonPath("$.[*].ordre").value(hasItem(DEFAULT_ORDRE)))
             .andExpect(jsonPath("$.[*].tempsTrajetDepart").value(hasItem(DEFAULT_TEMPS_TRAJET_DEPART)))
-            .andExpect(jsonPath("$.[*].distanceDepart").value(hasItem(sameNumber(DEFAULT_DISTANCE_DEPART))));
+            .andExpect(jsonPath("$.[*].distanceDepart").value(hasItem(sameNumber(DEFAULT_DISTANCE_DEPART))))
+            .andExpect(jsonPath("$.[*].tempsArretMoyen").value(hasItem(DEFAULT_TEMPS_ARRET_MOYEN)))
+            .andExpect(jsonPath("$.[*].arretPhysique").value(hasItem(DEFAULT_ARRET_PHYSIQUE)));
 
         // Check, that the count call also returns 1
         restLigneArretMockMvc
@@ -567,7 +711,12 @@ class LigneArretResourceIT {
         LigneArret updatedLigneArret = ligneArretRepository.findById(ligneArret.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedLigneArret are not directly saved in db
         em.detach(updatedLigneArret);
-        updatedLigneArret.ordre(UPDATED_ORDRE).tempsTrajetDepart(UPDATED_TEMPS_TRAJET_DEPART).distanceDepart(UPDATED_DISTANCE_DEPART);
+        updatedLigneArret
+            .ordre(UPDATED_ORDRE)
+            .tempsTrajetDepart(UPDATED_TEMPS_TRAJET_DEPART)
+            .distanceDepart(UPDATED_DISTANCE_DEPART)
+            .tempsArretMoyen(UPDATED_TEMPS_ARRET_MOYEN)
+            .arretPhysique(UPDATED_ARRET_PHYSIQUE);
         LigneArretDTO ligneArretDTO = ligneArretMapper.toDto(updatedLigneArret);
 
         restLigneArretMockMvc
@@ -657,7 +806,11 @@ class LigneArretResourceIT {
         LigneArret partialUpdatedLigneArret = new LigneArret();
         partialUpdatedLigneArret.setId(ligneArret.getId());
 
-        partialUpdatedLigneArret.ordre(UPDATED_ORDRE);
+        partialUpdatedLigneArret
+            .ordre(UPDATED_ORDRE)
+            .distanceDepart(UPDATED_DISTANCE_DEPART)
+            .tempsArretMoyen(UPDATED_TEMPS_ARRET_MOYEN)
+            .arretPhysique(UPDATED_ARRET_PHYSIQUE);
 
         restLigneArretMockMvc
             .perform(
@@ -691,7 +844,9 @@ class LigneArretResourceIT {
         partialUpdatedLigneArret
             .ordre(UPDATED_ORDRE)
             .tempsTrajetDepart(UPDATED_TEMPS_TRAJET_DEPART)
-            .distanceDepart(UPDATED_DISTANCE_DEPART);
+            .distanceDepart(UPDATED_DISTANCE_DEPART)
+            .tempsArretMoyen(UPDATED_TEMPS_ARRET_MOYEN)
+            .arretPhysique(UPDATED_ARRET_PHYSIQUE);
 
         restLigneArretMockMvc
             .perform(

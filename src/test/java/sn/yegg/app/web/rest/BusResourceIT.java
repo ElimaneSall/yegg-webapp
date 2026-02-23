@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -28,6 +30,8 @@ import sn.yegg.app.IntegrationTest;
 import sn.yegg.app.domain.Bus;
 import sn.yegg.app.domain.Ligne;
 import sn.yegg.app.domain.Utilisateur;
+import sn.yegg.app.domain.enumeration.BusStatus;
+import sn.yegg.app.domain.enumeration.EnergyType;
 import sn.yegg.app.repository.BusRepository;
 import sn.yegg.app.service.dto.BusDTO;
 import sn.yegg.app.service.mapper.BusMapper;
@@ -49,13 +53,27 @@ class BusResourceIT {
     private static final String DEFAULT_MODELE = "AAAAAAAAAA";
     private static final String UPDATED_MODELE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CONSTRUCTEUR = "AAAAAAAAAA";
+    private static final String UPDATED_CONSTRUCTEUR = "BBBBBBBBBB";
+
     private static final Integer DEFAULT_CAPACITE = 1;
     private static final Integer UPDATED_CAPACITE = 2;
     private static final Integer SMALLER_CAPACITE = 1 - 1;
 
-    private static final Integer DEFAULT_ANNEE_FABRICATION = 1;
-    private static final Integer UPDATED_ANNEE_FABRICATION = 2;
-    private static final Integer SMALLER_ANNEE_FABRICATION = 1 - 1;
+    private static final Integer DEFAULT_CAPACITE_DEBOUT = 0;
+    private static final Integer UPDATED_CAPACITE_DEBOUT = 1;
+    private static final Integer SMALLER_CAPACITE_DEBOUT = 0 - 1;
+
+    private static final Integer DEFAULT_ANNEE_FABRICATION = 1990;
+    private static final Integer UPDATED_ANNEE_FABRICATION = 1991;
+    private static final Integer SMALLER_ANNEE_FABRICATION = 1990 - 1;
+
+    private static final EnergyType DEFAULT_ENERGIE = EnergyType.DIESEL;
+    private static final EnergyType UPDATED_ENERGIE = EnergyType.ELECTRIC;
+
+    private static final Integer DEFAULT_AUTONOMIE_KM = 1;
+    private static final Integer UPDATED_AUTONOMIE_KM = 2;
+    private static final Integer SMALLER_AUTONOMIE_KM = 1 - 1;
 
     private static final String DEFAULT_GPS_DEVICE_ID = "AAAAAAAAAA";
     private static final String UPDATED_GPS_DEVICE_ID = "BBBBBBBBBB";
@@ -89,8 +107,20 @@ class BusResourceIT {
     private static final Instant DEFAULT_POSITION_UPDATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_POSITION_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_STATUT = "AAAAAAAAAA";
-    private static final String UPDATED_STATUT = "BBBBBBBBBB";
+    private static final BusStatus DEFAULT_STATUT = BusStatus.IN_SERVICE;
+    private static final BusStatus UPDATED_STATUT = BusStatus.OUT_OF_SERVICE;
+
+    private static final LocalDate DEFAULT_DATE_MISE_EN_SERVICE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_MISE_EN_SERVICE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_MISE_EN_SERVICE = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DATE_DERNIER_ENTRETIEN = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_DERNIER_ENTRETIEN = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_DERNIER_ENTRETIEN = LocalDate.ofEpochDay(-1L);
+
+    private static final Integer DEFAULT_PROCHAIN_ENTRETIEN_KM = 1;
+    private static final Integer UPDATED_PROCHAIN_ENTRETIEN_KM = 2;
+    private static final Integer SMALLER_PROCHAIN_ENTRETIEN_KM = 1 - 1;
 
     private static final String ENTITY_API_URL = "/api/buses";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -128,8 +158,12 @@ class BusResourceIT {
             .numeroVehicule(DEFAULT_NUMERO_VEHICULE)
             .plaque(DEFAULT_PLAQUE)
             .modele(DEFAULT_MODELE)
+            .constructeur(DEFAULT_CONSTRUCTEUR)
             .capacite(DEFAULT_CAPACITE)
+            .capaciteDebout(DEFAULT_CAPACITE_DEBOUT)
             .anneeFabrication(DEFAULT_ANNEE_FABRICATION)
+            .energie(DEFAULT_ENERGIE)
+            .autonomieKm(DEFAULT_AUTONOMIE_KM)
             .gpsDeviceId(DEFAULT_GPS_DEVICE_ID)
             .gpsStatus(DEFAULT_GPS_STATUS)
             .gpsLastPing(DEFAULT_GPS_LAST_PING)
@@ -139,7 +173,10 @@ class BusResourceIT {
             .currentVitesse(DEFAULT_CURRENT_VITESSE)
             .currentCap(DEFAULT_CURRENT_CAP)
             .positionUpdatedAt(DEFAULT_POSITION_UPDATED_AT)
-            .statut(DEFAULT_STATUT);
+            .statut(DEFAULT_STATUT)
+            .dateMiseEnService(DEFAULT_DATE_MISE_EN_SERVICE)
+            .dateDernierEntretien(DEFAULT_DATE_DERNIER_ENTRETIEN)
+            .prochainEntretienKm(DEFAULT_PROCHAIN_ENTRETIEN_KM);
     }
 
     /**
@@ -153,8 +190,12 @@ class BusResourceIT {
             .numeroVehicule(UPDATED_NUMERO_VEHICULE)
             .plaque(UPDATED_PLAQUE)
             .modele(UPDATED_MODELE)
+            .constructeur(UPDATED_CONSTRUCTEUR)
             .capacite(UPDATED_CAPACITE)
+            .capaciteDebout(UPDATED_CAPACITE_DEBOUT)
             .anneeFabrication(UPDATED_ANNEE_FABRICATION)
+            .energie(UPDATED_ENERGIE)
+            .autonomieKm(UPDATED_AUTONOMIE_KM)
             .gpsDeviceId(UPDATED_GPS_DEVICE_ID)
             .gpsStatus(UPDATED_GPS_STATUS)
             .gpsLastPing(UPDATED_GPS_LAST_PING)
@@ -164,7 +205,10 @@ class BusResourceIT {
             .currentVitesse(UPDATED_CURRENT_VITESSE)
             .currentCap(UPDATED_CURRENT_CAP)
             .positionUpdatedAt(UPDATED_POSITION_UPDATED_AT)
-            .statut(UPDATED_STATUT);
+            .statut(UPDATED_STATUT)
+            .dateMiseEnService(UPDATED_DATE_MISE_EN_SERVICE)
+            .dateDernierEntretien(UPDATED_DATE_DERNIER_ENTRETIEN)
+            .prochainEntretienKm(UPDATED_PROCHAIN_ENTRETIEN_KM);
     }
 
     @BeforeEach
@@ -305,8 +349,12 @@ class BusResourceIT {
             .andExpect(jsonPath("$.[*].numeroVehicule").value(hasItem(DEFAULT_NUMERO_VEHICULE)))
             .andExpect(jsonPath("$.[*].plaque").value(hasItem(DEFAULT_PLAQUE)))
             .andExpect(jsonPath("$.[*].modele").value(hasItem(DEFAULT_MODELE)))
+            .andExpect(jsonPath("$.[*].constructeur").value(hasItem(DEFAULT_CONSTRUCTEUR)))
             .andExpect(jsonPath("$.[*].capacite").value(hasItem(DEFAULT_CAPACITE)))
+            .andExpect(jsonPath("$.[*].capaciteDebout").value(hasItem(DEFAULT_CAPACITE_DEBOUT)))
             .andExpect(jsonPath("$.[*].anneeFabrication").value(hasItem(DEFAULT_ANNEE_FABRICATION)))
+            .andExpect(jsonPath("$.[*].energie").value(hasItem(DEFAULT_ENERGIE.toString())))
+            .andExpect(jsonPath("$.[*].autonomieKm").value(hasItem(DEFAULT_AUTONOMIE_KM)))
             .andExpect(jsonPath("$.[*].gpsDeviceId").value(hasItem(DEFAULT_GPS_DEVICE_ID)))
             .andExpect(jsonPath("$.[*].gpsStatus").value(hasItem(DEFAULT_GPS_STATUS)))
             .andExpect(jsonPath("$.[*].gpsLastPing").value(hasItem(DEFAULT_GPS_LAST_PING.toString())))
@@ -316,7 +364,10 @@ class BusResourceIT {
             .andExpect(jsonPath("$.[*].currentVitesse").value(hasItem(sameNumber(DEFAULT_CURRENT_VITESSE))))
             .andExpect(jsonPath("$.[*].currentCap").value(hasItem(DEFAULT_CURRENT_CAP)))
             .andExpect(jsonPath("$.[*].positionUpdatedAt").value(hasItem(DEFAULT_POSITION_UPDATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].dateMiseEnService").value(hasItem(DEFAULT_DATE_MISE_EN_SERVICE.toString())))
+            .andExpect(jsonPath("$.[*].dateDernierEntretien").value(hasItem(DEFAULT_DATE_DERNIER_ENTRETIEN.toString())))
+            .andExpect(jsonPath("$.[*].prochainEntretienKm").value(hasItem(DEFAULT_PROCHAIN_ENTRETIEN_KM)));
     }
 
     @Test
@@ -334,8 +385,12 @@ class BusResourceIT {
             .andExpect(jsonPath("$.numeroVehicule").value(DEFAULT_NUMERO_VEHICULE))
             .andExpect(jsonPath("$.plaque").value(DEFAULT_PLAQUE))
             .andExpect(jsonPath("$.modele").value(DEFAULT_MODELE))
+            .andExpect(jsonPath("$.constructeur").value(DEFAULT_CONSTRUCTEUR))
             .andExpect(jsonPath("$.capacite").value(DEFAULT_CAPACITE))
+            .andExpect(jsonPath("$.capaciteDebout").value(DEFAULT_CAPACITE_DEBOUT))
             .andExpect(jsonPath("$.anneeFabrication").value(DEFAULT_ANNEE_FABRICATION))
+            .andExpect(jsonPath("$.energie").value(DEFAULT_ENERGIE.toString()))
+            .andExpect(jsonPath("$.autonomieKm").value(DEFAULT_AUTONOMIE_KM))
             .andExpect(jsonPath("$.gpsDeviceId").value(DEFAULT_GPS_DEVICE_ID))
             .andExpect(jsonPath("$.gpsStatus").value(DEFAULT_GPS_STATUS))
             .andExpect(jsonPath("$.gpsLastPing").value(DEFAULT_GPS_LAST_PING.toString()))
@@ -345,7 +400,10 @@ class BusResourceIT {
             .andExpect(jsonPath("$.currentVitesse").value(sameNumber(DEFAULT_CURRENT_VITESSE)))
             .andExpect(jsonPath("$.currentCap").value(DEFAULT_CURRENT_CAP))
             .andExpect(jsonPath("$.positionUpdatedAt").value(DEFAULT_POSITION_UPDATED_AT.toString()))
-            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT));
+            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
+            .andExpect(jsonPath("$.dateMiseEnService").value(DEFAULT_DATE_MISE_EN_SERVICE.toString()))
+            .andExpect(jsonPath("$.dateDernierEntretien").value(DEFAULT_DATE_DERNIER_ENTRETIEN.toString()))
+            .andExpect(jsonPath("$.prochainEntretienKm").value(DEFAULT_PROCHAIN_ENTRETIEN_KM));
     }
 
     @Test
@@ -521,6 +579,59 @@ class BusResourceIT {
 
     @Test
     @Transactional
+    void getAllBusesByConstructeurIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where constructeur equals to
+        defaultBusFiltering("constructeur.equals=" + DEFAULT_CONSTRUCTEUR, "constructeur.equals=" + UPDATED_CONSTRUCTEUR);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByConstructeurIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where constructeur in
+        defaultBusFiltering(
+            "constructeur.in=" + DEFAULT_CONSTRUCTEUR + "," + UPDATED_CONSTRUCTEUR,
+            "constructeur.in=" + UPDATED_CONSTRUCTEUR
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByConstructeurIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where constructeur is not null
+        defaultBusFiltering("constructeur.specified=true", "constructeur.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByConstructeurContainsSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where constructeur contains
+        defaultBusFiltering("constructeur.contains=" + DEFAULT_CONSTRUCTEUR, "constructeur.contains=" + UPDATED_CONSTRUCTEUR);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByConstructeurNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where constructeur does not contain
+        defaultBusFiltering("constructeur.doesNotContain=" + UPDATED_CONSTRUCTEUR, "constructeur.doesNotContain=" + DEFAULT_CONSTRUCTEUR);
+    }
+
+    @Test
+    @Transactional
     void getAllBusesByCapaciteIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedBus = busRepository.saveAndFlush(bus);
@@ -591,6 +702,91 @@ class BusResourceIT {
 
     @Test
     @Transactional
+    void getAllBusesByCapaciteDeboutIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout equals to
+        defaultBusFiltering("capaciteDebout.equals=" + DEFAULT_CAPACITE_DEBOUT, "capaciteDebout.equals=" + UPDATED_CAPACITE_DEBOUT);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout in
+        defaultBusFiltering(
+            "capaciteDebout.in=" + DEFAULT_CAPACITE_DEBOUT + "," + UPDATED_CAPACITE_DEBOUT,
+            "capaciteDebout.in=" + UPDATED_CAPACITE_DEBOUT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout is not null
+        defaultBusFiltering("capaciteDebout.specified=true", "capaciteDebout.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout is greater than or equal to
+        defaultBusFiltering(
+            "capaciteDebout.greaterThanOrEqual=" + DEFAULT_CAPACITE_DEBOUT,
+            "capaciteDebout.greaterThanOrEqual=" + (DEFAULT_CAPACITE_DEBOUT + 1)
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout is less than or equal to
+        defaultBusFiltering(
+            "capaciteDebout.lessThanOrEqual=" + DEFAULT_CAPACITE_DEBOUT,
+            "capaciteDebout.lessThanOrEqual=" + SMALLER_CAPACITE_DEBOUT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout is less than
+        defaultBusFiltering(
+            "capaciteDebout.lessThan=" + (DEFAULT_CAPACITE_DEBOUT + 1),
+            "capaciteDebout.lessThan=" + DEFAULT_CAPACITE_DEBOUT
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByCapaciteDeboutIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where capaciteDebout is greater than
+        defaultBusFiltering(
+            "capaciteDebout.greaterThan=" + SMALLER_CAPACITE_DEBOUT,
+            "capaciteDebout.greaterThan=" + DEFAULT_CAPACITE_DEBOUT
+        );
+    }
+
+    @Test
+    @Transactional
     void getAllBusesByAnneeFabricationIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedBus = busRepository.saveAndFlush(bus);
@@ -631,7 +827,7 @@ class BusResourceIT {
         // Get all the busList where anneeFabrication is greater than or equal to
         defaultBusFiltering(
             "anneeFabrication.greaterThanOrEqual=" + DEFAULT_ANNEE_FABRICATION,
-            "anneeFabrication.greaterThanOrEqual=" + UPDATED_ANNEE_FABRICATION
+            "anneeFabrication.greaterThanOrEqual=" + (DEFAULT_ANNEE_FABRICATION + 1)
         );
     }
 
@@ -656,7 +852,7 @@ class BusResourceIT {
 
         // Get all the busList where anneeFabrication is less than
         defaultBusFiltering(
-            "anneeFabrication.lessThan=" + UPDATED_ANNEE_FABRICATION,
+            "anneeFabrication.lessThan=" + (DEFAULT_ANNEE_FABRICATION + 1),
             "anneeFabrication.lessThan=" + DEFAULT_ANNEE_FABRICATION
         );
     }
@@ -672,6 +868,112 @@ class BusResourceIT {
             "anneeFabrication.greaterThan=" + SMALLER_ANNEE_FABRICATION,
             "anneeFabrication.greaterThan=" + DEFAULT_ANNEE_FABRICATION
         );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByEnergieIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where energie equals to
+        defaultBusFiltering("energie.equals=" + DEFAULT_ENERGIE, "energie.equals=" + UPDATED_ENERGIE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByEnergieIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where energie in
+        defaultBusFiltering("energie.in=" + DEFAULT_ENERGIE + "," + UPDATED_ENERGIE, "energie.in=" + UPDATED_ENERGIE);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByEnergieIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where energie is not null
+        defaultBusFiltering("energie.specified=true", "energie.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm equals to
+        defaultBusFiltering("autonomieKm.equals=" + DEFAULT_AUTONOMIE_KM, "autonomieKm.equals=" + UPDATED_AUTONOMIE_KM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm in
+        defaultBusFiltering(
+            "autonomieKm.in=" + DEFAULT_AUTONOMIE_KM + "," + UPDATED_AUTONOMIE_KM,
+            "autonomieKm.in=" + UPDATED_AUTONOMIE_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm is not null
+        defaultBusFiltering("autonomieKm.specified=true", "autonomieKm.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm is greater than or equal to
+        defaultBusFiltering(
+            "autonomieKm.greaterThanOrEqual=" + DEFAULT_AUTONOMIE_KM,
+            "autonomieKm.greaterThanOrEqual=" + UPDATED_AUTONOMIE_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm is less than or equal to
+        defaultBusFiltering("autonomieKm.lessThanOrEqual=" + DEFAULT_AUTONOMIE_KM, "autonomieKm.lessThanOrEqual=" + SMALLER_AUTONOMIE_KM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm is less than
+        defaultBusFiltering("autonomieKm.lessThan=" + UPDATED_AUTONOMIE_KM, "autonomieKm.lessThan=" + DEFAULT_AUTONOMIE_KM);
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByAutonomieKmIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where autonomieKm is greater than
+        defaultBusFiltering("autonomieKm.greaterThan=" + SMALLER_AUTONOMIE_KM, "autonomieKm.greaterThan=" + DEFAULT_AUTONOMIE_KM);
     }
 
     @Test
@@ -1285,44 +1587,266 @@ class BusResourceIT {
 
     @Test
     @Transactional
-    void getAllBusesByStatutContainsSomething() throws Exception {
+    void getAllBusesByDateMiseEnServiceIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedBus = busRepository.saveAndFlush(bus);
 
-        // Get all the busList where statut contains
-        defaultBusFiltering("statut.contains=" + DEFAULT_STATUT, "statut.contains=" + UPDATED_STATUT);
+        // Get all the busList where dateMiseEnService equals to
+        defaultBusFiltering(
+            "dateMiseEnService.equals=" + DEFAULT_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.equals=" + UPDATED_DATE_MISE_EN_SERVICE
+        );
     }
 
     @Test
     @Transactional
-    void getAllBusesByStatutNotContainsSomething() throws Exception {
+    void getAllBusesByDateMiseEnServiceIsInShouldWork() throws Exception {
         // Initialize the database
         insertedBus = busRepository.saveAndFlush(bus);
 
-        // Get all the busList where statut does not contain
-        defaultBusFiltering("statut.doesNotContain=" + UPDATED_STATUT, "statut.doesNotContain=" + DEFAULT_STATUT);
+        // Get all the busList where dateMiseEnService in
+        defaultBusFiltering(
+            "dateMiseEnService.in=" + DEFAULT_DATE_MISE_EN_SERVICE + "," + UPDATED_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.in=" + UPDATED_DATE_MISE_EN_SERVICE
+        );
     }
 
     @Test
     @Transactional
-    void getAllBusesByUtilisateurIsEqualToSomething() throws Exception {
-        Utilisateur utilisateur;
-        if (TestUtil.findAll(em, Utilisateur.class).isEmpty()) {
-            busRepository.saveAndFlush(bus);
-            utilisateur = UtilisateurResourceIT.createEntity();
-        } else {
-            utilisateur = TestUtil.findAll(em, Utilisateur.class).get(0);
-        }
-        em.persist(utilisateur);
-        em.flush();
-        bus.setUtilisateur(utilisateur);
-        busRepository.saveAndFlush(bus);
-        Long utilisateurId = utilisateur.getId();
-        // Get all the busList where utilisateur equals to utilisateurId
-        defaultBusShouldBeFound("utilisateurId.equals=" + utilisateurId);
+    void getAllBusesByDateMiseEnServiceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
 
-        // Get all the busList where utilisateur equals to (utilisateurId + 1)
-        defaultBusShouldNotBeFound("utilisateurId.equals=" + (utilisateurId + 1));
+        // Get all the busList where dateMiseEnService is not null
+        defaultBusFiltering("dateMiseEnService.specified=true", "dateMiseEnService.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateMiseEnServiceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateMiseEnService is greater than or equal to
+        defaultBusFiltering(
+            "dateMiseEnService.greaterThanOrEqual=" + DEFAULT_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.greaterThanOrEqual=" + UPDATED_DATE_MISE_EN_SERVICE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateMiseEnServiceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateMiseEnService is less than or equal to
+        defaultBusFiltering(
+            "dateMiseEnService.lessThanOrEqual=" + DEFAULT_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.lessThanOrEqual=" + SMALLER_DATE_MISE_EN_SERVICE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateMiseEnServiceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateMiseEnService is less than
+        defaultBusFiltering(
+            "dateMiseEnService.lessThan=" + UPDATED_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.lessThan=" + DEFAULT_DATE_MISE_EN_SERVICE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateMiseEnServiceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateMiseEnService is greater than
+        defaultBusFiltering(
+            "dateMiseEnService.greaterThan=" + SMALLER_DATE_MISE_EN_SERVICE,
+            "dateMiseEnService.greaterThan=" + DEFAULT_DATE_MISE_EN_SERVICE
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien equals to
+        defaultBusFiltering(
+            "dateDernierEntretien.equals=" + DEFAULT_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.equals=" + UPDATED_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien in
+        defaultBusFiltering(
+            "dateDernierEntretien.in=" + DEFAULT_DATE_DERNIER_ENTRETIEN + "," + UPDATED_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.in=" + UPDATED_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien is not null
+        defaultBusFiltering("dateDernierEntretien.specified=true", "dateDernierEntretien.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien is greater than or equal to
+        defaultBusFiltering(
+            "dateDernierEntretien.greaterThanOrEqual=" + DEFAULT_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.greaterThanOrEqual=" + UPDATED_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien is less than or equal to
+        defaultBusFiltering(
+            "dateDernierEntretien.lessThanOrEqual=" + DEFAULT_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.lessThanOrEqual=" + SMALLER_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien is less than
+        defaultBusFiltering(
+            "dateDernierEntretien.lessThan=" + UPDATED_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.lessThan=" + DEFAULT_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByDateDernierEntretienIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where dateDernierEntretien is greater than
+        defaultBusFiltering(
+            "dateDernierEntretien.greaterThan=" + SMALLER_DATE_DERNIER_ENTRETIEN,
+            "dateDernierEntretien.greaterThan=" + DEFAULT_DATE_DERNIER_ENTRETIEN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm equals to
+        defaultBusFiltering(
+            "prochainEntretienKm.equals=" + DEFAULT_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.equals=" + UPDATED_PROCHAIN_ENTRETIEN_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm in
+        defaultBusFiltering(
+            "prochainEntretienKm.in=" + DEFAULT_PROCHAIN_ENTRETIEN_KM + "," + UPDATED_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.in=" + UPDATED_PROCHAIN_ENTRETIEN_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm is not null
+        defaultBusFiltering("prochainEntretienKm.specified=true", "prochainEntretienKm.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm is greater than or equal to
+        defaultBusFiltering(
+            "prochainEntretienKm.greaterThanOrEqual=" + DEFAULT_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.greaterThanOrEqual=" + UPDATED_PROCHAIN_ENTRETIEN_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm is less than or equal to
+        defaultBusFiltering(
+            "prochainEntretienKm.lessThanOrEqual=" + DEFAULT_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.lessThanOrEqual=" + SMALLER_PROCHAIN_ENTRETIEN_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm is less than
+        defaultBusFiltering(
+            "prochainEntretienKm.lessThan=" + UPDATED_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.lessThan=" + DEFAULT_PROCHAIN_ENTRETIEN_KM
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllBusesByProchainEntretienKmIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedBus = busRepository.saveAndFlush(bus);
+
+        // Get all the busList where prochainEntretienKm is greater than
+        defaultBusFiltering(
+            "prochainEntretienKm.greaterThan=" + SMALLER_PROCHAIN_ENTRETIEN_KM,
+            "prochainEntretienKm.greaterThan=" + DEFAULT_PROCHAIN_ENTRETIEN_KM
+        );
     }
 
     @Test
@@ -1347,6 +1871,28 @@ class BusResourceIT {
         defaultBusShouldNotBeFound("ligneId.equals=" + (ligneId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllBusesByChauffeurIsEqualToSomething() throws Exception {
+        Utilisateur chauffeur;
+        if (TestUtil.findAll(em, Utilisateur.class).isEmpty()) {
+            busRepository.saveAndFlush(bus);
+            chauffeur = UtilisateurResourceIT.createEntity();
+        } else {
+            chauffeur = TestUtil.findAll(em, Utilisateur.class).get(0);
+        }
+        em.persist(chauffeur);
+        em.flush();
+        bus.setChauffeur(chauffeur);
+        busRepository.saveAndFlush(bus);
+        Long chauffeurId = chauffeur.getId();
+        // Get all the busList where chauffeur equals to chauffeurId
+        defaultBusShouldBeFound("chauffeurId.equals=" + chauffeurId);
+
+        // Get all the busList where chauffeur equals to (chauffeurId + 1)
+        defaultBusShouldNotBeFound("chauffeurId.equals=" + (chauffeurId + 1));
+    }
+
     private void defaultBusFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultBusShouldBeFound(shouldBeFound);
         defaultBusShouldNotBeFound(shouldNotBeFound);
@@ -1364,8 +1910,12 @@ class BusResourceIT {
             .andExpect(jsonPath("$.[*].numeroVehicule").value(hasItem(DEFAULT_NUMERO_VEHICULE)))
             .andExpect(jsonPath("$.[*].plaque").value(hasItem(DEFAULT_PLAQUE)))
             .andExpect(jsonPath("$.[*].modele").value(hasItem(DEFAULT_MODELE)))
+            .andExpect(jsonPath("$.[*].constructeur").value(hasItem(DEFAULT_CONSTRUCTEUR)))
             .andExpect(jsonPath("$.[*].capacite").value(hasItem(DEFAULT_CAPACITE)))
+            .andExpect(jsonPath("$.[*].capaciteDebout").value(hasItem(DEFAULT_CAPACITE_DEBOUT)))
             .andExpect(jsonPath("$.[*].anneeFabrication").value(hasItem(DEFAULT_ANNEE_FABRICATION)))
+            .andExpect(jsonPath("$.[*].energie").value(hasItem(DEFAULT_ENERGIE.toString())))
+            .andExpect(jsonPath("$.[*].autonomieKm").value(hasItem(DEFAULT_AUTONOMIE_KM)))
             .andExpect(jsonPath("$.[*].gpsDeviceId").value(hasItem(DEFAULT_GPS_DEVICE_ID)))
             .andExpect(jsonPath("$.[*].gpsStatus").value(hasItem(DEFAULT_GPS_STATUS)))
             .andExpect(jsonPath("$.[*].gpsLastPing").value(hasItem(DEFAULT_GPS_LAST_PING.toString())))
@@ -1375,7 +1925,10 @@ class BusResourceIT {
             .andExpect(jsonPath("$.[*].currentVitesse").value(hasItem(sameNumber(DEFAULT_CURRENT_VITESSE))))
             .andExpect(jsonPath("$.[*].currentCap").value(hasItem(DEFAULT_CURRENT_CAP)))
             .andExpect(jsonPath("$.[*].positionUpdatedAt").value(hasItem(DEFAULT_POSITION_UPDATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].dateMiseEnService").value(hasItem(DEFAULT_DATE_MISE_EN_SERVICE.toString())))
+            .andExpect(jsonPath("$.[*].dateDernierEntretien").value(hasItem(DEFAULT_DATE_DERNIER_ENTRETIEN.toString())))
+            .andExpect(jsonPath("$.[*].prochainEntretienKm").value(hasItem(DEFAULT_PROCHAIN_ENTRETIEN_KM)));
 
         // Check, that the count call also returns 1
         restBusMockMvc
@@ -1427,8 +1980,12 @@ class BusResourceIT {
             .numeroVehicule(UPDATED_NUMERO_VEHICULE)
             .plaque(UPDATED_PLAQUE)
             .modele(UPDATED_MODELE)
+            .constructeur(UPDATED_CONSTRUCTEUR)
             .capacite(UPDATED_CAPACITE)
+            .capaciteDebout(UPDATED_CAPACITE_DEBOUT)
             .anneeFabrication(UPDATED_ANNEE_FABRICATION)
+            .energie(UPDATED_ENERGIE)
+            .autonomieKm(UPDATED_AUTONOMIE_KM)
             .gpsDeviceId(UPDATED_GPS_DEVICE_ID)
             .gpsStatus(UPDATED_GPS_STATUS)
             .gpsLastPing(UPDATED_GPS_LAST_PING)
@@ -1438,7 +1995,10 @@ class BusResourceIT {
             .currentVitesse(UPDATED_CURRENT_VITESSE)
             .currentCap(UPDATED_CURRENT_CAP)
             .positionUpdatedAt(UPDATED_POSITION_UPDATED_AT)
-            .statut(UPDATED_STATUT);
+            .statut(UPDATED_STATUT)
+            .dateMiseEnService(UPDATED_DATE_MISE_EN_SERVICE)
+            .dateDernierEntretien(UPDATED_DATE_DERNIER_ENTRETIEN)
+            .prochainEntretienKm(UPDATED_PROCHAIN_ENTRETIEN_KM);
         BusDTO busDTO = busMapper.toDto(updatedBus);
 
         restBusMockMvc
@@ -1521,15 +2081,18 @@ class BusResourceIT {
         partialUpdatedBus.setId(bus.getId());
 
         partialUpdatedBus
-            .plaque(UPDATED_PLAQUE)
+            .numeroVehicule(UPDATED_NUMERO_VEHICULE)
             .modele(UPDATED_MODELE)
             .capacite(UPDATED_CAPACITE)
+            .anneeFabrication(UPDATED_ANNEE_FABRICATION)
+            .autonomieKm(UPDATED_AUTONOMIE_KM)
+            .gpsDeviceId(UPDATED_GPS_DEVICE_ID)
             .gpsLastPing(UPDATED_GPS_LAST_PING)
             .gpsBatteryLevel(UPDATED_GPS_BATTERY_LEVEL)
-            .currentLatitude(UPDATED_CURRENT_LATITUDE)
-            .currentVitesse(UPDATED_CURRENT_VITESSE)
-            .positionUpdatedAt(UPDATED_POSITION_UPDATED_AT)
-            .statut(UPDATED_STATUT);
+            .currentLongitude(UPDATED_CURRENT_LONGITUDE)
+            .currentCap(UPDATED_CURRENT_CAP)
+            .dateDernierEntretien(UPDATED_DATE_DERNIER_ENTRETIEN)
+            .prochainEntretienKm(UPDATED_PROCHAIN_ENTRETIEN_KM);
 
         restBusMockMvc
             .perform(
@@ -1561,8 +2124,12 @@ class BusResourceIT {
             .numeroVehicule(UPDATED_NUMERO_VEHICULE)
             .plaque(UPDATED_PLAQUE)
             .modele(UPDATED_MODELE)
+            .constructeur(UPDATED_CONSTRUCTEUR)
             .capacite(UPDATED_CAPACITE)
+            .capaciteDebout(UPDATED_CAPACITE_DEBOUT)
             .anneeFabrication(UPDATED_ANNEE_FABRICATION)
+            .energie(UPDATED_ENERGIE)
+            .autonomieKm(UPDATED_AUTONOMIE_KM)
             .gpsDeviceId(UPDATED_GPS_DEVICE_ID)
             .gpsStatus(UPDATED_GPS_STATUS)
             .gpsLastPing(UPDATED_GPS_LAST_PING)
@@ -1572,7 +2139,10 @@ class BusResourceIT {
             .currentVitesse(UPDATED_CURRENT_VITESSE)
             .currentCap(UPDATED_CURRENT_CAP)
             .positionUpdatedAt(UPDATED_POSITION_UPDATED_AT)
-            .statut(UPDATED_STATUT);
+            .statut(UPDATED_STATUT)
+            .dateMiseEnService(UPDATED_DATE_MISE_EN_SERVICE)
+            .dateDernierEntretien(UPDATED_DATE_DERNIER_ENTRETIEN)
+            .prochainEntretienKm(UPDATED_PROCHAIN_ENTRETIEN_KM);
 
         restBusMockMvc
             .perform(

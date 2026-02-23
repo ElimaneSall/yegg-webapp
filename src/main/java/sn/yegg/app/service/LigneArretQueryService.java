@@ -77,6 +77,8 @@ public class LigneArretQueryService extends QueryService<LigneArret> {
                 buildRangeSpecification(criteria.getOrdre(), LigneArret_.ordre),
                 buildRangeSpecification(criteria.getTempsTrajetDepart(), LigneArret_.tempsTrajetDepart),
                 buildRangeSpecification(criteria.getDistanceDepart(), LigneArret_.distanceDepart),
+                buildRangeSpecification(criteria.getTempsArretMoyen(), LigneArret_.tempsArretMoyen),
+                buildSpecification(criteria.getArretPhysique(), LigneArret_.arretPhysique),
                 buildSpecification(criteria.getLigneId(), root -> root.join(LigneArret_.ligne, JoinType.LEFT).get(Ligne_.id)),
                 buildSpecification(criteria.getArretId(), root -> root.join(LigneArret_.arret, JoinType.LEFT).get(Arret_.id))
             );

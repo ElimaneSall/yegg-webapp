@@ -1,0 +1,10 @@
+{
+  "yeggApp": {
+    "ReportFormat": {
+      "null": "",
+      "PDF": "PDF",
+      "EXCEL": "EXCEL",
+      "CSV": "CSV"
+    }
+  }
+}

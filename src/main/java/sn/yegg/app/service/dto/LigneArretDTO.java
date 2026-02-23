@@ -20,6 +20,10 @@ public class LigneArretDTO implements Serializable {
 
     private BigDecimal distanceDepart;
 
+    private Integer tempsArretMoyen;
+
+    private Boolean arretPhysique;
+
     private LigneDTO ligne;
 
     private ArretDTO arret;
@@ -54,6 +58,22 @@ public class LigneArretDTO implements Serializable {
 
     public void setDistanceDepart(BigDecimal distanceDepart) {
         this.distanceDepart = distanceDepart;
+    }
+
+    public Integer getTempsArretMoyen() {
+        return tempsArretMoyen;
+    }
+
+    public void setTempsArretMoyen(Integer tempsArretMoyen) {
+        this.tempsArretMoyen = tempsArretMoyen;
+    }
+
+    public Boolean getArretPhysique() {
+        return arretPhysique;
+    }
+
+    public void setArretPhysique(Boolean arretPhysique) {
+        this.arretPhysique = arretPhysique;
     }
 
     public LigneDTO getLigne() {
@@ -101,6 +121,8 @@ public class LigneArretDTO implements Serializable {
             ", ordre=" + getOrdre() +
             ", tempsTrajetDepart=" + getTempsTrajetDepart() +
             ", distanceDepart=" + getDistanceDepart() +
+            ", tempsArretMoyen=" + getTempsArretMoyen() +
+            ", arretPhysique='" + getArretPhysique() + "'" +
             ", ligne=" + getLigne() +
             ", arret=" + getArret() +
             "}";

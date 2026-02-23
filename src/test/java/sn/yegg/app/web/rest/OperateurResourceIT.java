@@ -9,6 +9,8 @@ import static sn.yegg.app.web.rest.TestUtil.createUpdateProxyForBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -41,8 +43,8 @@ class OperateurResourceIT {
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TELEPHONE = "18698515548";
-    private static final String UPDATED_TELEPHONE = "806000152487427";
+    private static final String DEFAULT_TELEPHONE = "AAAAAAAAAA";
+    private static final String UPDATED_TELEPHONE = "BBBBBBBBBB";
 
     private static final String DEFAULT_ADRESSE = "AAAAAAAAAA";
     private static final String UPDATED_ADRESSE = "BBBBBBBBBB";
@@ -51,6 +53,15 @@ class OperateurResourceIT {
     private static final byte[] UPDATED_LOGO = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_LOGO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_LOGO_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_SITE_WEB = "AAAAAAAAAA";
+    private static final String UPDATED_SITE_WEB = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SIRET = "AAAAAAAAAA";
+    private static final String UPDATED_SIRET = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_DATE_CREATION = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATE_CREATION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Boolean DEFAULT_ACTIF = false;
     private static final Boolean UPDATED_ACTIF = true;
@@ -94,6 +105,9 @@ class OperateurResourceIT {
             .adresse(DEFAULT_ADRESSE)
             .logo(DEFAULT_LOGO)
             .logoContentType(DEFAULT_LOGO_CONTENT_TYPE)
+            .siteWeb(DEFAULT_SITE_WEB)
+            .siret(DEFAULT_SIRET)
+            .dateCreation(DEFAULT_DATE_CREATION)
             .actif(DEFAULT_ACTIF);
     }
 
@@ -111,6 +125,9 @@ class OperateurResourceIT {
             .adresse(UPDATED_ADRESSE)
             .logo(UPDATED_LOGO)
             .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
+            .siteWeb(UPDATED_SITE_WEB)
+            .siret(UPDATED_SIRET)
+            .dateCreation(UPDATED_DATE_CREATION)
             .actif(UPDATED_ACTIF);
     }
 
@@ -205,6 +222,23 @@ class OperateurResourceIT {
 
     @Test
     @Transactional
+    void checkDateCreationIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        operateur.setDateCreation(null);
+
+        // Create the Operateur, which fails.
+        OperateurDTO operateurDTO = operateurMapper.toDto(operateur);
+
+        restOperateurMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(operateurDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void checkActifIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
@@ -238,6 +272,9 @@ class OperateurResourceIT {
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
             .andExpect(jsonPath("$.[*].logoContentType").value(hasItem(DEFAULT_LOGO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].logo").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_LOGO))))
+            .andExpect(jsonPath("$.[*].siteWeb").value(hasItem(DEFAULT_SITE_WEB)))
+            .andExpect(jsonPath("$.[*].siret").value(hasItem(DEFAULT_SIRET)))
+            .andExpect(jsonPath("$.[*].dateCreation").value(hasItem(DEFAULT_DATE_CREATION.toString())))
             .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
     }
 
@@ -259,6 +296,9 @@ class OperateurResourceIT {
             .andExpect(jsonPath("$.adresse").value(DEFAULT_ADRESSE))
             .andExpect(jsonPath("$.logoContentType").value(DEFAULT_LOGO_CONTENT_TYPE))
             .andExpect(jsonPath("$.logo").value(Base64.getEncoder().encodeToString(DEFAULT_LOGO)))
+            .andExpect(jsonPath("$.siteWeb").value(DEFAULT_SITE_WEB))
+            .andExpect(jsonPath("$.siret").value(DEFAULT_SIRET))
+            .andExpect(jsonPath("$.dateCreation").value(DEFAULT_DATE_CREATION.toString()))
             .andExpect(jsonPath("$.actif").value(DEFAULT_ACTIF));
     }
 
@@ -429,6 +469,139 @@ class OperateurResourceIT {
 
     @Test
     @Transactional
+    void getAllOperateursBySiteWebIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siteWeb equals to
+        defaultOperateurFiltering("siteWeb.equals=" + DEFAULT_SITE_WEB, "siteWeb.equals=" + UPDATED_SITE_WEB);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiteWebIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siteWeb in
+        defaultOperateurFiltering("siteWeb.in=" + DEFAULT_SITE_WEB + "," + UPDATED_SITE_WEB, "siteWeb.in=" + UPDATED_SITE_WEB);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiteWebIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siteWeb is not null
+        defaultOperateurFiltering("siteWeb.specified=true", "siteWeb.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiteWebContainsSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siteWeb contains
+        defaultOperateurFiltering("siteWeb.contains=" + DEFAULT_SITE_WEB, "siteWeb.contains=" + UPDATED_SITE_WEB);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiteWebNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siteWeb does not contain
+        defaultOperateurFiltering("siteWeb.doesNotContain=" + UPDATED_SITE_WEB, "siteWeb.doesNotContain=" + DEFAULT_SITE_WEB);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiretIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siret equals to
+        defaultOperateurFiltering("siret.equals=" + DEFAULT_SIRET, "siret.equals=" + UPDATED_SIRET);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiretIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siret in
+        defaultOperateurFiltering("siret.in=" + DEFAULT_SIRET + "," + UPDATED_SIRET, "siret.in=" + UPDATED_SIRET);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiretIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siret is not null
+        defaultOperateurFiltering("siret.specified=true", "siret.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiretContainsSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siret contains
+        defaultOperateurFiltering("siret.contains=" + DEFAULT_SIRET, "siret.contains=" + UPDATED_SIRET);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursBySiretNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where siret does not contain
+        defaultOperateurFiltering("siret.doesNotContain=" + UPDATED_SIRET, "siret.doesNotContain=" + DEFAULT_SIRET);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursByDateCreationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where dateCreation equals to
+        defaultOperateurFiltering("dateCreation.equals=" + DEFAULT_DATE_CREATION, "dateCreation.equals=" + UPDATED_DATE_CREATION);
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursByDateCreationIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where dateCreation in
+        defaultOperateurFiltering(
+            "dateCreation.in=" + DEFAULT_DATE_CREATION + "," + UPDATED_DATE_CREATION,
+            "dateCreation.in=" + UPDATED_DATE_CREATION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllOperateursByDateCreationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedOperateur = operateurRepository.saveAndFlush(operateur);
+
+        // Get all the operateurList where dateCreation is not null
+        defaultOperateurFiltering("dateCreation.specified=true", "dateCreation.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllOperateursByActifIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedOperateur = operateurRepository.saveAndFlush(operateur);
@@ -477,6 +650,9 @@ class OperateurResourceIT {
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
             .andExpect(jsonPath("$.[*].logoContentType").value(hasItem(DEFAULT_LOGO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].logo").value(hasItem(Base64.getEncoder().encodeToString(DEFAULT_LOGO))))
+            .andExpect(jsonPath("$.[*].siteWeb").value(hasItem(DEFAULT_SITE_WEB)))
+            .andExpect(jsonPath("$.[*].siret").value(hasItem(DEFAULT_SIRET)))
+            .andExpect(jsonPath("$.[*].dateCreation").value(hasItem(DEFAULT_DATE_CREATION.toString())))
             .andExpect(jsonPath("$.[*].actif").value(hasItem(DEFAULT_ACTIF)));
 
         // Check, that the count call also returns 1
@@ -532,6 +708,9 @@ class OperateurResourceIT {
             .adresse(UPDATED_ADRESSE)
             .logo(UPDATED_LOGO)
             .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
+            .siteWeb(UPDATED_SITE_WEB)
+            .siret(UPDATED_SIRET)
+            .dateCreation(UPDATED_DATE_CREATION)
             .actif(UPDATED_ACTIF);
         OperateurDTO operateurDTO = operateurMapper.toDto(updatedOperateur);
 
@@ -622,7 +801,15 @@ class OperateurResourceIT {
         Operateur partialUpdatedOperateur = new Operateur();
         partialUpdatedOperateur.setId(operateur.getId());
 
-        partialUpdatedOperateur.nom(UPDATED_NOM).email(UPDATED_EMAIL).telephone(UPDATED_TELEPHONE).adresse(UPDATED_ADRESSE);
+        partialUpdatedOperateur
+            .nom(UPDATED_NOM)
+            .email(UPDATED_EMAIL)
+            .telephone(UPDATED_TELEPHONE)
+            .logo(UPDATED_LOGO)
+            .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
+            .siret(UPDATED_SIRET)
+            .dateCreation(UPDATED_DATE_CREATION)
+            .actif(UPDATED_ACTIF);
 
         restOperateurMockMvc
             .perform(
@@ -660,6 +847,9 @@ class OperateurResourceIT {
             .adresse(UPDATED_ADRESSE)
             .logo(UPDATED_LOGO)
             .logoContentType(UPDATED_LOGO_CONTENT_TYPE)
+            .siteWeb(UPDATED_SITE_WEB)
+            .siret(UPDATED_SIRET)
+            .dateCreation(UPDATED_DATE_CREATION)
             .actif(UPDATED_ACTIF);
 
         restOperateurMockMvc

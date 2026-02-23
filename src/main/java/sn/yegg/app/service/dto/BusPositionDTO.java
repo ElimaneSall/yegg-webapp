@@ -2,6 +2,7 @@ package sn.yegg.app.service.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import sn.yegg.app.domain.enumeration.BusStatus;
 
 public class BusPositionDTO {
 
@@ -13,7 +14,7 @@ public class BusPositionDTO {
     private BigDecimal vitesse;
     private Integer cap;
     private Instant timestamp;
-    private String statut;
+    private BusStatus statut;
 
     // Constructeurs
     public BusPositionDTO() {}
@@ -27,7 +28,7 @@ public class BusPositionDTO {
         BigDecimal vitesse,
         Integer cap,
         Instant timestamp,
-        String statut
+        BusStatus statut
     ) {
         this.busId = busId;
         this.numeroVehicule = numeroVehicule;
@@ -105,11 +106,11 @@ public class BusPositionDTO {
         this.timestamp = timestamp;
     }
 
-    public String getStatut() {
+    public BusStatus getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(BusStatus statut) {
         this.statut = statut;
     }
 

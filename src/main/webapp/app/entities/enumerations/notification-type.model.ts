@@ -1,0 +1,11 @@
+export enum NotificationType {
+  BUS_APPROACHING = 'BUS_APPROACHING',
+
+  DELAY = 'DELAY',
+
+  INCIDENT = 'INCIDENT',
+
+  BREAKDOWN = 'BREAKDOWN',
+
+  INFORMATION = 'INFORMATION',
+}

@@ -34,6 +34,12 @@ public class LigneArret implements Serializable {
     @Column(name = "distance_depart", precision = 21, scale = 2)
     private BigDecimal distanceDepart;
 
+    @Column(name = "temps_arret_moyen")
+    private Integer tempsArretMoyen;
+
+    @Column(name = "arret_physique")
+    private Boolean arretPhysique;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "ligneArrets", "operateur" }, allowSetters = true)
     private Ligne ligne;
@@ -96,6 +102,32 @@ public class LigneArret implements Serializable {
         this.distanceDepart = distanceDepart;
     }
 
+    public Integer getTempsArretMoyen() {
+        return this.tempsArretMoyen;
+    }
+
+    public LigneArret tempsArretMoyen(Integer tempsArretMoyen) {
+        this.setTempsArretMoyen(tempsArretMoyen);
+        return this;
+    }
+
+    public void setTempsArretMoyen(Integer tempsArretMoyen) {
+        this.tempsArretMoyen = tempsArretMoyen;
+    }
+
+    public Boolean getArretPhysique() {
+        return this.arretPhysique;
+    }
+
+    public LigneArret arretPhysique(Boolean arretPhysique) {
+        this.setArretPhysique(arretPhysique);
+        return this;
+    }
+
+    public void setArretPhysique(Boolean arretPhysique) {
+        this.arretPhysique = arretPhysique;
+    }
+
     public Ligne getLigne() {
         return this.ligne;
     }
@@ -149,6 +181,8 @@ public class LigneArret implements Serializable {
             ", ordre=" + getOrdre() +
             ", tempsTrajetDepart=" + getTempsTrajetDepart() +
             ", distanceDepart=" + getDistanceDepart() +
+            ", tempsArretMoyen=" + getTempsArretMoyen() +
+            ", arretPhysique='" + getArretPhysique() + "'" +
             "}";
     }
 }

@@ -7,7 +7,9 @@
   "fields": [
     {
       "fieldName": "type",
-      "fieldType": "String"
+      "fieldType": "NotificationType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "BUS_APPROACHING,DELAY,INCIDENT,BREAKDOWN,INFORMATION"
     },
     {
       "fieldName": "titre",
@@ -25,11 +27,23 @@
     },
     {
       "fieldName": "priorite",
-      "fieldType": "String"
+      "fieldType": "Priority",
+      "fieldValues": "HIGH,MEDIUM,LOW"
     },
     {
       "fieldName": "statut",
-      "fieldType": "String"
+      "fieldType": "NotificationStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SENT,FAILED,PENDING"
+    },
+    {
+      "fieldName": "dateCreation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateEnvoi",
+      "fieldType": "Instant"
     },
     {
       "fieldName": "lu",
@@ -46,8 +60,9 @@
   "relationships": [
     {
       "otherEntityName": "utilisateur",
+      "otherEntityRelationshipName": "notifications",
       "relationshipName": "utilisateur",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],

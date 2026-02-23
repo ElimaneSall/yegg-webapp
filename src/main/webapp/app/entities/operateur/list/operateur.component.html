@@ -77,6 +77,27 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="siteWeb">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.operateur.siteWeb">Site Web</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="siret">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.operateur.siret">Siret</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateCreation">
+              <div class="d-flex">
+                <span jhiTranslate="yeggApp.operateur.dateCreation">Date Creation</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="actif">
               <div class="d-flex">
                 <span jhiTranslate="yeggApp.operateur.actif">Actif</span>
@@ -98,6 +119,9 @@
               <td>{{ operateur.telephone }}</td>
               <td>{{ operateur.adresse }}</td>
               <td>{{ operateur.logo }}</td>
+              <td>{{ operateur.siteWeb }}</td>
+              <td>{{ operateur.siret }}</td>
+              <td>{{ operateur.dateCreation | formatMediumDatetime }}</td>
               <td>{{ operateur.actif }}</td>
               <td class="text-end">
                 <div class="btn-group">

@@ -15,13 +15,16 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="numero" type="varchar(10)">
-                <constraints nullable="false" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_ligne__numero" />
             </column>
             <column name="nom" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <column name="direction" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+            <column name="description" type="${clobType}">
+                <constraints nullable="true" />
             </column>
             <column name="couleur" type="varchar(255)">
                 <constraints nullable="true" />
@@ -32,7 +35,22 @@
             <column name="duree_moyenne" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="frequence" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="statut" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="jours_feries" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_debut" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_fin" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="actif" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="operateur_id" type="bigint">
@@ -62,10 +80,16 @@
             <column name="numero" type="string"/>
             <column name="nom" type="string"/>
             <column name="direction" type="string"/>
+            <column name="description" type="clob"/>
             <column name="couleur" type="string"/>
             <column name="distance_km" type="numeric"/>
             <column name="duree_moyenne" type="numeric"/>
+            <column name="frequence" type="numeric"/>
             <column name="statut" type="string"/>
+            <column name="jours_feries" type="clob"/>
+            <column name="date_debut" type="date"/>
+            <column name="date_fin" type="date"/>
+            <column name="actif" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

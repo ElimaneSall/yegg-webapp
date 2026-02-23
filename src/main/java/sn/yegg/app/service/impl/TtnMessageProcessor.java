@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.domain.Bus;
 import sn.yegg.app.domain.Tracking;
+import sn.yegg.app.domain.enumeration.TrackingSource;
 import sn.yegg.app.repository.BusRepository;
 import sn.yegg.app.repository.TrackingRepository;
 import sn.yegg.app.service.dto.BusPositionDTO;
@@ -215,7 +216,7 @@ public class TtnMessageProcessor {
             tracking.setVitesse(bus.getCurrentVitesse());
             tracking.setCap(bus.getCurrentCap());
             tracking.setTimestamp(bus.getPositionUpdatedAt() != null ? bus.getPositionUpdatedAt() : Instant.now());
-            tracking.setSource("TTN");
+            tracking.setSource(TrackingSource.ONBOARD_GPS);
 
             trackingRepository.save(tracking);
             log.debug("Tracking sauvegardé pour le bus {}", bus.getNumeroVehicule());

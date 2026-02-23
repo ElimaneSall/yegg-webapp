@@ -27,6 +27,14 @@
           <dd>
             <span>{{ ligneArretRef.distanceDepart }}</span>
           </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.tempsArretMoyen">Temps Arret Moyen</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.tempsArretMoyen }}</span>
+          </dd>
+          <dt><span jhiTranslate="yeggApp.ligneArret.arretPhysique">Arret Physique</span></dt>
+          <dd>
+            <span>{{ ligneArretRef.arretPhysique }}</span>
+          </dd>
           <dt><span jhiTranslate="yeggApp.ligneArret.ligne">Ligne</span></dt>
           <dd>
             @if (ligneArret()!.ligne) {

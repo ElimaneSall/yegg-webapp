@@ -17,6 +17,14 @@
     {
       "fieldName": "distanceDepart",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "tempsArretMoyen",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "arretPhysique",
+      "fieldType": "Boolean"
     }
   ],
   "jpaMetamodelFiltering": true,

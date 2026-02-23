@@ -21,8 +21,12 @@
       "numeroVehicule": "Numero Vehicule",
       "plaque": "Plaque",
       "modele": "Modele",
+      "constructeur": "Constructeur",
       "capacite": "Capacite",
+      "capaciteDebout": "Capacite Debout",
       "anneeFabrication": "Annee Fabrication",
+      "energie": "Energie",
+      "autonomieKm": "Autonomie Km",
       "gpsDeviceId": "Gps Device Id",
       "gpsStatus": "Gps Status",
       "gpsLastPing": "Gps Last Ping",
@@ -33,8 +37,11 @@
       "currentCap": "Current Cap",
       "positionUpdatedAt": "Position Updated At",
       "statut": "Statut",
-      "utilisateur": "Utilisateur",
-      "ligne": "Ligne"
+      "dateMiseEnService": "Date Mise En Service",
+      "dateDernierEntretien": "Date Dernier Entretien",
+      "prochainEntretienKm": "Prochain Entretien Km",
+      "ligne": "Ligne",
+      "chauffeur": "Chauffeur"
     }
   }
 }

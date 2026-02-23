@@ -1,0 +1,67 @@
+{
+  "annotations": {
+    "changelogDate": "20260223002347"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateDeclenchement",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "busNumero",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "distanceReelle",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "tempsReel",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "typeDeclenchement",
+      "fieldType": "ThresholdType",
+      "fieldValues": "DISTANCE,TIME,OR_BOTH,AND_BOTH"
+    },
+    {
+      "fieldName": "notificationEnvoyee",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateLecture",
+      "fieldType": "Instant"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "HistoriqueAlerte",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "bus",
+      "relationshipName": "bus",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "alerteApproche",
+      "otherEntityRelationshipName": "historiqueAlertes",
+      "relationshipName": "alerteApproche",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "utilisateur",
+      "otherEntityRelationshipName": "historiqueAlertes",
+      "relationshipName": "utilisateur",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -77,6 +77,9 @@ public class OperateurQueryService extends QueryService<Operateur> {
                 buildStringSpecification(criteria.getNom(), Operateur_.nom),
                 buildStringSpecification(criteria.getEmail(), Operateur_.email),
                 buildStringSpecification(criteria.getTelephone(), Operateur_.telephone),
+                buildStringSpecification(criteria.getSiteWeb(), Operateur_.siteWeb),
+                buildStringSpecification(criteria.getSiret(), Operateur_.siret),
+                buildRangeSpecification(criteria.getDateCreation(), Operateur_.dateCreation),
                 buildSpecification(criteria.getActif(), Operateur_.actif),
                 buildSpecification(criteria.getLignesId(), root -> root.join(Operateur_.lignes, JoinType.LEFT).get(Ligne_.id))
             );

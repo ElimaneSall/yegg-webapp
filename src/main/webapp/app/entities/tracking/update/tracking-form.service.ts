@@ -35,8 +35,11 @@ type TrackingFormGroupContent = {
   longitude: FormControl<TrackingFormRawValue['longitude']>;
   vitesse: FormControl<TrackingFormRawValue['vitesse']>;
   cap: FormControl<TrackingFormRawValue['cap']>;
+  precision: FormControl<TrackingFormRawValue['precision']>;
   timestamp: FormControl<TrackingFormRawValue['timestamp']>;
   source: FormControl<TrackingFormRawValue['source']>;
+  evenement: FormControl<TrackingFormRawValue['evenement']>;
+  commentaire: FormControl<TrackingFormRawValue['commentaire']>;
   bus: FormControl<TrackingFormRawValue['bus']>;
 };
 
@@ -67,10 +70,15 @@ export class TrackingFormService {
       cap: new FormControl(trackingRawValue.cap, {
         validators: [Validators.min(0), Validators.max(359)],
       }),
+      precision: new FormControl(trackingRawValue.precision),
       timestamp: new FormControl(trackingRawValue.timestamp, {
         validators: [Validators.required],
       }),
-      source: new FormControl(trackingRawValue.source),
+      source: new FormControl(trackingRawValue.source, {
+        validators: [Validators.required],
+      }),
+      evenement: new FormControl(trackingRawValue.evenement),
+      commentaire: new FormControl(trackingRawValue.commentaire),
       bus: new FormControl(trackingRawValue.bus),
     });
   }

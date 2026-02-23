@@ -74,12 +74,12 @@ public class FavoriQueryService extends QueryService<Favori> {
             specification = Specification.allOf(
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null,
                 buildRangeSpecification(criteria.getId(), Favori_.id),
-                buildStringSpecification(criteria.getType(), Favori_.type),
+                buildSpecification(criteria.getType(), Favori_.type),
                 buildRangeSpecification(criteria.getCibleId(), Favori_.cibleId),
                 buildStringSpecification(criteria.getNomPersonnalise(), Favori_.nomPersonnalise),
                 buildRangeSpecification(criteria.getOrdre(), Favori_.ordre),
-                buildSpecification(criteria.getAlerteActive(), Favori_.alerteActive),
-                buildRangeSpecification(criteria.getAlerteSeuil(), Favori_.alerteSeuil),
+                buildRangeSpecification(criteria.getDateAjout(), Favori_.dateAjout),
+                buildRangeSpecification(criteria.getDernierAcces(), Favori_.dernierAcces),
                 buildSpecification(criteria.getUtilisateurId(), root -> root.join(Favori_.utilisateur, JoinType.LEFT).get(Utilisateur_.id))
             );
         }

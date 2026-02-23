@@ -11,17 +11,18 @@ public class LigneArretTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static LigneArret getLigneArretSample1() {
-        return new LigneArret().id(1L).ordre(1).tempsTrajetDepart(1);
+        return new LigneArret().id(1L).ordre(1).tempsTrajetDepart(1).tempsArretMoyen(1);
     }
 
     public static LigneArret getLigneArretSample2() {
-        return new LigneArret().id(2L).ordre(2).tempsTrajetDepart(2);
+        return new LigneArret().id(2L).ordre(2).tempsTrajetDepart(2).tempsArretMoyen(2);
     }
 
     public static LigneArret getLigneArretRandomSampleGenerator() {
         return new LigneArret()
             .id(longCount.incrementAndGet())
             .ordre(intCount.incrementAndGet())
-            .tempsTrajetDepart(intCount.incrementAndGet());
+            .tempsTrajetDepart(intCount.incrementAndGet())
+            .tempsArretMoyen(intCount.incrementAndGet());
     }
 }

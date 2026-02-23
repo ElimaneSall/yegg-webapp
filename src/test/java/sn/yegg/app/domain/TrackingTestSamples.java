@@ -12,14 +12,18 @@ public class TrackingTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Tracking getTrackingSample1() {
-        return new Tracking().id(1L).cap(1).source("source1");
+        return new Tracking().id(1L).cap(1).precision(1).evenement("evenement1");
     }
 
     public static Tracking getTrackingSample2() {
-        return new Tracking().id(2L).cap(2).source("source2");
+        return new Tracking().id(2L).cap(2).precision(2).evenement("evenement2");
     }
 
     public static Tracking getTrackingRandomSampleGenerator() {
-        return new Tracking().id(longCount.incrementAndGet()).cap(intCount.incrementAndGet()).source(UUID.randomUUID().toString());
+        return new Tracking()
+            .id(longCount.incrementAndGet())
+            .cap(intCount.incrementAndGet())
+            .precision(intCount.incrementAndGet())
+            .evenement(UUID.randomUUID().toString());
     }
 }
