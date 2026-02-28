@@ -13,7 +13,7 @@ export interface ITracking {
   source?: keyof typeof TrackingSource | null;
   evenement?: string | null;
   commentaire?: string | null;
-  bus?: Pick<IBus, 'id'> | null;
+  bus?: Pick<IBus, 'id' | 'numeroVehicule'> | null;
 }
 
 export type NewTracking = Omit<ITracking, 'id'> & { id: null };

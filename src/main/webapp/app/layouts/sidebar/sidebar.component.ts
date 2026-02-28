@@ -36,7 +36,7 @@ export default class SidebarComponent implements OnInit {
 
     return {
       network: items.filter(item => ['operateur', 'ligne', 'arret', 'ligne-arret'].includes(item.route.substring(1))),
-      vehicles: items.filter(item => ['bus', 'tracking'].includes(item.route.substring(1))),
+      vehicles: items.filter(item => ['bus', 'tracking', 'maps-views'].includes(item.route.substring(1))),
       users: items.filter(item => ['utilisateur', 'favori'].includes(item.route.substring(1))),
       alerts: items.filter(item =>
         ['alerte-approche', 'alerte-ligne-arret', 'historique-alerte', 'notification'].includes(item.route.substring(1)),

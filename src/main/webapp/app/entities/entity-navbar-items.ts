@@ -61,6 +61,12 @@ export const EntityNavbarItems: NavbarItem[] = [
     translationKey: 'global.menu.entities.tracking',
     icon: faMap,
   },
+  {
+    name: 'MapsViews',
+    route: '/tracking/maps-views',
+    translationKey: 'global.menu.entities.tracking',
+    icon: faMap,
+  },
 
   // Utilisateurs
   {

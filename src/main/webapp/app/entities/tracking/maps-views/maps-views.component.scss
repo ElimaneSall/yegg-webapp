@@ -1,0 +1,12 @@
+/* Important : l'ID doit correspondre à celui dans votre HTML */
+#map {
+  height: 500px; /* Testez avec une valeur fixe d'abord */
+  width: 100%;
+  display: block;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 600px; /* Conteneur global */
+}
