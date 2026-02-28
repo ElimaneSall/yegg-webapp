@@ -13,19 +13,17 @@ public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMes
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
             .nullDestMatcher()
+            .permitAll()
+            .simpDestMatchers("/topic/bus-positions")
+            .permitAll()
+            .simpDestMatchers("/topic/bus-alerts")
+            .permitAll()
+            .simpDestMatchers("/topic/activity")
             .authenticated()
-            .simpDestMatchers("/topic/tracker")
-            .hasAuthority(AuthoritiesConstants.ADMIN)
-            // matches any destination that starts with /topic/
-            // (i.e. cannot send messages directly to /topic/)
-            // (i.e. cannot subscribe to /topic/messages/* to get messages sent to
-            // /topic/messages-user<id>)
-            .simpDestMatchers("/topic/**")
+            .simpTypeMatchers(SimpMessageType.CONNECT, SimpMessageType.SUBSCRIBE, SimpMessageType.DISCONNECT)
+            .permitAll()
+            .simpTypeMatchers(SimpMessageType.MESSAGE)
             .authenticated()
-            // message types other than MESSAGE and SUBSCRIBE
-            .simpTypeMatchers(SimpMessageType.MESSAGE, SimpMessageType.SUBSCRIBE)
-            .denyAll()
-            // catch all
             .anyMessage()
             .denyAll();
     }

@@ -1,10 +1,9 @@
-import { Component, NgZone, OnInit, inject, signal } from '@angular/core';
+import { Component, NgZone, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
@@ -17,6 +16,8 @@ import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'a
 import { EntityArrayResponseType, TrackingService } from '../service/tracking.service';
 import { TrackingDeleteDialogComponent } from '../delete/tracking-delete-dialog.component';
 import { ITracking } from '../tracking.model';
+import { BusWebsocketService } from '../service/bus-websocket.service.service';
+import SharedModule from '../../../shared/shared.module';
 
 @Component({
   selector: 'jhi-tracking',
@@ -32,7 +33,7 @@ import { ITracking } from '../tracking.model';
     ItemCountComponent,
   ],
 })
-export class TrackingComponent implements OnInit {
+export class TrackingComponent implements OnInit, OnDestroy {
   subscription: Subscription | null = null;
   trackings = signal<ITracking[]>([]);
   isLoading = false;
@@ -51,10 +52,21 @@ export class TrackingComponent implements OnInit {
   protected dataUtils = inject(DataUtils);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
+  protected readonly busWebsocketService = inject(BusWebsocketService);
+  private websocketSubscription?: Subscription;
 
   trackId = (item: ITracking): number => this.trackingService.getTrackingIdentifier(item);
 
   ngOnInit(): void {
+    // 1. Charge les données initiales
+    this.load();
+
+    // 2. S'abonne au flux temps réel (WebSocket)
+    this.websocketSubscription = this.busWebsocketService.subscribeToBusPositions().subscribe(newPosition => {
+      this.updateTrackingList(newPosition);
+    });
+
+    // 3. Gère les changements de route (pagination, filtres, tri)
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
@@ -63,6 +75,37 @@ export class TrackingComponent implements OnInit {
       .subscribe();
 
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+  }
+
+  /**
+   * Met à jour la liste des trackings en temps réel
+   */
+  private updateTrackingList(newPosition: any): void {
+    this.trackings.update(currentTrackings => {
+      // Si c'est un nouveau tracking (pas dans la liste actuelle)
+      const index = currentTrackings.findIndex(t => t.bus?.id === newPosition.busId);
+
+      /*  if (index !== -1) {
+        // Met à jour le tracking existant
+        const updated = [...currentTrackings];
+        updated[index] = {
+          ...updated[index],
+          latitude: newPosition.latitude,
+          longitude: newPosition.longitude,
+          vitesse: newPosition.vitesse,
+          timestamp: new Date() // ou utilisez le timestamp du message
+        };
+        return updated;
+      }*/
+
+      // Ajoute le nouveau tracking en tête de liste
+      // Mais attention : ça peut créer des doublons si on recharge la page
+      // On pourrait plutôt charger le détail du bus depuis l'API
+      return [newPosition, ...currentTrackings];
+    });
+
+    // Force la détection de changements (optionnel car signals le fait déjà)
+    this.ngZone.run(() => {});
   }
 
   byteSize(base64String: string): string {
@@ -102,9 +145,9 @@ export class TrackingComponent implements OnInit {
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-    const page = params.get(PAGE_HEADER);
+    const page = params.get('page');
     this.page = +(page ?? 1);
-    this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+    this.sortState.set(this.sortService.parseSortParam(params.get('sort') ?? data['defaultSort']));
     this.filters.initializeFromParams(params);
   }
 
@@ -119,7 +162,7 @@ export class TrackingComponent implements OnInit {
   }
 
   protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
-    this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+    this.totalItems = Number(headers.get('X-Total-Count'));
   }
 
   protected queryBackend(): Observable<EntityArrayResponseType> {
@@ -155,5 +198,10 @@ export class TrackingComponent implements OnInit {
         queryParams: queryParamsObj,
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.websocketSubscription?.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 }
