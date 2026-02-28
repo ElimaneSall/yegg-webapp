@@ -1,6 +1,9 @@
 package sn.yegg.app.service.impl;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -71,5 +74,16 @@ public class ArretServiceImpl implements ArretService {
     public void delete(Long id) {
         LOG.debug("Request to delete Arret : {}", id);
         arretRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ArretDTO> findNearby(Double lat, Double lng, Double radius) {
+        LOG.debug("Request to get nearby Arrets around lat: {}, lng: {}", lat, lng);
+        return arretRepository
+            .findNearbyArrets(lat, lng, radius)
+            .stream()
+            .map(arretMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 }

@@ -131,7 +131,16 @@
       flex: 1;
       overflow-y: auto;
       padding: 16px 0;
+      // Pour Chrome, Safari et Opera
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
+      // Pour Firefox
+      scrollbar-width: none;
+
+      // Pour Internet Explorer et Edge
+      -ms-overflow-style: none;
       .nav-section {
         margin-bottom: 8px;
 

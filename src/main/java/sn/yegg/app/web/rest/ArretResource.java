@@ -198,4 +198,23 @@ public class ArretResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /**
+     * {@code GET  /arrets/nearby} : get all the nearby arrets based on coordinates.
+     *
+     * @param lat the latitude of the current position.
+     * @param lng the longitude of the current position.
+     * @param radius the search radius in kilometers (default is 1.0 km).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of arrets in body.
+     */
+    @GetMapping("/arrets/nearby")
+    public ResponseEntity<List<ArretDTO>> getNearbyArrets(
+        @RequestParam(value = "lat") Double lat,
+        @RequestParam(value = "lng") Double lng,
+        @RequestParam(value = "radius", defaultValue = "1.0") Double radius
+    ) {
+        LOG.debug("REST request to get nearby Arrets around lat: {}, lng: {} within {}km", lat, lng, radius);
+        List<ArretDTO> list = arretService.findNearby(lat, lng, radius);
+        return ResponseEntity.ok().body(list);
+    }
 }

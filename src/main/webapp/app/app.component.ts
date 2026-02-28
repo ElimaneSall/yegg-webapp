@@ -40,7 +40,8 @@ import {
   faStar, // Favoris
   faEnvelope, // Notifications
   faLink, // Lignes-Arrêts
-
+  faHistory, // Ajoutez celle-ci
+  faChartBar,
   // Icônes supplémentaires
   faHome,
   faThList,
@@ -100,6 +101,8 @@ export default class AppComponent {
       faChevronLeft,
       faCircle,
       faUserCircle,
+      faHistory, // Ajoutez celle-ci
+      faChartBar,
       // Icônes pour les entités
       faBuilding, // Opérateurs
       faRoad, // Lignes

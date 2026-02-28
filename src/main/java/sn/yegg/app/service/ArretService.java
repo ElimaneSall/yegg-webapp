@@ -1,5 +1,6 @@
 package sn.yegg.app.service;
 
+import java.util.List;
 import java.util.Optional;
 import sn.yegg.app.service.dto.ArretDTO;
 
@@ -45,4 +46,6 @@ public interface ArretService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<ArretDTO> findNearby(Double lat, Double lng, Double radius);
 }

@@ -1,83 +1,107 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
+<div class="home-wrapper">
+  <section class="hero-section text-center">
+    <div class="container py-5">
+      <div class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2 mb-3">
+        🚀 Version 1.0 disponible - Réseau Dakar & Banlieue
+      </div>
+      <h1 class="display-4 fw-bold">Voyagez plus intelligemment avec <span class="text-primary">Yegg</span></h1>
+      <p class="lead text-white mx-auto" style="max-width: 700px">
+        La plateforme de gestion de flotte qui connecte passagers, chauffeurs et opérateurs pour une mobilité urbaine fluide et ponctuelle.
+      </p>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span jhiTranslate="home.title">Bienvenue, Java Hipster !</span> (Yegg App)</h1>
-
-    <p class="lead" jhiTranslate="home.subtitle">Ceci est votre page d&apos;accueil</p>
-
-    <div>
-      @if (account() !== null) {
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >Vous êtes connecté en tant que &quot;{{ accountRef.login }}&quot;.</span
-            >
-          }
-        </div>
-      } @else {
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.authenticated.prefix">Si vous voulez vous </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">connecter</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, vous pouvez utiliser les comptes par défaut : <br />
-            - Administrateur (nom d&apos;utilisateur=&quot;admin&quot; et mot de passe =&quot;admin&quot;) <br />
-            - Utilisateur (nom d&apos;utilisateur=&quot;user&quot; et mot de passe =&quot;user&quot;).</span
-          >
-        </div>
-
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">Vous n&apos;avez pas encore de compte ?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Créer un compte</a>
-        </div>
-      }
+      <div class="mt-4 d-flex justify-content-center gap-3">
+        @if (account() === null) {
+          <button class="btn btn-primary btn-lg shadow" (click)="login()"><i class="fas fa-sign-in-alt me-2"></i>Se connecter</button>
+          <button class="btn btn-outline-secondary btn-lg" routerLink="/account/register">Créer un compte</button>
+        } @else {
+          <button class="btn btn-primary btn-lg shadow" routerLink="/tracking">
+            <i class="fas fa-map-marker-alt me-2"></i>Suivre mon bus
+          </button>
+        }
+      </div>
     </div>
+  </section>
 
-    <p jhiTranslate="home.question">Si vous avez des questions à propos de JHipster :</p>
+  <section class="container py-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+          <div class="icon-box bg-blue-soft mb-3">
+            <i class="fas fa-bell text-primary"></i>
+          </div>
+          <h4>Alertes d'approche</h4>
+          <p class="text-muted">Définissez vos arrêts favoris et recevez une notification dès que le bus est à moins de 500m.</p>
+          <a routerLink="/alerte-approche" class="stretched-link text-primary fw-bold text-decoration-none">
+            Gérer mes alertes <i class="fas fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
 
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >Page d&apos;accueil de JHipster</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster sur Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster bug tracker</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >JHipster public chat room</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >Suivez &#64;jhipster sur Twitter</a
-        >
-      </li>
-    </ul>
+      <div class="col-md-4">
+        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+          <div class="icon-box bg-pink-soft mb-3">
+            <i class="fas fa-bus text-danger"></i>
+          </div>
+          <h4>Espace Chauffeur</h4>
+          <p class="text-muted">Signalez un incident, mettez à jour votre statut (pause, panne) et consultez vos statistiques de trajet.</p>
+          <a routerLink="/bus" class="stretched-link text-danger fw-bold text-decoration-none">
+            Mettre à jour mon statut <i class="fas fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
 
-    <p>
-      <span jhiTranslate="home.like">Si vous aimez JHipster, donnez nous une étoile sur</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub </a
-      >!
-    </p>
-  </div>
+      <div class="col-md-4">
+        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+          <div class="icon-box bg-cyan-soft mb-3">
+            <i class="fas fa-chart-bar text-info"></i>
+          </div>
+          <h4>Supervision Réseau</h4>
+          <p class="text-muted">Visualisez l'état des lignes, gérez les arrêts et générez des rapports mensuels de performance.</p>
+          <a routerLink="/ligne" class="stretched-link text-info fw-bold text-decoration-none">
+            Administration <i class="fas fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-light py-5 mt-4">
+    <div class="container">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="row g-0">
+          <div class="col-md-8 p-4 bg-white">
+            <h5 class="fw-bold mb-4">Lignes les plus actives</h5>
+            <div class="line-status-item mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-medium">Ligne 7 (Ouakam - Plateau)</span>
+                <span class="badge bg-success">Fluide</span>
+              </div>
+              <div class="progress" style="height: 8px">
+                <div class="progress-bar bg-primary" style="width: 85%"></div>
+              </div>
+            </div>
+            <div class="line-status-item mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-medium">Ligne 12 (Pikine - Centre)</span>
+                <span class="badge bg-warning">Ralentissement</span>
+              </div>
+              <div class="progress" style="height: 8px">
+                <div class="progress-bar bg-primary" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 p-4 bg-primary text-white d-flex flex-column justify-content-center align-items-center">
+            <div class="text-center">
+              <h2 class="display-5 fw-bold">48</h2>
+              <p class="mb-0">Bus connectés en direct</p>
+              <div class="pulse-container mt-3">
+                <div class="pulse-dot"></div>
+                <small>Système synchronisé</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

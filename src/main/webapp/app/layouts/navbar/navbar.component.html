@@ -21,14 +21,6 @@
 
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
       <ul class="navbar-nav ms-auto">
-        <!-- Accueil -->
-        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
-            <fa-icon icon="home"></fa-icon>
-            <span jhiTranslate="global.menu.home">Accueil</span>
-          </a>
-        </li>
-
         <!-- Menu Entités avec sous-menus -->
         @if (account() !== null) {
           <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
