@@ -17,5 +17,6 @@ public interface TrackingMapper extends EntityMapper<TrackingDTO, Tracking> {
     @Named("busId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "numeroVehicule", source = "numeroVehicule")
     BusDTO toDtoBusId(Bus bus);
 }

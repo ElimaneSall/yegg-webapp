@@ -14,6 +14,12 @@ const trackingRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
+    path: 'maps-views',
+    loadComponent: () => import('./maps-views/maps-views.component').then(m => m.MapsViewsComponent),
+
+    canActivate: [UserRouteAccessService],
+  },
+  {
     path: ':id/view',
     loadComponent: () => import('./detail/tracking-detail.component').then(m => m.TrackingDetailComponent),
     resolve: {
