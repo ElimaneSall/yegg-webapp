@@ -1,9 +1,7 @@
 package sn.yegg.app.service;
 
 import java.util.Optional;
-import sn.yegg.app.service.dto.AlertCheckRequest;
-import sn.yegg.app.service.dto.AlertCheckResponse;
-import sn.yegg.app.service.dto.AlerteApprocheDTO;
+import sn.yegg.app.service.dto.*;
 
 /**
  * Service Interface for managing {@link sn.yegg.app.domain.AlerteApproche}.
@@ -41,6 +39,8 @@ public interface AlerteApprocheService {
      */
     Optional<AlerteApprocheDTO> findOne(Long id);
 
+    AlerteResponseDTO storeCompleteAlert(AlerteRequestDTO request);
+
     /**
      * Delete the "id" alerteApproche.
      *
@@ -48,4 +48,8 @@ public interface AlerteApprocheService {
      */
     void delete(Long id);
     AlertCheckResponse checkAlerts(AlertCheckRequest request);
+
+    AlerteResponseDTO toggleCompleteAlert(ToggleAlerteLigneArretDTO toggleAlerteLigneArretDTO);
+
+    void deleteCompleteAlert(Long alerteLigneArretId);
 }

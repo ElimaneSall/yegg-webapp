@@ -81,11 +81,14 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.deleteById(id);
     }
 
+    @Override
+    public void sendPushNotification(String token, String title, String body) {}
+
     public void sendAlertNotification(
         Utilisateur user,
         Bus bus,
         Arret arret,
-        double distance,
+        //        double distance,
         AlerteApprocheServiceImpl.ThresholdCheckResult result
     ) {
         Notification notification = new Notification();

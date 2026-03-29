@@ -83,6 +83,12 @@ public class AlerteLigneArretQueryService extends QueryService<AlerteLigneArret>
                 buildSpecification(criteria.getArretId(), root -> root.join(AlerteLigneArret_.arret, JoinType.LEFT).get(Arret_.id)),
                 buildSpecification(criteria.getAlerteApprocheId(), root ->
                     root.join(AlerteLigneArret_.alerteApproche, JoinType.LEFT).get(AlerteApproche_.id)
+                ),
+                buildSpecification(criteria.getUtilisateurId(), root ->
+                    root
+                        .join(AlerteLigneArret_.alerteApproche, JoinType.LEFT)
+                        .join(AlerteApproche_.utilisateur, JoinType.LEFT)
+                        .get(Utilisateur_.id)
                 )
             );
         }

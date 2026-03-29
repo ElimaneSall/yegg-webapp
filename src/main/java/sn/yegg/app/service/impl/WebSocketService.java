@@ -1,5 +1,6 @@
 package sn.yegg.app.service.impl;
 
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -56,5 +57,23 @@ public class WebSocketService {
         } catch (Exception e) {
             log.error("Erreur lors de l'envoi de l'alerte: {}", e.getMessage());
         }
+    }
+
+    /**
+     * Envoie une alerte à un utilisateur spécifique
+     */
+    public void sendPersonalizedAlert(String userId, String destination, Object payload) {
+        String userDestination = "/user/" + userId + destination;
+        messagingTemplate.convertAndSend(userDestination, payload);
+    }
+
+    /**
+     * Envoie une alerte à tous les abonnés d'un topic public
+     */
+    public void sendBusAlert(String type, String message, Long busId, Object additionalData) {
+        messagingTemplate.convertAndSend(
+            "/topic/bus-alerts",
+            Map.of("type", type, "message", message, "busId", busId, "data", additionalData, "timestamp", System.currentTimeMillis())
+        );
     }
 }

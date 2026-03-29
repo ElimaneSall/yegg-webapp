@@ -2,6 +2,7 @@ package sn.yegg.app.repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sn.yegg.app.domain.AlerteLigneArret;
 
@@ -12,5 +13,18 @@ import sn.yegg.app.domain.AlerteLigneArret;
 @Repository
 public interface AlerteLigneArretRepository extends JpaRepository<AlerteLigneArret, Long>, JpaSpecificationExecutor<AlerteLigneArret> {
     List<AlerteLigneArret> findByAlerteApprocheId(Long alerteApprocheId);
+
+    List<AlerteLigneArret> findByLigneId(Long ligneId);
+
     List<AlerteLigneArret> findByLigneIdAndActifTrue(Long ligneId);
+
+    @Query(
+        "SELECT ala FROM AlerteLigneArret ala " +
+        "JOIN FETCH ala.alerteApproche aa " +
+        "JOIN FETCH aa.utilisateur u " +
+        "WHERE ala.ligne.id = :ligneId " +
+        "AND ala.actif = true " +
+        "AND aa.statut = 'ACTIVE'"
+    )
+    List<AlerteLigneArret> findActiveAlertsWithUsersByLigne(@Param("ligneId") Long ligneId);
 }

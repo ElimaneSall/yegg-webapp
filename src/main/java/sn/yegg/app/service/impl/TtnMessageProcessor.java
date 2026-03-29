@@ -85,13 +85,16 @@ public class TtnMessageProcessor {
             BusPositionDTO positionDTO = new BusPositionDTO(
                 bus.getId(),
                 bus.getNumeroVehicule(),
+                bus.getModele(),
                 bus.getPlaque(),
                 bus.getCurrentLatitude(),
                 bus.getCurrentLongitude(),
                 bus.getCurrentVitesse(),
                 bus.getCurrentCap(),
                 bus.getPositionUpdatedAt(),
-                bus.getStatut()
+                bus.getStatut(),
+                bus.getLigne().getNumero(),
+                bus.getLigne().getDirection()
             );
 
             webSocketService.sendBusPosition(positionDTO);

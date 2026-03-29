@@ -12,13 +12,13 @@ class AlerteLigneArretCriteriaTest {
 
     @Test
     void newAlerteLigneArretCriteriaHasAllFiltersNullTest() {
-        var alerteLigneArretCriteria = new AlerteLigneArretCriteria();
+        var alerteLigneArretCriteria = new AlerteLigneArretCriteria(utilisateurId);
         assertThat(alerteLigneArretCriteria).is(criteriaFiltersAre(Objects::isNull));
     }
 
     @Test
     void alerteLigneArretCriteriaFluentMethodsCreatesFiltersTest() {
-        var alerteLigneArretCriteria = new AlerteLigneArretCriteria();
+        var alerteLigneArretCriteria = new AlerteLigneArretCriteria(utilisateurId);
 
         setAllFilters(alerteLigneArretCriteria);
 
@@ -27,7 +27,7 @@ class AlerteLigneArretCriteriaTest {
 
     @Test
     void alerteLigneArretCriteriaCopyCreatesNullFilterTest() {
-        var alerteLigneArretCriteria = new AlerteLigneArretCriteria();
+        var alerteLigneArretCriteria = new AlerteLigneArretCriteria(utilisateurId);
         var copy = alerteLigneArretCriteria.copy();
 
         assertThat(alerteLigneArretCriteria).satisfies(
@@ -47,7 +47,7 @@ class AlerteLigneArretCriteriaTest {
 
     @Test
     void alerteLigneArretCriteriaCopyDuplicatesEveryExistingFilterTest() {
-        var alerteLigneArretCriteria = new AlerteLigneArretCriteria();
+        var alerteLigneArretCriteria = new AlerteLigneArretCriteria(utilisateurId);
         setAllFilters(alerteLigneArretCriteria);
 
         var copy = alerteLigneArretCriteria.copy();
@@ -69,7 +69,7 @@ class AlerteLigneArretCriteriaTest {
 
     @Test
     void toStringVerifier() {
-        var alerteLigneArretCriteria = new AlerteLigneArretCriteria();
+        var alerteLigneArretCriteria = new AlerteLigneArretCriteria(utilisateurId);
 
         assertThat(alerteLigneArretCriteria).hasToString("AlerteLigneArretCriteria{}");
     }

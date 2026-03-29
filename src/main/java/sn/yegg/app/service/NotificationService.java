@@ -50,11 +50,5 @@ public interface NotificationService {
      */
     void delete(Long id);
 
-    void sendAlertNotification(
-        Utilisateur utilisateur,
-        Bus bus,
-        Arret arretCible,
-        double distance,
-        AlerteApprocheServiceImpl.ThresholdCheckResult thresholdResult
-    );
+    void sendPushNotification(String token, String title, String body);
 }

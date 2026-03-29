@@ -34,6 +34,8 @@ public class AlerteLigneArretCriteria implements Serializable, Criteria {
 
     private LongFilter alerteApprocheId;
 
+    private LongFilter utilisateurId;
+
     private Boolean distinct;
 
     public AlerteLigneArretCriteria() {}
@@ -46,6 +48,7 @@ public class AlerteLigneArretCriteria implements Serializable, Criteria {
         this.arretId = other.optionalArretId().map(LongFilter::copy).orElse(null);
         this.alerteApprocheId = other.optionalAlerteApprocheId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
+        this.utilisateurId = other.optionalUtilisateurId().map(LongFilter::copy).orElse(null);
     }
 
     @Override
@@ -167,6 +170,25 @@ public class AlerteLigneArretCriteria implements Serializable, Criteria {
         this.alerteApprocheId = alerteApprocheId;
     }
 
+    public LongFilter getUtilisateurId() {
+        return utilisateurId;
+    }
+
+    public Optional<LongFilter> optionalUtilisateurId() {
+        return Optional.ofNullable(utilisateurId);
+    }
+
+    public LongFilter utilisateurId() {
+        if (utilisateurId == null) {
+            setUtilisateurId(new LongFilter());
+        }
+        return utilisateurId;
+    }
+
+    public void setUtilisateurId(LongFilter utilisateurId) {
+        this.utilisateurId = utilisateurId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -202,13 +224,14 @@ public class AlerteLigneArretCriteria implements Serializable, Criteria {
             Objects.equals(ligneId, that.ligneId) &&
             Objects.equals(arretId, that.arretId) &&
             Objects.equals(alerteApprocheId, that.alerteApprocheId) &&
+            Objects.equals(utilisateurId, that.utilisateurId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sens, actif, ligneId, arretId, alerteApprocheId, distinct);
+        return Objects.hash(id, sens, actif, ligneId, arretId, alerteApprocheId, utilisateurId, distinct);
     }
 
     // prettier-ignore
@@ -221,6 +244,7 @@ public class AlerteLigneArretCriteria implements Serializable, Criteria {
             optionalLigneId().map(f -> "ligneId=" + f + ", ").orElse("") +
             optionalArretId().map(f -> "arretId=" + f + ", ").orElse("") +
             optionalAlerteApprocheId().map(f -> "alerteApprocheId=" + f + ", ").orElse("") +
+            optionalUtilisateurId().map(f -> "utilisateurId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

@@ -8,6 +8,8 @@ public class BusPositionDTO {
 
     private Long busId;
     private String numeroVehicule;
+
+    private String modele;
     private String plaque;
     private BigDecimal latitude;
     private BigDecimal longitude;
@@ -16,22 +18,30 @@ public class BusPositionDTO {
     private Instant timestamp;
     private BusStatus statut;
 
+    private String numeroLigne;
+
+    private String direction;
+
     // Constructeurs
     public BusPositionDTO() {}
 
     public BusPositionDTO(
         Long busId,
         String numeroVehicule,
+        String modele,
         String plaque,
         BigDecimal latitude,
         BigDecimal longitude,
         BigDecimal vitesse,
         Integer cap,
         Instant timestamp,
-        BusStatus statut
+        BusStatus statut,
+        String numeroLigne,
+        String direction
     ) {
         this.busId = busId;
         this.numeroVehicule = numeroVehicule;
+        this.modele = modele;
         this.plaque = plaque;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -39,6 +49,8 @@ public class BusPositionDTO {
         this.cap = cap;
         this.timestamp = timestamp;
         this.statut = statut;
+        this.numeroLigne = numeroLigne;
+        this.direction = direction;
     }
 
     // Getters et Setters
@@ -112,6 +124,30 @@ public class BusPositionDTO {
 
     public void setStatut(BusStatus statut) {
         this.statut = statut;
+    }
+
+    public String getModele() {
+        return modele;
+    }
+
+    public void setModele(String modele) {
+        this.modele = modele;
+    }
+
+    public String getNumeroLigne() {
+        return numeroLigne;
+    }
+
+    public void setNumeroLigne(String numeroLigne) {
+        this.numeroLigne = numeroLigne;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     @Override

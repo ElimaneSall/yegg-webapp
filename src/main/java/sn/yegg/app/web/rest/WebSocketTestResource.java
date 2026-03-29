@@ -35,13 +35,16 @@ public class WebSocketTestResource {
                 BusPositionDTO dto = new BusPositionDTO(
                     bus.getId(),
                     bus.getNumeroVehicule(),
+                    bus.getModele(),
                     bus.getPlaque(),
                     bus.getCurrentLatitude(),
                     bus.getCurrentLongitude(),
                     bus.getCurrentVitesse(),
                     bus.getCurrentCap(),
                     bus.getPositionUpdatedAt(),
-                    bus.getStatut()
+                    bus.getStatut(),
+                    bus.getLigne().getNumero(),
+                    bus.getLigne().getDirection()
                 );
 
                 webSocketService.sendBusPosition(dto);
@@ -64,13 +67,16 @@ public class WebSocketTestResource {
                 new BusPositionDTO(
                     bus.getId(),
                     bus.getNumeroVehicule(),
+                    bus.getModele(),
                     bus.getPlaque(),
                     bus.getCurrentLatitude(),
                     bus.getCurrentLongitude(),
                     bus.getCurrentVitesse(),
                     bus.getCurrentCap(),
                     bus.getPositionUpdatedAt(),
-                    bus.getStatut()
+                    bus.getStatut(),
+                    bus.getLigne().getNumero(),
+                    bus.getLigne().getDirection()
                 )
             )
             .collect(Collectors.toList());

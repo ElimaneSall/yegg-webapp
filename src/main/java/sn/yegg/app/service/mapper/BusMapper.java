@@ -20,6 +20,9 @@ public interface BusMapper extends EntityMapper<BusDTO, Bus> {
     @Named("ligneId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
+    @Mapping(target = "direction", source = "direction")
+    @Mapping(target = "numero", source = "numero")
     LigneDTO toDtoLigneId(Ligne ligne);
 
     @Named("utilisateurId")

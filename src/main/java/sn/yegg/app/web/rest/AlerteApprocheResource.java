@@ -20,9 +20,7 @@ import sn.yegg.app.repository.AlerteApprocheRepository;
 import sn.yegg.app.service.AlerteApprocheQueryService;
 import sn.yegg.app.service.AlerteApprocheService;
 import sn.yegg.app.service.criteria.AlerteApprocheCriteria;
-import sn.yegg.app.service.dto.AlertCheckRequest;
-import sn.yegg.app.service.dto.AlertCheckResponse;
-import sn.yegg.app.service.dto.AlerteApprocheDTO;
+import sn.yegg.app.service.dto.*;
 import sn.yegg.app.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -76,6 +74,38 @@ public class AlerteApprocheResource {
         return ResponseEntity.created(new URI("/api/alerte-approches/" + alerteApprocheDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, alerteApprocheDTO.getId().toString()))
             .body(alerteApprocheDTO);
+    }
+
+    @PostMapping("/store/complete")
+    public ResponseEntity<AlerteResponseDTO> createCompleteAlerte(@Valid @RequestBody AlerteRequestDTO request) throws URISyntaxException {
+        LOG.debug("REST request to create complete alerte: {}", request);
+
+        AlerteResponseDTO response = alerteApprocheService.storeCompleteAlert(request);
+
+        return ResponseEntity.created(new URI("/api/alerte-approches/store/complete/" + response.getAlerteApproche().getId())).body(
+            response
+        );
+    }
+
+    @PutMapping("/toggle/complete")
+    public ResponseEntity<AlerteResponseDTO> toggleCompleteAlerte(@Valid @RequestBody ToggleAlerteLigneArretDTO toggleAlerteLigneArretDTO)
+        throws URISyntaxException {
+        LOG.debug("REST request to toggle complete alerte: {}", toggleAlerteLigneArretDTO);
+
+        AlerteResponseDTO response = alerteApprocheService.toggleCompleteAlert(toggleAlerteLigneArretDTO);
+
+        return ResponseEntity.created(new URI("/api/alerte-approches/toggle/complete/" + response.getAlerteApproche().getId())).body(
+            response
+        );
+    }
+
+    @DeleteMapping("/delete/complete/{alerteLigneArretId}")
+    public ResponseEntity<Void> deleteCompleteAlerte(@PathVariable Long alerteLigneArretId) {
+        LOG.debug("REST request to delete complete alerte : {}", alerteLigneArretId);
+
+        alerteApprocheService.deleteCompleteAlert(alerteLigneArretId);
+
+        return ResponseEntity.noContent().build();
     }
 
     /**

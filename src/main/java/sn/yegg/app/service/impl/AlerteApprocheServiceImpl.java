@@ -1,5 +1,6 @@
 package sn.yegg.app.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,10 +17,10 @@ import sn.yegg.app.domain.enumeration.ThresholdType;
 import sn.yegg.app.repository.*;
 import sn.yegg.app.service.AlerteApprocheService;
 import sn.yegg.app.service.NotificationService;
-import sn.yegg.app.service.dto.AlertCheckRequest;
-import sn.yegg.app.service.dto.AlertCheckResponse;
-import sn.yegg.app.service.dto.AlerteApprocheDTO;
+import sn.yegg.app.service.dto.*;
 import sn.yegg.app.service.mapper.AlerteApprocheMapper;
+import sn.yegg.app.service.mapper.AlerteLigneArretMapper;
+import sn.yegg.app.web.rest.errors.BadRequestAlertException;
 
 /**
  * Service Implementation for managing {@link sn.yegg.app.domain.AlerteApproche}.
@@ -40,6 +41,10 @@ public class AlerteApprocheServiceImpl implements AlerteApprocheService {
     private final ArretRepository arretRepository;
     private final NotificationService notificationService;
 
+    private final UtilisateurRepository utilisateurRepository;
+
+    private final AlerteLigneArretMapper alerteLigneArretMapper;
+
     // Rayon de la Terre en mètres
     private static final double EARTH_RADIUS = 6371000;
 
@@ -51,7 +56,9 @@ public class AlerteApprocheServiceImpl implements AlerteApprocheService {
         BusRepository busRepository,
         LigneRepository ligneRepository,
         ArretRepository arretRepository,
-        NotificationService notificationService
+        NotificationService notificationService,
+        UtilisateurRepository utilisateurRepository,
+        AlerteLigneArretMapper alerteLigneArretMapper
     ) {
         this.alerteApprocheRepository = alerteApprocheRepository;
         this.alerteApprocheMapper = alerteApprocheMapper;
@@ -61,6 +68,8 @@ public class AlerteApprocheServiceImpl implements AlerteApprocheService {
         this.ligneRepository = ligneRepository;
         this.arretRepository = arretRepository;
         this.notificationService = notificationService;
+        this.utilisateurRepository = utilisateurRepository;
+        this.alerteLigneArretMapper = alerteLigneArretMapper;
     }
 
     @Override
@@ -105,6 +114,106 @@ public class AlerteApprocheServiceImpl implements AlerteApprocheService {
     public void delete(Long id) {
         LOG.debug("Request to delete AlerteApproche : {}", id);
         alerteApprocheRepository.deleteById(id);
+    }
+
+    @Transactional
+    public AlerteResponseDTO storeCompleteAlert(AlerteRequestDTO request) {
+        LOG.debug("Request to create complete alerte: {}", request);
+
+        // 1. Find and validate entities
+        Utilisateur utilisateur = utilisateurRepository
+            .findById(request.getUtilisateurId())
+            .orElseThrow(() -> new BadRequestAlertException("Utilisateur not found", "alerteCreation", "usernotfound"));
+
+        Ligne ligne = ligneRepository
+            .findById(request.getLigneId())
+            .orElseThrow(() -> new BadRequestAlertException("Ligne not found", "alerteCreation", "lignenotfound"));
+
+        Arret arret = arretRepository
+            .findById(request.getArretId())
+            .orElseThrow(() -> new BadRequestAlertException("Arret not found", "alerteCreation", "arretnotfound"));
+
+        // 2. Create AlerteApproche
+        AlerteApproche alerteApproche = new AlerteApproche();
+        alerteApproche.setNom(request.getNom());
+        alerteApproche.setSeuilDistance(request.getSeuilDistance());
+        alerteApproche.setSeuilTemps(request.getSeuilTemps());
+        alerteApproche.setTypeSeuil(request.getTypeSeuil());
+        alerteApproche.setJoursActivation(request.getJoursActivation());
+        alerteApproche.setHeureDebut(request.getHeureDebut());
+        alerteApproche.setHeureFin(request.getHeureFin());
+        alerteApproche.setStatut(request.getStatut() != null ? request.getStatut() : AlertStatus.ACTIVE);
+        alerteApproche.setDateCreation(Instant.now());
+        alerteApproche.setNombreDeclenchements(0);
+        alerteApproche.setUtilisateur(utilisateur);
+
+        alerteApproche = alerteApprocheRepository.save(alerteApproche);
+
+        // 3. Create AlerteLigneArret
+        AlerteLigneArret alerteLigneArret = new AlerteLigneArret();
+        alerteLigneArret.setSens(request.getSens());
+        alerteLigneArret.setActif(request.getActif() != null ? request.getActif() : true);
+        alerteLigneArret.setLigne(ligne);
+        alerteLigneArret.setArret(arret);
+        alerteLigneArret.setAlerteApproche(alerteApproche);
+
+        alerteLigneArret = alerteLigneArretRepository.save(alerteLigneArret);
+
+        // 4. Convert to DTOs and return
+        AlerteApprocheDTO alerteApprocheDTO = alerteApprocheMapper.toDto(alerteApproche);
+        AlerteLigneArretDTO alerteLigneArretDTO = alerteLigneArretMapper.toDto(alerteLigneArret);
+
+        return new AlerteResponseDTO(alerteApprocheDTO, alerteLigneArretDTO);
+    }
+
+    public AlerteResponseDTO toggleCompleteAlert(ToggleAlerteLigneArretDTO toggleAlerteLigneArretDTO) {
+        // Vérification de l'existence
+        AlerteLigneArret alerteLigneArret = alerteLigneArretRepository
+            .findById(toggleAlerteLigneArretDTO.getAlerteLigneArretId())
+            .orElseThrow(() ->
+                new EntityNotFoundException("AlerteLigneArret introuvable avec l'id " + toggleAlerteLigneArretDTO.getAlerteLigneArretId())
+            );
+
+        AlerteApproche alerteApproche = alerteLigneArret.getAlerteApproche();
+
+        if (AlertStatus.ACTIVE.equals(alerteApproche.getStatut())) {
+            alerteApproche.setStatut(AlertStatus.DISABLED);
+            alerteLigneArret.setActif(false);
+        } else {
+            alerteApproche.setStatut(AlertStatus.ACTIVE);
+            alerteLigneArret.setActif(true);
+        }
+        alerteApprocheRepository.save(alerteApproche);
+
+        alerteLigneArretRepository.save(alerteLigneArret);
+
+        AlerteResponseDTO alerteResponseDTO = new AlerteResponseDTO();
+        alerteResponseDTO.setAlerteApproche(alerteApprocheMapper.toDto(alerteApproche));
+        alerteResponseDTO.setAlerteLigneArret(alerteLigneArretMapper.toDto(alerteLigneArret));
+        // Préparation de la réponse
+        return alerteResponseDTO;
+    }
+
+    @Transactional
+    public void deleteCompleteAlert(Long alerteLigneArretId) {
+        AlerteLigneArret alerteLigneArret = alerteLigneArretRepository
+            .findById(alerteLigneArretId)
+            .orElseThrow(() -> new EntityNotFoundException("AlerteLigneArret introuvable avec l'id " + alerteLigneArretId));
+
+        AlerteApproche alerteApproche = alerteLigneArret.getAlerteApproche();
+
+        if (alerteApproche != null) {
+            // supprimer historique
+            historiqueAlerteRepository.deleteByAlerteApprocheId(alerteApproche.getId());
+
+            // supprimer alerte approche
+            alerteApprocheRepository.delete(alerteApproche);
+        }
+
+        // supprimer relation ligne/arret
+        alerteLigneArretRepository.delete(alerteLigneArret);
+
+        LOG.debug("Alerte complète supprimée pour alerteLigneArretId={}", alerteLigneArretId);
     }
 
     /**
@@ -237,7 +346,7 @@ public class AlerteApprocheServiceImpl implements AlerteApprocheService {
                     historiqueAlerteRepository.save(historique);
 
                     // Envoyer une notification
-                    notificationService.sendAlertNotification(alerte.getUtilisateur(), bus, arretCible, distance, thresholdResult);
+                    //  notificationService.sendAlertNotification(alerte.getUtilisateur(), bus, arretCible, distance, thresholdResult);
 
                     // Ajouter à la réponse
                     AlertCheckResponse.TriggeredAlert triggered = new AlertCheckResponse.TriggeredAlert();

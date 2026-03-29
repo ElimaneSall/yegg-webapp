@@ -23,15 +23,34 @@ public interface AlerteLigneArretMapper extends EntityMapper<AlerteLigneArretDTO
     @Named("ligneId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
+    @Mapping(target = "numero", source = "numero")
     LigneDTO toDtoLigneId(Ligne ligne);
 
     @Named("arretId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "latitude", source = "latitude")
+    @Mapping(target = "longitude", source = "longitude")
+    @Mapping(target = "altitude", source = "altitude")
+    @Mapping(target = "nom", source = "nom")
+    @Mapping(target = "ville", source = "ville")
     ArretDTO toDtoArretId(Arret arret);
 
     @Named("alerteApprocheId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
+    @Mapping(target = "seuilDistance", source = "seuilDistance")
+    @Mapping(target = "seuilTemps", source = "seuilTemps")
+    @Mapping(target = "typeSeuil", source = "typeSeuil")
+    @Mapping(target = "joursActivation", source = "joursActivation")
+    @Mapping(target = "heureDebut", source = "heureDebut")
+    @Mapping(target = "heureFin", source = "heureFin")
+    @Mapping(target = "statut", source = "statut")
+    @Mapping(target = "dateCreation", source = "dateCreation")
+    @Mapping(target = "dateModification", source = "dateModification")
+    @Mapping(target = "dernierDeclenchement", source = "dernierDeclenchement")
+    @Mapping(target = "nombreDeclenchements", source = "nombreDeclenchements")
     AlerteApprocheDTO toDtoAlerteApprocheId(AlerteApproche alerteApproche);
 }

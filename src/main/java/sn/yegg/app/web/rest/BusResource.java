@@ -196,4 +196,17 @@ public class BusResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/nearby")
+    public ResponseEntity<List<BusDTO>> getNearbyBuses(
+        @RequestParam double lat,
+        @RequestParam double lng,
+        @RequestParam(defaultValue = "1") double radius
+    ) {
+        LOG.debug("REST request to get nearby buses: lat={}, lng={}, radius={}", lat, lng, radius);
+
+        List<BusDTO> buses = busService.findNearbyBuses(lat, lng, radius);
+
+        return ResponseEntity.ok().body(buses);
+    }
 }
