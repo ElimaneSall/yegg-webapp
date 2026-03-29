@@ -253,7 +253,7 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
+            <artifactId>hibernate-processor</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -404,7 +404,7 @@
                 </path>
                 <path>
                   <groupId>org.hibernate</groupId>
-                  <artifactId>hibernate-jpamodelgen</artifactId>
+                  <artifactId>hibernate-processor</artifactId>
                   <version>${hibernate.version}</version>
                 </path>
               </annotationProcessorPaths>
@@ -473,7 +473,7 @@
                             </path>
                             <path>
                                 <groupId>org.hibernate.orm</groupId>
-                                <artifactId>hibernate-jpamodelgen</artifactId>
+                                <artifactId>hibernate-processor</artifactId>
                               <version>${hibernate.version}</version>
 
                             </path>
@@ -986,7 +986,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.hibernate.orm</groupId>
-                    <artifactId>hibernate-jpamodelgen</artifactId>
+                    <artifactId>hibernate-processor</artifactId>
                   <version>${hibernate.version}</version>
 
                 </dependency>
