@@ -254,7 +254,7 @@
       <dependency>
         <groupId>org.hibernate.orm</groupId>
         <artifactId>hibernate-processor</artifactId>
-        <version>7.1.11.Finall</version>
+        <version>7.1.11.Final</version>
         <scope>provided</scope>
       </dependency>
         <dependency>
@@ -988,7 +988,7 @@
               <dependency>
                 <groupId>org.hibernate.orm</groupId>
                 <artifactId>hibernate-processor</artifactId>
-                <version>7.1.11.Finall</version>
+                <version>7.1.11.Final</version>
                 <scope>provided</scope>
               </dependency>
                 <dependency>
