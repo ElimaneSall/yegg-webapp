@@ -12,7 +12,8 @@ COPY . .
 RUN chmod +x mvnw
 
 # Build
-RUN ./mvnw -Pprod clean package -DskipTests
+RUN ./mvnw -Pprod clean package -Dmaven.test.skip=true -DskipTests
+
 
 # ==========================================
 # Étape 2 : Run
