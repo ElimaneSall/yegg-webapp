@@ -1,23 +1,15 @@
-# cloudbuild.yaml
-# Build et déploiement automatique sur Cloud Run avec Cloud SQL (variables sécurisées)
+# ==========================================
+# Build et déploiement Cloud Run + Cloud SQL
+# ==========================================
 
 steps:
-  # Étape 1 : Build de l'image Docker
+  # Étape 1 : Build Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      [
-        'build',
-        '-t', 'gcr.io/$PROJECT_ID/yegg-app:latest',
-        '.'
-      ]
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/yegg-app:latest', '.']
 
-  # Étape 2 : Pousser l'image vers Artifact Registry / Container Registry
+  # Étape 2 : Push Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      [
-        'push',
-        'gcr.io/$PROJECT_ID/yegg-app:latest'
-      ]
+    args: ['push', 'gcr.io/$PROJECT_ID/yegg-app:latest']
 
   # Étape 3 : Déployer sur Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
@@ -36,17 +28,21 @@ steps:
         '--set-env-vars', 'SPRING_DATASOURCE_PASSWORD=${_SPRING_DATASOURCE_PASSWORD}'
       ]
 
+# Image finale
 images:
   - 'gcr.io/$PROJECT_ID/yegg-app:latest'
 
-# Substitutions pour les variables sensibles (à passer via Secret Manager)
+# Substitutions (sécurisées via Secret Manager)
 substitutions:
-  _CLOUDSQL_INSTANCE: 'INSTANCE'
-  _SPRING_DATASOURCE_URL: 'URL'
-  _SPRING_DATASOURCE_USERNAME: "USERNAME"
-  _SPRING_DATASOURCE_PASSWORD: "PASSWORD"
+  _DEPLOY_REGION: ''
+  _CLOUDSQL_INSTANCE: ''
+  _SPRING_DATASOURCE_URL: ''
+  _SPRING_DATASOURCE_USERNAME: 'root'
+  _SPRING_DATASOURCE_PASSWORD: 'YourDbPassword'
 
 # Timeout du build
 timeout: '1200s'
+
+# Logs Cloud Logging uniquement
 options:
   logging: CLOUD_LOGGING_ONLY
