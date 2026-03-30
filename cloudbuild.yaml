@@ -48,3 +48,5 @@ substitutions:
 
 # Timeout du build
 timeout: '1200s'
+options:
+  logging: NONE
