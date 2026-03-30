@@ -39,13 +39,12 @@ public class TtnMessageProcessor {
 
             JsonNode root = objectMapper.readTree(payload);
 
-            Optional<Bus> busOpt = busRepository.findByGpsDeviceId(deviceId);
-            if (busOpt.isEmpty()) {
+            Bus bus = busRepository.findByGpsDeviceId(deviceId).orElse(null);
+            if (bus == null) {
                 log.warn("Aucun bus trouvé avec device ID: {}", deviceId);
                 return;
             }
 
-            Bus bus = busOpt.get();
             log.info("Bus trouvé: {} ({})", bus.getNumeroVehicule(), bus.getPlaque());
 
             boolean positionUpdated = extractAndUpdatePosition(bus, root);
