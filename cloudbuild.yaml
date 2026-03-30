@@ -49,4 +49,4 @@ substitutions:
 # Timeout du build
 timeout: '1200s'
 options:
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
