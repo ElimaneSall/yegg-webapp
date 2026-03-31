@@ -1,70 +1,336 @@
-<?xml version="1.0" encoding="utf-8"?>
-<databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+// ================================================
+// JDL - Application Gestion de Flotte de Bus
+// Version avec syntaxe correcte
+// ================================================
 
-    <!-- ===================== -->
-    <!-- PROPERTIES -->
-    <!-- ===================== -->
-    <property name="now" value="now()" dbms="mysql"/>
-    <property name="floatType" value="float" dbms="mysql"/>
-    <property name="clobType" value="clob" dbms="mysql"/>
-    <property name="blobType" value="longblob" dbms="mysql"/>
-    <property name="uuidType" value="varchar(36)" dbms="mysql"/>
-    <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
-    <property name="timeType" value="time(6)" dbms="mysql"/>
+// ================================================
+// ENUMS
+// ================================================
 
-    <!-- ===================== -->
-    <!-- INITIAL SCHEMA -->
-    <!-- ===================== -->
-    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+enum ActionType {
+  READ, ADD, UPDATE, DELETE
+}
 
-    <!-- ===================== -->
-    <!-- ENTITIES (ORDER MATTERS) -->
-    <!-- ===================== -->
+enum Priority {
+  HIGH, MEDIUM, LOW
+}
 
-    <!-- 1. ROOT ENTITIES -->
-    <include file="config/liquibase/changelog/20260221233518_added_entity_Operateur.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233522_added_entity_Utilisateur.xml" relativeToChangelogFile="false"/>
+enum LineStatus {
+  ACTIVE, SUSPENDED, CLOSED, UNDER_CONSTRUCTION
+}
 
-    <!-- 2. DEPENDENT ENTITIES -->
-    <include file="config/liquibase/changelog/20260221233519_added_entity_Ligne.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233520_added_entity_Arret.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233521_added_entity_Bus.xml" relativeToChangelogFile="false"/>
+enum BusStatus {
+  IN_SERVICE, OUT_OF_SERVICE, BROKEN_DOWN, UNDER_MAINTENANCE, ON_BREAK
+}
 
-    <!-- 3. RELATION ENTITIES -->
-    <include file="config/liquibase/changelog/20260221233527_added_entity_LigneArret.xml" relativeToChangelogFile="false"/>
+enum AlertStatus {
+  ACTIVE, PAUSED, DISABLED
+}
 
-    <!-- 4. FUNCTIONAL ENTITIES -->
-    <include file="config/liquibase/changelog/20260221233523_added_entity_Tracking.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233524_added_entity_Alerte.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233525_added_entity_Favori.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233526_added_entity_Notification.xml" relativeToChangelogFile="false"/>
+enum ThresholdType {
+  DISTANCE,
+  TIME,
+  OR_BOTH,
+  AND_BOTH
+}
 
-    <!-- 5. ADVANCED ENTITIES -->
-    <include file="config/liquibase/changelog/20260223002345_added_entity_AlerteApproche.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002346_added_entity_AlerteLigneArret.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002347_added_entity_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002348_added_entity_Feedback.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002349_added_entity_Rapport.xml" relativeToChangelogFile="false"/>
+enum NotificationType {
+  BUS_APPROACHING, DELAY, INCIDENT, BREAKDOWN, INFORMATION
+}
 
-    <!-- ===================== -->
-    <!-- CONSTRAINTS (AFTER ALL TABLES) -->
-    <!-- ===================== -->
+enum NotificationStatus {
+  SENT, FAILED, PENDING
+}
 
-    <include file="config/liquibase/changelog/20260221233519_added_entity_constraints_Ligne.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233521_added_entity_constraints_Bus.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233523_added_entity_constraints_Tracking.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233524_added_entity_constraints_Alerte.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233525_added_entity_constraints_Favori.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233526_added_entity_constraints_Notification.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233527_added_entity_constraints_LigneArret.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002345_added_entity_constraints_AlerteApproche.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002346_added_entity_constraints_AlerteLigneArret.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002347_added_entity_constraints_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002348_added_entity_constraints_Feedback.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260223002349_added_entity_constraints_Rapport.xml" relativeToChangelogFile="false"/>
+enum UserRole {
+  PASSENGER, TOURIST, DRIVER, OPERATOR, ADMIN
+}
 
-</databaseChangeLog>
+enum FavoriteType {
+  LINE, STOP, ROUTE
+}
+
+enum TrackingSource {
+  ONBOARD_GPS, DRIVER_APP, MANUAL
+}
+
+enum ReportType {
+  MONTHLY, WEEKLY, CUSTOM
+}
+
+enum ReportFormat {
+  PDF, EXCEL, CSV
+}
+
+enum EnergyType {
+  DIESEL, ELECTRIC, HYBRID, CNG
+}
+
+// ================================================
+// ENTITÉS PRINCIPALES
+// ================================================
+
+entity Operateur {
+  Nom             String required
+  Email           String required unique
+  Telephone       String
+  Adresse         TextBlob
+  Logo            Blob
+  SiteWeb         String
+  Siret           String unique
+  DateCreation    Instant required
+  Actif           Boolean required
+}
+
+entity Ligne {
+  Numero          String required minlength(1) maxlength(10) unique
+  Nom             String required
+  Direction       String required
+  Description     TextBlob
+  Couleur         String
+  DistanceKm      BigDecimal min(0)
+  DureeMoyenne    Integer min(0)
+  Frequence       Integer min(1) max(60)
+  Statut          LineStatus required
+  JoursFeries     TextBlob
+  DateDebut       LocalDate
+  DateFin         LocalDate
+  Actif           Boolean required
+}
+
+entity Arret {
+  Nom             String required
+  Code            String required unique
+  Latitude        BigDecimal required min(-90) max(90)
+  Longitude       BigDecimal required min(-180) max(180)
+  Altitude        Integer
+  Adresse         String
+  Ville           String
+  CodePostal      String
+  ZoneTarifaire   String
+  Equipements     TextBlob
+  Photo           Blob
+  AccessiblePMR   Boolean
+  Actif           Boolean required
+}
+
+entity Bus {
+  NumeroVehicule  String required unique
+  Plaque          String required unique
+  Modele          String
+  Constructeur    String
+  Capacite        Integer required min(1) max(200)
+  CapaciteDebout  Integer min(0) max(100)
+  AnneeFabrication Integer min(1990) max(2100)
+  Energie         EnergyType
+  AutonomieKm     Integer
+  GpsDeviceId     String unique
+  GpsStatus       String
+  GpsLastPing     Instant
+  GpsBatteryLevel Integer min(0) max(100)
+  CurrentLatitude BigDecimal
+  CurrentLongitude BigDecimal
+  CurrentVitesse  BigDecimal
+  CurrentCap      Integer min(0) max(359)
+  PositionUpdatedAt Instant
+  Statut          BusStatus required
+  DateMiseEnService LocalDate
+  DateDernierEntretien LocalDate
+  ProchainEntretienKm Integer
+}
+
+entity Utilisateur {
+  Prenom          String
+  Nom             String
+  Email           String unique
+  Telephone       String
+  MotDePasse      String
+  Role            UserRole required
+  Matricule       String unique
+  FcmToken        String
+  NotificationsPush Boolean
+  NotificationsSms Boolean
+  Langue          String
+  Photo           Blob
+  DateCreation    Instant required
+  DerniereConnexion Instant
+  Actif           Boolean required
+  DateEmbauche    LocalDate
+  NumeroPermis    String unique
+}
+
+// ================================================
+// RELATION LIGNE - ARRET
+// ================================================
+
+entity LigneArret {
+  Ordre               Integer required
+  TempsTrajetDepart   Integer
+  DistanceDepart      BigDecimal
+  TempsArretMoyen     Integer
+  ArretPhysique       Boolean
+}
+
+// ================================================
+// TRACKING
+// ================================================
+
+entity Tracking {
+  Latitude        BigDecimal required
+  Longitude       BigDecimal required
+  Vitesse         BigDecimal
+  Cap             Integer min(0) max(359)
+  Precision       Integer
+  Timestamp       Instant required
+  Source          TrackingSource required
+  Evenement       String
+  Commentaire     TextBlob
+}
+
+// ================================================
+// ALERTES
+// ================================================
+
+entity AlerteApproche {
+  Nom                 String
+  SeuilDistance       Integer min(50) max(1000)
+  SeuilTemps          Integer min(1) max(60)
+  TypeSeuil           ThresholdType required
+  JoursActivation     String
+  HeureDebut          String
+  HeureFin            String
+  Statut              AlertStatus required
+  DateCreation        Instant required
+  DateModification    Instant
+  DernierDeclenchement Instant
+  NombreDeclenchements Integer min(0)
+}
+
+entity AlerteLigneArret {
+  Sens                String
+  Actif               Boolean
+}
+
+entity HistoriqueAlerte {
+  DateDeclenchement   Instant required
+  BusNumero           String
+  DistanceReelle      Integer
+  TempsReel           Integer
+  TypeDeclenchement   ThresholdType
+  NotificationEnvoyee Boolean required
+  DateLecture         Instant
+}
+
+// ================================================
+// UTILISATEUR & NOTIFICATIONS
+// ================================================
+
+entity Favori {
+  Type                FavoriteType required
+  CibleId             Long required
+  NomPersonnalise     String
+  Ordre               Integer
+  DateAjout           Instant required
+  DernierAcces        Instant
+}
+
+entity Notification {
+  Type                NotificationType required
+  Titre               String required
+  Message             TextBlob required
+  Donnees             TextBlob
+  Priorite            Priority
+  Statut              NotificationStatus required
+  DateCreation        Instant required
+  DateEnvoi           Instant
+  Lu                  Boolean
+  DateLecture         Instant
+}
+
+// ================================================
+// FEEDBACK & RAPPORTS
+// ================================================
+
+entity Feedback {
+  Note                Integer required min(1) max(5)
+  Commentaire         TextBlob
+  TypeObjet           String required
+  ObjetId             Long required
+  DateCreation        Instant required
+  Anonyme             Boolean
+}
+
+entity Rapport {
+  Nom                 String required
+  Type                ReportType required
+  PeriodeDebut        LocalDate required
+  PeriodeFin          LocalDate required
+  Format              ReportFormat
+  Contenu             TextBlob
+  DateGeneration      Instant required
+  GenerePar           String
+}
+
+// ================================================
+// RELATIONS
+// ================================================
+
+relationship OneToMany {
+  Operateur{Lignes} to Ligne{Operateur}
+}
+
+relationship OneToMany {
+  Ligne{LigneArrets} to LigneArret{Ligne}
+  Arret{LigneArrets} to LigneArret{Arret}
+}
+
+relationship ManyToOne {
+  Bus{Ligne} to Ligne
+  Bus{Chauffeur} to Utilisateur
+}
+
+relationship ManyToOne {
+  Tracking{Bus} to Bus
+}
+
+relationship ManyToOne {
+  AlerteApproche{Utilisateur} to Utilisateur
+}
+
+relationship OneToMany {
+  AlerteApproche{AlerteLigneArret} to AlerteLigneArret{AlerteApproche}
+}
+
+relationship ManyToOne {
+  AlerteLigneArret{Ligne} to Ligne
+  AlerteLigneArret{Arret} to Arret
+}
+
+relationship OneToMany {
+  AlerteApproche{HistoriqueAlertes} to HistoriqueAlerte{AlerteApproche}
+}
+
+relationship ManyToOne {
+  HistoriqueAlerte{Bus} to Bus
+}
+
+relationship OneToMany {
+  Utilisateur{Favoris} to Favori{Utilisateur}
+  Utilisateur{Notifications} to Notification{Utilisateur}
+  Utilisateur{Feedbacks} to Feedback{Utilisateur}
+  Utilisateur{HistoriqueAlertes} to HistoriqueAlerte{Utilisateur}
+}
+
+relationship ManyToOne {
+  Rapport{Operateur} to Operateur
+  Rapport{Admin} to Utilisateur
+}
+
+// ================================================
+// OPTIONS JHIPSTER
+// ================================================
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
+filter *
