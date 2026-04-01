@@ -1,0 +1,43 @@
+// src/main/webapp/app/layouts/sidebar/sidebar.component.scss
+
+// ⚠️ Uniquement ce qui ne peut pas être géré par Tailwind
+
+// Masquage des éléments en mode collapsed
+.sidebar.collapsed {
+  .menu-text,
+  .submenu-icon,
+  .user-details {
+    @apply hidden;
+  }
+
+  // Submenu en dropdown flottant quand collapsed
+  .has-submenu:hover > .submenu {
+    @apply block absolute left-[70px] top-0 bg-white shadow-lg rounded-lg min-w-[200px] z-50 border border-gray-200;
+  }
+}
+
+// Submenu par défaut caché
+.submenu {
+  @apply hidden;
+}
+
+// Animation smooth pour le hover sur les items
+.nav-link {
+  @apply transition-colors duration-200;
+}
+
+// Responsive mobile : sidebar cachée par défaut
+@media (max-width: 768px) {
+  .sidebar {
+    @apply transform -translate-x-full transition-transform duration-300 ease-in-out;
+    
+    &.mobile-open {
+      @apply translate-x-0;
+    }
+  }
+}
+
+// Utility pour le text truncation dans flex
+.truncate {
+  @apply whitespace-nowrap overflow-hidden text-ellipsis;
+}
