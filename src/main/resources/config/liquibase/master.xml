@@ -2,7 +2,12 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ===================== -->
+    <!-- PROPERTIES -->
+    <!-- ===================== -->
     <property name="now" value="now()" dbms="mysql"/>
     <property name="floatType" value="float" dbms="mysql"/>
     <property name="clobType" value="clob" dbms="mysql"/>
@@ -11,23 +16,44 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
     <property name="timeType" value="time(6)" dbms="mysql"/>
 
+    <!-- ===================== -->
+    <!-- INITIAL SCHEMA -->
+    <!-- ===================== -->
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-   <include file="config/liquibase/changelog/20260221233518_added_entity_Operateur.xml" relativeToChangelogFile="false"/>
+
+    <!-- ===================== -->
+    <!-- ENTITIES (ORDER MATTERS) -->
+    <!-- ===================== -->
+
+    <!-- 1. ROOT ENTITIES -->
+    <include file="config/liquibase/changelog/20260221233518_added_entity_Operateur.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260221233522_added_entity_Utilisateur.xml" relativeToChangelogFile="false"/>
+
+    <!-- 2. DEPENDENT ENTITIES -->
     <include file="config/liquibase/changelog/20260221233519_added_entity_Ligne.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233520_added_entity_Arret.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233521_added_entity_Bus.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233522_added_entity_Utilisateur.xml" relativeToChangelogFile="false"/>
+
+    <!-- 3. RELATION ENTITIES -->
+    <include file="config/liquibase/changelog/20260221233527_added_entity_LigneArret.xml" relativeToChangelogFile="false"/>
+
+    <!-- 4. FUNCTIONAL ENTITIES -->
     <include file="config/liquibase/changelog/20260221233523_added_entity_Tracking.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233524_added_entity_Alerte.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233525_added_entity_Favori.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233526_added_entity_Notification.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20260221233527_added_entity_LigneArret.xml" relativeToChangelogFile="false"/>
+
+    <!-- 5. ADVANCED ENTITIES -->
     <include file="config/liquibase/changelog/20260223002345_added_entity_AlerteApproche.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002346_added_entity_AlerteLigneArret.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002347_added_entity_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002348_added_entity_Feedback.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002349_added_entity_Rapport.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+
+    <!-- ===================== -->
+    <!-- CONSTRAINTS (AFTER ALL TABLES) -->
+    <!-- ===================== -->
+
     <include file="config/liquibase/changelog/20260221233519_added_entity_constraints_Ligne.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233521_added_entity_constraints_Bus.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260221233523_added_entity_constraints_Tracking.xml" relativeToChangelogFile="false"/>
@@ -40,6 +66,5 @@
     <include file="config/liquibase/changelog/20260223002347_added_entity_constraints_HistoriqueAlerte.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002348_added_entity_constraints_Feedback.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260223002349_added_entity_constraints_Rapport.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+
 </databaseChangeLog>

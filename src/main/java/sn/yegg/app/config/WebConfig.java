@@ -15,7 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
                 "http://localhost:*", // Accepte tous les ports localhost
-                "http://127.0.0.1:*" // Accepte tous les ports 127.0.0.1
+                "http://127.0.0.1:*", // Accepte tous les ports 127.0.0.1
+                "https://yegg-app-303905372958.europe-west1.run.app"
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
