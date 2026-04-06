@@ -43,7 +43,7 @@ enum NotificationStatus {
 }
 
 enum UserRole {
-  PASSENGER, TOURIST, DRIVER, OPERATOR, ADMIN
+  PASSENGER, DRIVER, OPERATOR, ADMIN
 }
 
 enum FavoriteType {

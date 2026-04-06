@@ -32,7 +32,7 @@ public class MqttMessageHandler {
     }
 
     @Bean
-    @ServiceActivator(inputChannel = "mqttInputChannel") // ⚠️ Écoute sur le même channel que MqttConfig
+    @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler ttnMessageHandler() {
         return message -> {
             try {

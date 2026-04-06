@@ -5,16 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sn.yegg.app.domain.Bus;
 import sn.yegg.app.domain.Tracking;
 import sn.yegg.app.domain.enumeration.TrackingSource;
 import sn.yegg.app.repository.BusRepository;
 import sn.yegg.app.repository.TrackingRepository;
+import sn.yegg.app.service.AlertDetectionService;
 import sn.yegg.app.service.dto.BusPositionDTO;
 
 @Service
@@ -23,29 +22,33 @@ public class TtnMessageProcessor {
     private final BusRepository busRepository;
     private final TrackingRepository trackingRepository;
     private final WebSocketService webSocketService;
+
+    private final AlertDetectionService alertDetectionService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Logger log = LoggerFactory.getLogger(TtnMessageProcessor.class);
 
-    public TtnMessageProcessor(BusRepository busRepository, TrackingRepository trackingRepository, WebSocketService webSocketService) {
+    public TtnMessageProcessor(
+        BusRepository busRepository,
+        TrackingRepository trackingRepository,
+        WebSocketService webSocketService,
+        AlertDetectionService alertDetectionService
+    ) {
         this.busRepository = busRepository;
         this.trackingRepository = trackingRepository;
         this.webSocketService = webSocketService;
+        this.alertDetectionService = alertDetectionService;
     }
 
-    @Transactional
     public void processMessage(String deviceId, String payload) {
         try {
             log.info("Traitement message pour device: {}", deviceId);
-
             JsonNode root = objectMapper.readTree(payload);
 
-            Bus bus = busRepository.findByGpsDeviceId(deviceId).orElse(null);
+            Bus bus = busRepository.findByGpsDeviceIdWithLigne(deviceId).orElse(null);
             if (bus == null) {
                 log.warn("Aucun bus trouvé avec device ID: {}", deviceId);
                 return;
             }
-
-            log.info("Bus trouvé: {} ({})", bus.getNumeroVehicule(), bus.getPlaque());
 
             boolean positionUpdated = extractAndUpdatePosition(bus, root);
 
@@ -54,25 +57,34 @@ public class TtnMessageProcessor {
                 saveTracking(bus, root);
 
                 log.info(
-                    "✅ Position mise à jour pour bus {}: lat={}, lng={}, vitesse={}",
+                    "✅ Position mise à jour pour bus {}: lat={}, lng={}",
                     bus.getNumeroVehicule(),
                     bus.getCurrentLatitude(),
-                    bus.getCurrentLongitude(),
-                    bus.getCurrentVitesse()
+                    bus.getCurrentLongitude()
                 );
 
                 // 🚀 Envoyer la position via WebSocket
                 sendBusPositionViaWebSocket(bus);
-            } else {
-                log.warn("⚠️ Aucune position valide trouvée dans le message");
-            }
 
-            // Nettoyer les anciennes données (1% de chance)
-            if (Math.random() < 0.01) {
-                cleanupOldTrackingData();
+                // 🔔 VÉRIFIER LES ALERTES (NOUVEAU)
+                checkAndTriggerAlerts(bus);
             }
         } catch (Exception e) {
-            log.error("❌ Erreur lors du traitement du message TTN: {}", e.getMessage(), e);
+            log.error("❌ Erreur traitement message TTN: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Vérifie et déclenche les alertes pour un bus
+     */
+    private void checkAndTriggerAlerts(Bus bus) {
+        try {
+            if (bus.getLigne() != null && bus.getCurrentLatitude() != null && bus.getCurrentLongitude() != null) {
+                alertDetectionService.checkApproachAlerts(bus);
+            }
+        } catch (Exception e) {
+            log.error("Erreur lors de la vérification des alertes pour bus {}: {}", bus.getNumeroVehicule(), e.getMessage());
+            // Ne pas propager l'exception pour ne pas bloquer le traitement MQTT
         }
     }
 
@@ -240,21 +252,6 @@ public class TtnMessageProcessor {
             log.warn("Format de timestamp invalide: {}", e.getMessage());
         }
         return Instant.now();
-    }
-
-    /**
-     * Nettoie les anciennes données de tracking (plus de 7 jours)
-     */
-    private void cleanupOldTrackingData() {
-        try {
-            Instant cutoffDate = Instant.now().minusSeconds(7 * 24 * 3600); // 7 jours
-            int deletedCount = trackingRepository.deleteByTimestampBefore(cutoffDate);
-            if (deletedCount > 0) {
-                log.info("Nettoyage: {} anciennes données supprimées", deletedCount);
-            }
-        } catch (Exception e) {
-            log.error("Erreur lors du nettoyage: {}", e.getMessage());
-        }
     }
 
     /**

@@ -1,7 +1,11 @@
-<!-- src/main/webapp/app/layouts/sidebar/sidebar.component.html -->
 <div class="sidebar-container" [class.sidebar-collapsed]="isSidebarCollapsed()">
   <!-- Bouton menu mobile -->
-  <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" *ngIf="isSidebarCollapsed()">
+  <button
+    class="btn btn-primary position-fixed top-0 start-0 m-2 d-md-none"
+    style="z-index: 1001; padding: 8px 12px"
+    (click)="toggleMobileMenu()"
+    *ngIf="isSidebarCollapsed()"
+  >
     <fa-icon icon="bars"></fa-icon>
   </button>
 
@@ -11,23 +15,28 @@
   <!-- Sidebar -->
   <aside class="sidebar" [class.mobile-open]="isMobileMenuOpen()" [class.collapsed]="isSidebarCollapsed()">
     <!-- En-tête sidebar -->
-    <div class="sidebar-header">
-      <div class="logo-area">
-        <fa-icon icon="bus" class="logo-icon"></fa-icon>
+    <div class="sidebar-header d-flex align-items-center justify-content-between p-3 border-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <fa-icon icon="bus" class="logo-icon fs-4"></fa-icon>
         @if (!isSidebarCollapsed()) {
-          <span class="logo-text" jhiTranslate="global.title">YeggApp</span>
+          <span class="logo-text fw-semibold" jhiTranslate="global.title">YeggApp</span>
         }
       </div>
-      <button class="toggle-btn" (click)="toggleSidebar()">
+      <button class="toggle-btn btn btn-link text-white p-1" (click)="toggleSidebar()">
         <fa-icon [icon]="isSidebarCollapsed() ? 'chevron-right' : 'chevron-left'"></fa-icon>
       </button>
     </div>
 
     <!-- Menu principal -->
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav flex-grow-1 overflow-auto py-3">
       <!-- Accueil -->
-      <a class="nav-item" routerLink="/" routerLinkActive="active" (click)="closeMobileMenu()">
-        <fa-icon icon="home" class="nav-icon"></fa-icon>
+      <a
+        class="nav-item d-flex align-items-center p-2 text-white text-decoration-none"
+        routerLink="/"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+      >
+        <fa-icon icon="home" class="nav-icon me-2"></fa-icon>
         @if (!isSidebarCollapsed()) {
           <span class="nav-text" jhiTranslate="global.menu.home">Accueil</span>
         }
@@ -36,21 +45,24 @@
       @if (account() !== null) {
         <!-- SECTION RÉSEAU -->
         <div class="nav-section">
-          <div class="section-header" (click)="toggleSubmenu('network')">
-            <fa-icon icon="network-wired" class="section-icon"></fa-icon>
+          <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('network')">
+            <fa-icon icon="network-wired" class="section-icon me-2"></fa-icon>
             @if (!isSidebarCollapsed()) {
-              <span class="section-title">Réseau</span>
-            }
-            @if (!isSidebarCollapsed()) {
-              <fa-icon [icon]="isSubmenuExpanded('network') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+              <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Réseau</span>
+              <fa-icon [icon]="isSubmenuExpanded('network') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
             }
           </div>
           @if (!isSidebarCollapsed() && isSubmenuExpanded('network')) {
             <div class="section-items">
               @for (item of menuGroups().network; track item.route) {
-                <a class="nav-item sub-item" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                  <span class="nav-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon [icon]="item.icon" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
                 </a>
               }
             </div>
@@ -59,21 +71,24 @@
 
         <!-- SECTION VÉHICULES -->
         <div class="nav-section">
-          <div class="section-header" (click)="toggleSubmenu('vehicles')">
-            <fa-icon icon="bus" class="section-icon"></fa-icon>
+          <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('vehicles')">
+            <fa-icon icon="bus" class="section-icon me-2"></fa-icon>
             @if (!isSidebarCollapsed()) {
-              <span class="section-title">Véhicules</span>
-            }
-            @if (!isSidebarCollapsed()) {
-              <fa-icon [icon]="isSubmenuExpanded('vehicles') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+              <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Véhicules</span>
+              <fa-icon [icon]="isSubmenuExpanded('vehicles') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
             }
           </div>
           @if (!isSidebarCollapsed() && isSubmenuExpanded('vehicles')) {
             <div class="section-items">
               @for (item of menuGroups().vehicles; track item.route) {
-                <a class="nav-item sub-item" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                  <span class="nav-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon [icon]="item.icon" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
                 </a>
               }
             </div>
@@ -82,21 +97,24 @@
 
         <!-- SECTION UTILISATEURS & FAVORIS -->
         <div class="nav-section">
-          <div class="section-header" (click)="toggleSubmenu('users')">
-            <fa-icon icon="users" class="section-icon"></fa-icon>
+          <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('users')">
+            <fa-icon icon="users" class="section-icon me-2"></fa-icon>
             @if (!isSidebarCollapsed()) {
-              <span class="section-title">Utilisateurs</span>
-            }
-            @if (!isSidebarCollapsed()) {
-              <fa-icon [icon]="isSubmenuExpanded('users') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+              <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Utilisateurs</span>
+              <fa-icon [icon]="isSubmenuExpanded('users') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
             }
           </div>
           @if (!isSidebarCollapsed() && isSubmenuExpanded('users')) {
             <div class="section-items">
               @for (item of menuGroups().users; track item.route) {
-                <a class="nav-item sub-item" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                  <span class="nav-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon [icon]="item.icon" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
                 </a>
               }
             </div>
@@ -105,21 +123,24 @@
 
         <!-- SECTION ALERTES & NOTIFICATIONS -->
         <div class="nav-section">
-          <div class="section-header" (click)="toggleSubmenu('alerts')">
-            <fa-icon icon="bell" class="section-icon"></fa-icon>
+          <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('alerts')">
+            <fa-icon icon="bell" class="section-icon me-2"></fa-icon>
             @if (!isSidebarCollapsed()) {
-              <span class="section-title">Alertes</span>
-            }
-            @if (!isSidebarCollapsed()) {
-              <fa-icon [icon]="isSubmenuExpanded('alerts') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+              <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Alertes</span>
+              <fa-icon [icon]="isSubmenuExpanded('alerts') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
             }
           </div>
           @if (!isSidebarCollapsed() && isSubmenuExpanded('alerts')) {
             <div class="section-items">
               @for (item of menuGroups().alerts; track item.route) {
-                <a class="nav-item sub-item" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                  <span class="nav-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon [icon]="item.icon" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
                 </a>
               }
             </div>
@@ -128,21 +149,24 @@
 
         <!-- SECTION FEEDBACK & RAPPORTS -->
         <div class="nav-section">
-          <div class="section-header" (click)="toggleSubmenu('feedback')">
-            <fa-icon icon="chart-bar" class="section-icon"></fa-icon>
+          <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('feedback')">
+            <fa-icon icon="chart-bar" class="section-icon me-2"></fa-icon>
             @if (!isSidebarCollapsed()) {
-              <span class="section-title">Analyses</span>
-            }
-            @if (!isSidebarCollapsed()) {
-              <fa-icon [icon]="isSubmenuExpanded('feedback') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+              <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Analyses</span>
+              <fa-icon [icon]="isSubmenuExpanded('feedback') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
             }
           </div>
           @if (!isSidebarCollapsed() && isSubmenuExpanded('feedback')) {
             <div class="section-items">
               @for (item of menuGroups().feedback; track item.route) {
-                <a class="nav-item sub-item" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
-                  <span class="nav-text" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon [icon]="item.icon" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" [jhiTranslate]="item.translationKey">{{ item.name }}</span>
                 </a>
               }
             </div>
@@ -151,33 +175,51 @@
 
         <!-- SECTION ADMIN (visible uniquement pour les admins) -->
         @if (hasAdminAuthority()) {
-          <div class="nav-section admin-section">
-            <div class="section-header" (click)="toggleSubmenu('admin')">
-              <fa-icon icon="users-cog" class="section-icon"></fa-icon>
+          <div class="nav-section admin-section border-top mt-2 pt-2">
+            <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('admin')">
+              <fa-icon icon="users-cog" class="section-icon me-2"></fa-icon>
               @if (!isSidebarCollapsed()) {
-                <span class="section-title">Administration</span>
-              }
-              @if (!isSidebarCollapsed()) {
-                <fa-icon [icon]="isSubmenuExpanded('admin') ? 'chevron-down' : 'chevron-right'" class="section-arrow"></fa-icon>
+                <span class="section-title flex-grow-1 text-uppercase small fw-semibold">Administration</span>
+                <fa-icon [icon]="isSubmenuExpanded('admin') ? 'chevron-down' : 'chevron-right'" class="section-arrow small"></fa-icon>
               }
             </div>
             @if (!isSidebarCollapsed() && isSubmenuExpanded('admin')) {
               <div class="section-items">
-                <a class="nav-item sub-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon icon="users" class="nav-icon"></fa-icon>
-                  <span class="nav-text" jhiTranslate="global.menu.admin.userManagement">Utilisateurs</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  routerLink="/admin/user-management"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon icon="users" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" jhiTranslate="global.menu.admin.userManagement">Utilisateurs</span>
                 </a>
-                <a class="nav-item sub-item" routerLink="/admin/health" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon icon="heart" class="nav-icon"></fa-icon>
-                  <span class="nav-text" jhiTranslate="global.menu.admin.health">Diagnostics</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  routerLink="/admin/health"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon icon="heart" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" jhiTranslate="global.menu.admin.health">Diagnostics</span>
                 </a>
-                <a class="nav-item sub-item" routerLink="/admin/metrics" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon icon="tachometer-alt" class="nav-icon"></fa-icon>
-                  <span class="nav-text" jhiTranslate="global.menu.admin.metrics">Métriques</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  routerLink="/admin/metrics"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon icon="tachometer-alt" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" jhiTranslate="global.menu.admin.metrics">Métriques</span>
                 </a>
-                <a class="nav-item sub-item" routerLink="/admin/logs" routerLinkActive="active" (click)="closeMobileMenu()">
-                  <fa-icon icon="tasks" class="nav-icon"></fa-icon>
-                  <span class="nav-text" jhiTranslate="global.menu.admin.logs">Logs</span>
+                <a
+                  class="nav-item sub-item d-flex align-items-center p-2 ps-5 text-white text-decoration-none"
+                  routerLink="/admin/logs"
+                  routerLinkActive="active"
+                  (click)="closeMobileMenu()"
+                >
+                  <fa-icon icon="tasks" class="nav-icon me-2 small"></fa-icon>
+                  <span class="nav-text small" jhiTranslate="global.menu.admin.logs">Logs</span>
                 </a>
               </div>
             }
@@ -187,26 +229,26 @@
     </nav>
 
     <!-- Pied de page sidebar avec infos utilisateur -->
-    <div class="sidebar-footer">
+    <div class="sidebar-footer p-3 border-top">
       @if (account() !== null) {
-        <div class="user-info">
-          <fa-icon icon="user-circle" class="user-avatar"></fa-icon>
+        <div class="user-info d-flex align-items-center gap-3 cursor-pointer">
+          <fa-icon icon="user-circle" class="user-avatar fs-2"></fa-icon>
           @if (!isSidebarCollapsed()) {
-            <div class="user-details">
-              <span class="user-name">{{ account()?.firstName }} {{ account()?.lastName }}</span>
-              <span class="user-role">{{ userRole() }}</span>
+            <div class="user-details d-flex flex-column">
+              <span class="user-name fw-medium">{{ account()?.firstName }} {{ account()?.lastName }}</span>
+              <span class="user-role small">{{ userRole() }}</span>
             </div>
           }
         </div>
         @if (!isSidebarCollapsed()) {
-          <button class="logout-btn" (click)="logout()">
+          <button class="logout-btn w-100 text-start mt-2 p-2 d-flex align-items-center gap-2" (click)="logout()">
             <fa-icon icon="sign-out-alt"></fa-icon>
             <span jhiTranslate="global.menu.account.logout">Déconnexion</span>
           </button>
         }
       } @else {
-        <div class="user-info" (click)="login()">
-          <fa-icon icon="sign-in-alt" class="user-avatar"></fa-icon>
+        <div class="user-info d-flex align-items-center gap-2 cursor-pointer" (click)="login()">
+          <fa-icon icon="sign-in-alt" class="user-avatar fs-2"></fa-icon>
           @if (!isSidebarCollapsed()) {
             <span class="login-text" jhiTranslate="global.menu.account.login">Se connecter</span>
           }

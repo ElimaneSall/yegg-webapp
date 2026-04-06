@@ -22,9 +22,11 @@ public interface AlerteLigneArretRepository extends JpaRepository<AlerteLigneArr
         "SELECT ala FROM AlerteLigneArret ala " +
         "JOIN FETCH ala.alerteApproche aa " +
         "JOIN FETCH aa.utilisateur u " +
-        "WHERE ala.ligne.id = :ligneId " +
-        "AND ala.actif = true " +
-        "AND aa.statut = 'ACTIVE'"
+        "JOIN FETCH ala.ligne l " +
+        "JOIN FETCH ala.arret a " +
+        "WHERE l.id = :ligneId " +
+        "AND aa.statut = 'ACTIVE' " +
+        "AND ala.actif = true"
     )
     List<AlerteLigneArret> findActiveAlertsWithUsersByLigne(@Param("ligneId") Long ligneId);
 }

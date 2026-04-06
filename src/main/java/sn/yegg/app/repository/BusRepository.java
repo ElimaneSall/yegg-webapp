@@ -2,6 +2,7 @@ package sn.yegg.app.repository;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sn.yegg.app.domain.Bus;
 
@@ -11,5 +12,6 @@ import sn.yegg.app.domain.Bus;
 @SuppressWarnings("unused")
 @Repository
 public interface BusRepository extends JpaRepository<Bus, Long>, JpaSpecificationExecutor<Bus> {
-    Optional<Bus> findByGpsDeviceId(String deviceId);
+    @Query("SELECT b FROM Bus b LEFT JOIN FETCH b.ligne WHERE b.gpsDeviceId = :deviceId")
+    Optional<Bus> findByGpsDeviceIdWithLigne(@Param("deviceId") String deviceId);
 }

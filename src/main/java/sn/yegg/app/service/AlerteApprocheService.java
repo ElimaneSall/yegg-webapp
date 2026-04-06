@@ -47,7 +47,6 @@ public interface AlerteApprocheService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-    AlertCheckResponse checkAlerts(AlertCheckRequest request);
 
     AlerteResponseDTO toggleCompleteAlert(ToggleAlerteLigneArretDTO toggleAlerteLigneArretDTO);
 

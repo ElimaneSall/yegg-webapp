@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import sn.yegg.app.repository.AlerteApprocheRepository;
+import sn.yegg.app.service.AlertDetectionService;
 import sn.yegg.app.service.AlerteApprocheQueryService;
 import sn.yegg.app.service.AlerteApprocheService;
 import sn.yegg.app.service.criteria.AlerteApprocheCriteria;
@@ -42,16 +43,20 @@ public class AlerteApprocheResource {
 
     private final AlerteApprocheService alerteApprocheService;
 
+    private final AlertDetectionService alertDetectionService;
+
     private final AlerteApprocheRepository alerteApprocheRepository;
 
     private final AlerteApprocheQueryService alerteApprocheQueryService;
 
     public AlerteApprocheResource(
         AlerteApprocheService alerteApprocheService,
+        AlertDetectionService alertDetectionService,
         AlerteApprocheRepository alerteApprocheRepository,
         AlerteApprocheQueryService alerteApprocheQueryService
     ) {
         this.alerteApprocheService = alerteApprocheService;
+        this.alertDetectionService = alertDetectionService;
         this.alerteApprocheRepository = alerteApprocheRepository;
         this.alerteApprocheQueryService = alerteApprocheQueryService;
     }
@@ -234,43 +239,5 @@ public class AlerteApprocheResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    /**
-     * POST /alerts/check : Vérifie si un bus déclenche des alertes
-     */
-    @PostMapping("/alerts/check")
-    public ResponseEntity<AlertCheckResponse> checkAlerts(@Valid @RequestBody AlertCheckRequest request) {
-        LOG.debug("REST request to check alerts: {}", request);
-
-        AlertCheckResponse response = alerteApprocheService.checkAlerts(request);
-
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * GET /alerts/bus/{busId}/check : Vérifie les alertes pour un bus spécifique
-     */
-    @GetMapping("/alerts/bus/{busId}/check")
-    public ResponseEntity<AlertCheckResponse> checkAlertsForBus(
-        @PathVariable Long busId,
-        @RequestParam Double latitude,
-        @RequestParam Double longitude,
-        @RequestParam(required = false) Double vitesse,
-        @RequestParam(required = false) Integer cap
-    ) {
-        LOG.debug("REST request to check alerts for bus {} at ({}, {})", busId, latitude, longitude);
-
-        AlertCheckRequest request = new AlertCheckRequest();
-        request.setBusId(busId);
-        request.setLatitude(latitude);
-        request.setLongitude(longitude);
-        request.setVitesse(vitesse);
-        request.setCap(cap);
-        request.setTimestamp(java.time.Instant.now());
-
-        AlertCheckResponse response = alerteApprocheService.checkAlerts(request);
-
-        return ResponseEntity.ok(response);
     }
 }
