@@ -1,5 +1,6 @@
 package sn.yegg.app.service;
 
+import java.util.Map;
 import java.util.Optional;
 import sn.yegg.app.domain.Arret;
 import sn.yegg.app.domain.Bus;
@@ -51,4 +52,6 @@ public interface NotificationService {
     void delete(Long id);
 
     void sendPushNotification(String token, String title, String body);
+
+    void sendPushNotificationWithNavigation(String token, String title, String body, Map<String, String> data);
 }

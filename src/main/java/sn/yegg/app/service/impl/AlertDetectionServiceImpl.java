@@ -1,5 +1,7 @@
 package sn.yegg.app.service.impl;
 
+import static java.util.Map.entry;
+
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -156,11 +158,11 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
     }
 
     private boolean isAlertActiveNow(AlerteApproche alerte) {
-        log.debug("🕐 Checking time window for alert '{}'", alerte.getNom());
+        log.debug("Checking time window for alert '{}'", alerte.getNom());
 
         // 1. Vérifier statut
         if (!AlertStatus.ACTIVE.equals(alerte.getStatut())) {
-            log.debug("   ❌ Statut != ACTIVE (statut={})", alerte.getStatut());
+            log.debug("Statut != ACTIVE (statut={})", alerte.getStatut());
             return false;
         }
 
@@ -170,7 +172,7 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
             boolean dayMatch = alerte.getJoursActivation().contains(todayFr);
 
             log.debug(
-                "   📅 Jour actuel: {} ({}), Jours activés: '{}', match: {}",
+                "Jour actuel: {} ({}), Jours activés: '{}', match: {}",
                 todayFr,
                 LocalDate.now().getDayOfWeek(),
                 alerte.getJoursActivation(),
@@ -189,14 +191,14 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
             LocalTime fin = LocalTime.parse(alerte.getHeureFin());
             boolean inTimeRange = !now.isBefore(debut) && !now.isAfter(fin);
 
-            log.debug("   🕐 Heure: {}, Plage: {}-{}, dans la plage: {}", now, alerte.getHeureDebut(), alerte.getHeureFin(), inTimeRange);
+            log.debug("Heure: {}, Plage: {}-{}, dans la plage: {}", now, alerte.getHeureDebut(), alerte.getHeureFin(), inTimeRange);
 
             if (!inTimeRange) {
                 return false;
             }
         }
 
-        log.debug("   ✅ Alert is active");
+        log.debug("Alert is active");
         return true;
     }
 
@@ -228,69 +230,69 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
         ThresholdCheckResult result = new ThresholdCheckResult();
         result.setDistanceValue(distance);
 
-        // 📏 Distance check
+        // Distance check
         boolean distanceOk = false;
         if (alerte.getSeuilDistance() != null) {
             distanceOk = distance <= alerte.getSeuilDistance();
             log.debug("   📏 Distance: {}m <= {}m ? → {}", distance, alerte.getSeuilDistance(), distanceOk);
         }
 
-        // ⏱️ Time check
+        // Time check
         boolean timeOk = false;
         Integer timeToArrival = null;
 
         if (alerte.getSeuilTemps() != null) {
             BigDecimal vitesse = bus.getCurrentVitesse();
-            log.debug("   🚀 Vitesse bus: {} km/h", vitesse);
+            log.debug("Vitesse bus: {} km/h", vitesse);
 
             if (vitesse != null && vitesse.doubleValue() > 0) {
                 double vitesseMs = (vitesse.doubleValue() * 1000) / 3600;
                 timeToArrival = (int) (distance / vitesseMs);
                 timeOk = timeToArrival <= alerte.getSeuilTemps();
                 result.setTimeValue(timeToArrival);
-                log.debug("   ⏱️ Temps d'arrivée: {}s <= {}s ? → {}", timeToArrival, alerte.getSeuilTemps(), timeOk);
+                log.debug("Temps d'arrivée: {}s <= {}s ? → {}", timeToArrival, alerte.getSeuilTemps(), timeOk);
             } else {
-                log.debug("   ⚠️ Vitesse nulle ou nulle, time check skipped");
+                log.debug("Vitesse nulle ou nulle, time check skipped");
             }
         }
 
         // 🔀 Type de seuil
-        log.debug("   🔀 TypeSeuil: {}, distanceOk: {}, timeOk: {}", alerte.getTypeSeuil(), distanceOk, timeOk);
+        log.debug("TypeSeuil: {}, distanceOk: {}, timeOk: {}", alerte.getTypeSeuil(), distanceOk, timeOk);
 
         switch (alerte.getTypeSeuil()) {
             case DISTANCE:
                 if (distanceOk) {
                     result.setTriggered(true);
                     result.setTriggeredBy("DISTANCE");
-                    log.debug("   ✅ TRIGGERED by DISTANCE");
+                    log.debug("TRIGGERED by DISTANCE");
                 }
                 break;
             case TIME:
                 if (timeOk) {
                     result.setTriggered(true);
                     result.setTriggeredBy("TIME");
-                    log.debug("   ✅ TRIGGERED by TIME");
+                    log.debug("TRIGGERED by TIME");
                 }
                 break;
             case OR_BOTH:
                 if (distanceOk || timeOk) {
                     result.setTriggered(true);
                     result.setTriggeredBy(distanceOk ? "DISTANCE" : "TIME");
-                    log.debug("   ✅ TRIGGERED by OR_BOTH ({})", result.getTriggeredBy());
+                    log.debug("TRIGGERED by OR_BOTH ({})", result.getTriggeredBy());
                 } else {
-                    log.debug("   ❌ NOT triggered: distanceOk={}, timeOk={}", distanceOk, timeOk);
+                    log.debug("NOT triggered: distanceOk={}, timeOk={}", distanceOk, timeOk);
                 }
                 break;
             case AND_BOTH:
                 if (distanceOk && timeOk) {
                     result.setTriggered(true);
                     result.setTriggeredBy("BOTH");
-                    log.debug("   ✅ TRIGGERED by AND_BOTH");
+                    log.debug("TRIGGERED by AND_BOTH");
                 }
                 break;
         }
 
-        log.debug("   🎯 Final: triggered={}, by={}", result.isTriggered(), result.getTriggeredBy());
+        log.debug("Final: triggered={}, by={}", result.isTriggered(), result.getTriggeredBy());
         return result;
     }
 
@@ -321,32 +323,45 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
 
         int minutes = result.getTimeValue() != null && result.getTimeValue() > 0 ? Math.max(1, result.getTimeValue() / 60) : 1;
 
-        // WebSocket personnel
-        Map<String, Object> wsData = Map.of(
-            "type",
-            "BUS_APPROACHING",
-            "alertId",
-            alerte.getId(),
-            "busNumero",
-            bus.getNumeroVehicule(),
-            "ligne",
-            bus.getLigne().getNumero(),
-            "arret",
-            arret.getNom(),
-            "distance",
-            Math.round(distance),
-            "minutes",
-            minutes,
-            "triggeredBy",
-            result.getTriggeredBy(),
-            "timestamp",
-            Instant.now().toString()
+        // 📦 Payload complet pour le popup mobile
+        Map<String, Object> alertData = Map.ofEntries(
+            entry("type", "BUS_APPROACHING"),
+            entry("alertId", alerte.getId()),
+            entry("busNumero", bus.getNumeroVehicule()),
+            entry("ligneNumero", bus.getLigne().getNumero()),
+            entry("ligneNom", bus.getLigne().getNom()),
+            entry("arretId", arret.getId()),
+            entry("arretNom", arret.getNom()),
+            entry("arretLat", arret.getLatitude()),
+            entry("arretLng", arret.getLongitude()),
+            entry("distance", Math.round(distance)),
+            entry("minutes", minutes),
+            entry("triggeredBy", result.getTriggeredBy()),
+            entry("timestamp", Instant.now().toString()),
+            entry("message", String.format("Le bus %s arrive à %s dans ~%d min", bus.getNumeroVehicule(), arret.getNom(), minutes))
         );
-        webSocketService.sendPersonalizedAlert(user.getId().toString(), "/queue/alerts", wsData);
 
-        // Push notification FCM
+        // 🎯 Destination STOMP utilisateur : /user/{userId}/queue/alerts
+        String userDestination = "/user/" + user.getId() + "/queue/alerts";
+
+        log.info("📤 Envoi alerte WebSocket à {} vers {}", user.getEmail(), userDestination);
+        webSocketService.sendPersonalizedAlert(user.getId().toString(), "/queue/alerts", alertData);
+
+        // 🔔 Push FCM (pour background/killed)
         if (user.getFcmToken() != null && !user.getFcmToken().isEmpty() && Boolean.TRUE.equals(user.getNotificationsPush())) {
-            notificationService.sendPushNotification(
+            // Données pour navigation au clic
+            Map<String, String> fcmData = Map.of(
+                "type",
+                "BUS_APPROACHING",
+                "arretId",
+                arret.getId().toString(),
+                "alertId",
+                alerte.getId().toString(),
+                "busNumero",
+                bus.getNumeroVehicule()
+            );
+
+            notificationService.sendPushNotificationWithNavigation(
                 user.getFcmToken(),
                 "🚌 Bus " + bus.getLigne().getNumero() + " en approche",
                 String.format(
@@ -355,7 +370,8 @@ public class AlertDetectionServiceImpl implements AlertDetectionService {
                     arret.getNom(),
                     minutes,
                     Math.round(distance)
-                )
+                ),
+                fcmData
             );
         }
     }

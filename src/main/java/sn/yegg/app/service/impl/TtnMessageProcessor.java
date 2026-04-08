@@ -116,106 +116,133 @@ public class TtnMessageProcessor {
     }
 
     /**
-     * Extrait et met à jour la position du bus à partir du payload TTN
+     * Extrait position, H3 et cap depuis le payload TTN
      */
     private boolean extractAndUpdatePosition(Bus bus, JsonNode root) {
         try {
-            JsonNode uplinkMessage = root.path("uplink_message");
-            if (uplinkMessage.isMissingNode()) {
-                log.warn("Pas de uplink_message dans le payload");
+            JsonNode uplink = root.path("uplink_message");
+            if (uplink.isMissingNode()) {
+                log.warn("Pas de uplink_message");
                 return false;
             }
 
-            // Extraire le timestamp
-            Instant timestamp = extractTimestamp(uplinkMessage);
-            if (timestamp != null) {
-                bus.setPositionUpdatedAt(timestamp);
-                bus.setGpsLastPing(timestamp);
+            // Timestamp
+            Instant ts = extractTimestamp(uplink);
+            if (ts != null) {
+                bus.setPositionUpdatedAt(ts);
+                bus.setGpsLastPing(ts);
             }
 
-            // Récupérer le decoded_payload
-            JsonNode decodedPayload = uplinkMessage.path("decoded_payload");
-
-            // Variables pour stocker les données extraites
-            BigDecimal latitude = null;
-            BigDecimal longitude = null;
-            BigDecimal vitesse = null;
+            JsonNode payload = uplink.path("decoded_payload");
+            BigDecimal lat = null, lng = null, alt = null, vitesse = null;
             Integer cap = null;
+            Long h3Index = null;
 
-            // STRUCTURE 1: Format Cayenne LPP avec gps_1 (votre format actuel)
-            if (!decodedPayload.isMissingNode()) {
-                log.debug("decoded_payload: {}", decodedPayload);
-
-                // Chercher gps_1
-                JsonNode gpsNode = decodedPayload.path("gps_1");
-                if (!gpsNode.isMissingNode()) {
-                    latitude = getBigDecimal(gpsNode, "latitude");
-                    longitude = getBigDecimal(gpsNode, "longitude");
-                    log.info("Structure gps_1 trouvée dans decoded_payload");
+            if (!payload.isMissingNode()) {
+                // GPS (channel 1)
+                JsonNode gps = payload.path("gps_1");
+                if (!gps.isMissingNode()) {
+                    lat = getBigDecimal(gps, "latitude");
+                    lng = getBigDecimal(gps, "longitude");
+                    alt = getBigDecimal(gps, "altitude");
                 }
 
-                // Chercher la vitesse dans analog_in_2
-                if (decodedPayload.has("analog_in_2")) {
-                    vitesse = getBigDecimal(decodedPayload, "analog_in_2");
+                // Cap (channel 12)
+                // Cap (channel 12) - CORRECTION
+                if (payload.has("analog_in_12")) {
+                    // Cayenne LPP décode analogInput en FLOAT, pas en INTEGER
+                    BigDecimal capVal = getBigDecimal(payload, "analog_in_12");
+
+                    if (capVal != null) {
+                        int capInt = capVal.intValue();
+
+                        if (capInt >= 0 && capInt <= 360) {
+                            cap = capInt;
+                            log.debug("Cap extrait: {}°", capInt);
+                        } else if (capInt == 65535 || capInt == -1) {
+                            log.debug("Cap indisponible (valeur: {})", capInt);
+                        } else {
+                            log.warn("Valeur cap invalide: {}", capInt);
+                        }
+                    } else {
+                        log.debug("analog_in_12 est null ou non numérique");
+                    }
                 }
 
-                // Chercher le cap si disponible
-                if (decodedPayload.has("cap")) {
-                    cap = getIntegerFromJson(decodedPayload, "cap");
+                // H3 Index (channels 8-11 → 64 bits)
+                if (
+                    payload.has("analog_in_8") && payload.has("analog_in_9") && payload.has("analog_in_10") && payload.has("analog_in_11")
+                ) {
+                    Long p1 = getLong(payload, "analog_in_8");
+                    Long p2 = getLong(payload, "analog_in_9");
+                    Long p3 = getLong(payload, "analog_in_10");
+                    Long p4 = getLong(payload, "analog_in_11");
+
+                    if (p1 != null && p2 != null && p3 != null && p4 != null) {
+                        h3Index = (p4 << 48) | (p3 << 32) | (p2 << 16) | p1;
+                        log.debug("H3 reconstruit: 0x{}", Long.toHexString(h3Index));
+                    }
+                }
+
+                // Vitesse optionnelle
+                if (payload.has("analog_in_2")) {
+                    vitesse = getBigDecimal(payload, "analog_in_2");
                 }
             }
 
-            // STRUCTURE 2: Champs directs dans decoded_payload
-            if (latitude == null && decodedPayload.has("latitude")) {
-                latitude = getBigDecimal(decodedPayload, "latitude");
-                longitude = getBigDecimal(decodedPayload, "longitude");
-                log.info("Structure champs directs trouvée dans decoded_payload");
-            }
-
-            // STRUCTURE 3: Locations frm-payload
-            if (latitude == null) {
-                JsonNode locations = uplinkMessage.path("locations");
-                if (locations.has("frm-payload")) {
-                    JsonNode gps = locations.get("frm-payload");
-                    latitude = getBigDecimal(gps, "latitude");
-                    longitude = getBigDecimal(gps, "longitude");
-                    log.info("Structure locations.frm-payload trouvée");
+            // Fallback: locations.frm-payload
+            if (lat == null) {
+                JsonNode loc = uplink.path("locations");
+                if (loc.has("frm-payload")) {
+                    JsonNode g = loc.get("frm-payload");
+                    lat = getBigDecimal(g, "latitude");
+                    lng = getBigDecimal(g, "longitude");
                 }
             }
 
-            // STRUCTURE 4: Parsing manuel du frm_payload (si nécessaire)
-            if (latitude == null) {
-                String frmPayload = uplinkMessage.path("frm_payload").asText();
-                if (!frmPayload.isEmpty()) {
-                    log.debug("frm_payload brut: {}", frmPayload);
-                    // Ajouter ici le parsing spécifique si besoin
-                }
-            }
-
-            // Si on a trouvé une position valide
-            if (latitude != null && longitude != null) {
-                bus.setCurrentLatitude(latitude);
-                bus.setCurrentLongitude(longitude);
-
-                if (vitesse != null) {
-                    bus.setCurrentVitesse(vitesse);
+            // Mise à jour Bus
+            if (lat != null && lng != null) {
+                bus.setCurrentLatitude(lat);
+                bus.setCurrentLongitude(lng);
+                //  if (alt != null) bus.setCurrentLatitude(alt);
+                if (vitesse != null) bus.setCurrentVitesse(vitesse);
+                if (cap != null) bus.setCurrentCap(cap);
+                if (h3Index != null) {
+                    //                    bus.setH3Index(h3Index);
+                    //                    bus.setH3Resolution(extractH3Resolution(h3Index));
                 }
 
-                if (cap != null) {
-                    bus.setCurrentCap(cap);
-                }
-
-                log.info("✅ Position extraite: lat={}, lng={}, vitesse={}", latitude, longitude, vitesse);
+                log.info(
+                    "Position: {} {} | Cap: {}° | H3: 0x{}",
+                    lat,
+                    lng,
+                    cap != null ? cap : "N/A",
+                    h3Index != null ? Long.toHexString(h3Index) : "N/A"
+                );
                 return true;
             }
 
-            log.warn("⚠️ Aucune position trouvée dans le payload");
-            log.debug("Payload complet: {}", root);
+            log.warn("Position introuvable");
             return false;
         } catch (Exception e) {
-            log.error("❌ Erreur lors de l'extraction de la position: {}", e.getMessage(), e);
+            log.error("Erreur extraction: {}", e.getMessage(), e);
             return false;
         }
+    }
+
+    /**
+     * Extrait la résolution H3 depuis l'index encodé
+     */
+    private int extractH3Resolution(long h3Index) {
+        return (int) ((h3Index >> 52) & 0x0F);
+    }
+
+    /**
+     * Helper pour Long
+     */
+    private Long getLong(JsonNode node, String field) {
+        JsonNode v = node.path(field);
+        return v.isNumber() ? v.longValue() : null;
     }
 
     /**

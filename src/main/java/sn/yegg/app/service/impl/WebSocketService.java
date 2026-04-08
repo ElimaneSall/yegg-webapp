@@ -30,18 +30,6 @@ public class WebSocketService {
     }
 
     /**
-     * Envoie la position d'un bus à un utilisateur spécifique
-     */
-    public void sendBusPositionToUser(String userLogin, BusPositionDTO busPosition) {
-        try {
-            log.debug("Envoi WebSocket à {} - Bus: {}", userLogin, busPosition);
-            messagingTemplate.convertAndSendToUser(userLogin, "/queue/bus-positions", busPosition);
-        } catch (Exception e) {
-            log.error("Erreur lors de l'envoi WebSocket à l'utilisateur: {}", e.getMessage());
-        }
-    }
-
-    /**
      * Envoie une alerte de bus
      */
     public void sendBusAlert(String alertType, String message, Long busId) {
@@ -60,20 +48,18 @@ public class WebSocketService {
     }
 
     /**
-     * Envoie une alerte à un utilisateur spécifique
+     * Envoie une alerte à un utilisateur spécifique via STOMP
+     * Destination: /user/{userId}/queue/alerts
      */
-    public void sendPersonalizedAlert(String userId, String destination, Object payload) {
-        String userDestination = "/user/" + userId + destination;
-        messagingTemplate.convertAndSend(userDestination, payload);
-    }
+    public void sendPersonalizedAlert(String userId, String queuePath, Object payload) {
+        try {
+            // Format Spring: /user/{userId}{queuePath}
+            String destination = "/user/" + userId + queuePath;
 
-    /**
-     * Envoie une alerte à tous les abonnés d'un topic public
-     */
-    public void sendBusAlert(String type, String message, Long busId, Object additionalData) {
-        messagingTemplate.convertAndSend(
-            "/topic/bus-alerts",
-            Map.of("type", type, "message", message, "busId", busId, "data", additionalData, "timestamp", System.currentTimeMillis())
-        );
+            log.debug("📤 Envoi vers: {} | Payload: {}", destination, payload);
+            messagingTemplate.convertAndSendToUser(userId, queuePath, payload);
+        } catch (Exception e) {
+            log.error("❌ Erreur envoi WebSocket utilisateur {}: {}", userId, e.getMessage(), e);
+        }
     }
 }
