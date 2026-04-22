@@ -1,7 +1,4 @@
-# ==========================================
-# Build et déploiement Cloud Run + Cloud SQL
-# ==========================================
-
+# cloudbuild.yaml
 steps:
   # Étape 1 : Build Docker
   - name: 'gcr.io/cloud-builders/docker'
@@ -25,24 +22,23 @@ steps:
         '--add-cloudsql-instances', '${_CLOUDSQL_INSTANCE}',
         '--set-env-vars', 'SPRING_DATASOURCE_URL=${_SPRING_DATASOURCE_URL}',
         '--set-env-vars', 'SPRING_DATASOURCE_USERNAME=${_SPRING_DATASOURCE_USERNAME}',
-        '--set-env-vars', 'SPRING_DATASOURCE_PASSWORD=${_SPRING_DATASOURCE_PASSWORD}'
+        '--set-env-vars', 'SPRING_DATASOURCE_PASSWORD=${_SPRING_DATASOURCE_PASSWORD}',
+        '--set-env-vars', 'SPRING_PROFILES_ACTIVE=prod',  # ← Important !
+        '--service-account', '${_CLOUD_RUN_SERVICE_ACCOUNT}'  # ← Optionnel : SA dédié
       ]
 
-# Image finale
 images:
   - 'gcr.io/$PROJECT_ID/yegg-app:latest'
 
-# Substitutions (sécurisées via Secret Manager)
 substitutions:
-  _DEPLOY_REGION: ''
+  _DEPLOY_REGION: 'europe-west1'
   _CLOUDSQL_INSTANCE: ''
   _SPRING_DATASOURCE_URL: ''
-  _SPRING_DATASOURCE_USERNAME: 'root'
-  _SPRING_DATASOURCE_PASSWORD: 'YourDbPassword'
+  _SPRING_DATASOURCE_USERNAME: ''
+  _SPRING_DATASOURCE_PASSWORD: ''
+  _CLOUD_RUN_SERVICE_ACCOUNT: ''
 
-# Timeout du build
 timeout: '1200s'
 
-# Logs Cloud Logging uniquement
 options:
   logging: CLOUD_LOGGING_ONLY

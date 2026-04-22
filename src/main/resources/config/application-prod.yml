@@ -137,3 +137,7 @@ ttn:
     client-id: bus-fleet-${random.value}
     topic: v3/mysensorsapp@ttn/devices/+/up
     use-tls: false
+
+firebase:
+  config:
+    path: ''
