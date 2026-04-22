@@ -189,6 +189,22 @@ public class UtilisateurResource {
     }
 
     /**
+     * {@code GET  /utilisateurs/show} : get the "matricule" utilisateur.
+     *
+     * @param matricule the matricule of the utilisateurDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the utilisateurDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/show")
+    public ResponseEntity<UtilisateurDTO> getUtilisateurByMatricule(
+        @RequestParam(value = "matricule", required = false) String matricule,
+        @RequestParam(value = "email", required = false) String email
+    ) {
+        LOG.debug("REST request to get Utilisateur : matricule={}, email={}", matricule, email);
+        Optional<UtilisateurDTO> utilisateurDTO = utilisateurService.findOneByMatriculeOrEmail(matricule, email);
+        return ResponseUtil.wrapOrNotFound(utilisateurDTO);
+    }
+
+    /**
      * {@code DELETE  /utilisateurs/:id} : delete the "id" utilisateur.
      *
      * @param id the id of the utilisateurDTO to delete.

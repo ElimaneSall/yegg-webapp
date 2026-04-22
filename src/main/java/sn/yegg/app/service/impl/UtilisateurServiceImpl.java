@@ -68,6 +68,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<UtilisateurDTO> findOneByMatriculeOrEmail(String matricule, String email) {
+        LOG.debug("Request to get Utilisateur : matricule={}, email={}", matricule, email);
+        return utilisateurRepository.findByMatriculeOrEmail(matricule, email).map(utilisateur -> utilisateurMapper.toDto(utilisateur));
+    }
+
+    @Override
     public void delete(Long id) {
         LOG.debug("Request to delete Utilisateur : {}", id);
         utilisateurRepository.deleteById(id);

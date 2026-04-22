@@ -45,4 +45,6 @@ public interface UtilisateurService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Optional<UtilisateurDTO> findOneByMatriculeOrEmail(String matricule, String email);
 }
