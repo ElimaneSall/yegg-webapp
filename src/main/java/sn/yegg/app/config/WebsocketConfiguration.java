@@ -52,11 +52,15 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
         allOrigins.add("http://localhost:*");
         allOrigins.add("http://127.0.0.1:*");
         allOrigins.add("http://192.168.1.5:*");
+        allOrigins.add("https://yegg-app-303905372958.europe-west1.run.app");
+        allOrigins.add("https://*.run.app");
+        allOrigins.add("https://*.a.run.app");
         registry
             .addEndpoint("/websocket/tracker")
             .setHandshakeHandler(defaultHandshakeHandler())
-            .setAllowedOriginPatterns(allOrigins.toArray(new String[0])) // Utiliser setAllowedOriginPatterns au lieu de setAllowedOrigins
-            .addInterceptors(new WebsocketAuthInterceptor(jwtDecoder()));
+            .setAllowedOriginPatterns(allOrigins.toArray(new String[0]))
+            .addInterceptors(new WebsocketAuthInterceptor(jwtDecoder()))
+            .withSockJS();
     }
 
     // Ajoutez ce bean si nécessaire
