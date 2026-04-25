@@ -1,6 +1,8 @@
 {
   "login": {
     "title": "Sign in",
+    "subtitle": "Never miss your bus again",
+    "welcome": "Welcome",
     "form": {
       "password": "Password",
       "password.placeholder": "Your password",

@@ -1,13 +1,14 @@
-<!-- src/main/webapp/app/layouts/main/main.component.html -->
 <div class="app-wrapper">
   <!-- Navbar en haut -->
   <jhi-navbar></jhi-navbar>
 
   <!-- Layout principal avec sidebar -->
   <div class="app-container">
+    <!-- Sidebar conditionnelle -->
     <jhi-sidebar></jhi-sidebar>
 
-    <div class="main-content">
+    <!-- Contenu principal avec classe dynamique -->
+    <div class="main-content" [class.with-sidebar]="showSidebar()">
       <div class="container-fluid">
         <div class="card jh-card">
           <router-outlet />

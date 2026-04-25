@@ -1,28 +1,10 @@
 <!-- src/main/webapp/app/layouts/navbar/navbar.component.html -->
-<nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-      <span class="logo-img"></span>
-      <span class="navbar-title" jhiTranslate="global.title">YeggApp</span>
-      <span class="navbar-version">{{ version }}</span>
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarResponsive"
-      aria-controls="navbarResponsive"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      (click)="toggleNavbar()"
-    >
-      <fa-icon icon="bars"></fa-icon>
-    </button>
-
-    <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
-      <ul class="navbar-nav ms-auto">
-        <!-- Menu Entités avec sous-menus -->
-        @if (account() !== null) {
+@if (account() !== null) {
+  <nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-dark">
+    <div class="container-fluid">
+      <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
+        <ul class="navbar-nav ms-auto">
+          <!-- Menu Entités avec sous-menus -->
           <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
             <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
               <fa-icon icon="th-list"></fa-icon>
@@ -122,140 +104,141 @@
               <!-- jhipster-needle-add-entity-to-menu -->
             </div>
           </li>
-        }
+          <!-- } -->
 
-        <!-- Menu Administration (accessible uniquement aux admins) -->
-        <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
-            <fa-icon icon="users-cog"></fa-icon>
-            <span jhiTranslate="global.menu.admin.main">Administration</span>
-          </a>
-          <div ngbDropdownMenu aria-labelledby="admin-menu" class="dropdown-menu dropdown-menu-end">
-            <!-- Gestion des autorités -->
-            <a class="dropdown-item" routerLink="/authority" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.adminAuthority">Autorités</span>
+          <!-- Menu Administration (accessible uniquement aux admins) -->
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
+              <fa-icon icon="users-cog"></fa-icon>
+              <span jhiTranslate="global.menu.admin.main">Administration</span>
             </a>
-
-            <div class="dropdown-divider"></div>
-
-            <!-- JHipster administration -->
-            <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.userManagement">Gestion des utilisateurs</span>
-            </a>
-            <a class="dropdown-item" routerLink="/admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.tracker">Suivi des utilisateurs</span>
-            </a>
-            <a class="dropdown-item" routerLink="/admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.metrics">Métriques</span>
-            </a>
-            <a class="dropdown-item" routerLink="/admin/health" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="heart" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.health">Diagnostics</span>
-            </a>
-            <a class="dropdown-item" routerLink="/admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="cogs" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
-            </a>
-            <a class="dropdown-item" routerLink="/admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="tasks" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.logs">Logs</span>
-            </a>
-            @if (openAPIEnabled) {
-              <a class="dropdown-item" routerLink="/admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
-                <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.admin.apidocs">API</span>
+            <div ngbDropdownMenu aria-labelledby="admin-menu" class="dropdown-menu dropdown-menu-end">
+              <!-- Gestion des autorités -->
+              <a class="dropdown-item" routerLink="/authority" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.adminAuthority">Autorités</span>
               </a>
-            }
-          </div>
-        </li>
 
-        <!-- Sélecteur de langue -->
-        @if (languages && languages.length > 1) {
-          <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
-              <fa-icon icon="flag"></fa-icon>
-              <span jhiTranslate="global.menu.language">Langue</span>
-            </a>
-            <div ngbDropdownMenu aria-labelledby="languagesnavBarDropdown" class="dropdown-menu dropdown-menu-end">
-              @for (language of languages; track $index) {
-                <a
-                  class="dropdown-item"
-                  [jhiActiveMenu]="language"
-                  href="javascript:void(0);"
-                  (click)="changeLanguage(language); collapseNavbar()"
-                >
-                  {{ language | findLanguageFromKey }}
+              <div class="dropdown-divider"></div>
+
+              <!-- JHipster administration -->
+              <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.userManagement">Gestion des utilisateurs</span>
+              </a>
+              <a class="dropdown-item" routerLink="/admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.tracker">Suivi des utilisateurs</span>
+              </a>
+              <a class="dropdown-item" routerLink="/admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.metrics">Métriques</span>
+              </a>
+              <a class="dropdown-item" routerLink="/admin/health" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="heart" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.health">Diagnostics</span>
+              </a>
+              <a class="dropdown-item" routerLink="/admin/configuration" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="cogs" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
+              </a>
+              <a class="dropdown-item" routerLink="/admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="tasks" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.logs">Logs</span>
+              </a>
+              @if (openAPIEnabled) {
+                <a class="dropdown-item" routerLink="/admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
+                  <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.admin.apidocs">API</span>
                 </a>
               }
             </div>
           </li>
-        }
 
-        <!-- Menu compte utilisateur -->
-        <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
-          @let accountRef = account();
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
-            @if (!accountRef?.imageUrl) {
-              <span>
-                <fa-icon icon="user-circle"></fa-icon>
-                <span jhiTranslate="global.menu.account.main">Compte</span>
-              </span>
-            } @else {
-              <span>
-                <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
-              </span>
-            }
-          </a>
-          <div ngbDropdownMenu aria-labelledby="account-menu" class="dropdown-menu dropdown-menu-end">
-            @if (accountRef !== null) {
-              <a
-                class="dropdown-item"
-                routerLink="/account/settings"
-                routerLinkActive="active"
-                (click)="collapseNavbar()"
-                data-cy="settings"
-              >
-                <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.account.settings">Profil</span>
+          <!-- Sélecteur de langue -->
+          @if (languages && languages.length > 1) {
+            <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
+              <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
+                <fa-icon icon="flag"></fa-icon>
+                <span jhiTranslate="global.menu.language">Langue</span>
               </a>
-              <a
-                class="dropdown-item"
-                routerLink="/account/password"
-                routerLinkActive="active"
-                (click)="collapseNavbar()"
-                data-cy="passwordItem"
-              >
-                <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.account.password">Mot de passe</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
-                <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.account.logout">Déconnexion</span>
-              </a>
-            } @else {
-              <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
-                <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.account.login">S'authentifier</span>
-              </a>
-              <a
-                class="dropdown-item"
-                routerLink="/account/register"
-                routerLinkActive="active"
-                (click)="collapseNavbar()"
-                data-cy="register"
-              >
-                <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.account.register">Créer un compte</span>
-              </a>
-            }
-          </div>
-        </li>
-      </ul>
+              <div ngbDropdownMenu aria-labelledby="languagesnavBarDropdown" class="dropdown-menu dropdown-menu-end">
+                @for (language of languages; track $index) {
+                  <a
+                    class="dropdown-item"
+                    [jhiActiveMenu]="language"
+                    href="javascript:void(0);"
+                    (click)="changeLanguage(language); collapseNavbar()"
+                  >
+                    {{ language | findLanguageFromKey }}
+                  </a>
+                }
+              </div>
+            </li>
+          }
+
+          <!-- Menu compte utilisateur -->
+          <li ngbDropdown class="nav-item dropdown" display="dynamic" placement="bottom-right">
+            @let accountRef = account();
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+              @if (!accountRef?.imageUrl) {
+                <span>
+                  <fa-icon icon="user-circle"></fa-icon>
+                  <span jhiTranslate="global.menu.account.main">Compte</span>
+                </span>
+              } @else {
+                <span>
+                  <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
+                </span>
+              }
+            </a>
+            <div ngbDropdownMenu aria-labelledby="account-menu" class="dropdown-menu dropdown-menu-end">
+              @if (accountRef !== null) {
+                <a
+                  class="dropdown-item"
+                  routerLink="/account/settings"
+                  routerLinkActive="active"
+                  (click)="collapseNavbar()"
+                  data-cy="settings"
+                >
+                  <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.account.settings">Profil</span>
+                </a>
+                <a
+                  class="dropdown-item"
+                  routerLink="/account/password"
+                  routerLinkActive="active"
+                  (click)="collapseNavbar()"
+                  data-cy="passwordItem"
+                >
+                  <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.account.password">Mot de passe</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
+                  <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.account.logout">Déconnexion</span>
+                </a>
+              } @else {
+                <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
+                  <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.account.login">S'authentifier</span>
+                </a>
+                <a
+                  class="dropdown-item"
+                  routerLink="/account/register"
+                  routerLinkActive="active"
+                  (click)="collapseNavbar()"
+                  data-cy="register"
+                >
+                  <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
+                  <span jhiTranslate="global.menu.account.register">Créer un compte</span>
+                </a>
+              }
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+}

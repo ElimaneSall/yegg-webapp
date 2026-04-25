@@ -1,48 +1,48 @@
-<div class="sidebar-container" [class.sidebar-collapsed]="isSidebarCollapsed()">
-  <!-- Bouton menu mobile -->
-  <button
-    class="btn btn-primary position-fixed top-0 start-0 m-2 d-md-none"
-    style="z-index: 1001; padding: 8px 12px"
-    (click)="toggleMobileMenu()"
-    *ngIf="isSidebarCollapsed()"
-  >
-    <fa-icon icon="bars"></fa-icon>
-  </button>
+@if (account() !== null) {
+  <div class="sidebar-container" [class.sidebar-collapsed]="isSidebarCollapsed()">
+    <!-- Bouton menu mobile -->
+    <button
+      class="btn btn-primary position-fixed top-0 start-0 m-2 d-md-none"
+      style="z-index: 1001; padding: 8px 12px"
+      (click)="toggleMobileMenu()"
+      *ngIf="isSidebarCollapsed()"
+    >
+      <fa-icon icon="bars"></fa-icon>
+    </button>
 
-  <!-- Overlay mobile -->
-  <div class="sidebar-overlay" *ngIf="isMobileMenuOpen()" (click)="closeMobileMenu()"></div>
+    <!-- Overlay mobile -->
+    <div class="sidebar-overlay" *ngIf="isMobileMenuOpen()" (click)="closeMobileMenu()"></div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" [class.mobile-open]="isMobileMenuOpen()" [class.collapsed]="isSidebarCollapsed()">
-    <!-- En-tête sidebar -->
-    <div class="sidebar-header d-flex align-items-center justify-content-between p-3 border-bottom">
-      <div class="d-flex align-items-center gap-2">
-        <fa-icon icon="bus" class="logo-icon fs-4"></fa-icon>
-        @if (!isSidebarCollapsed()) {
-          <span class="logo-text fw-semibold" jhiTranslate="global.title">YeggApp</span>
-        }
+    <!-- Sidebar -->
+    <aside class="sidebar" [class.mobile-open]="isMobileMenuOpen()" [class.collapsed]="isSidebarCollapsed()">
+      <!-- En-tête sidebar -->
+      <div class="sidebar-header d-flex align-items-center justify-content-between p-3 border-bottom">
+        <div class="d-flex align-items-center gap-2">
+          <fa-icon icon="bus" class="logo-icon fs-4"></fa-icon>
+          @if (!isSidebarCollapsed()) {
+            <span class="logo-text fw-semibold" jhiTranslate="global.title">YeggApp</span>
+          }
+        </div>
+        <button class="toggle-btn btn btn-link text-white p-1" (click)="toggleSidebar()">
+          <fa-icon [icon]="isSidebarCollapsed() ? 'chevron-right' : 'chevron-left'"></fa-icon>
+        </button>
       </div>
-      <button class="toggle-btn btn btn-link text-white p-1" (click)="toggleSidebar()">
-        <fa-icon [icon]="isSidebarCollapsed() ? 'chevron-right' : 'chevron-left'"></fa-icon>
-      </button>
-    </div>
 
-    <!-- Menu principal -->
-    <nav class="sidebar-nav flex-grow-1 overflow-auto py-3">
-      <!-- Accueil -->
-      <a
-        class="nav-item d-flex align-items-center p-2 text-white text-decoration-none"
-        routerLink="/"
-        routerLinkActive="active"
-        (click)="closeMobileMenu()"
-      >
-        <fa-icon icon="home" class="nav-icon me-2"></fa-icon>
-        @if (!isSidebarCollapsed()) {
-          <span class="nav-text" jhiTranslate="global.menu.home">Accueil</span>
-        }
-      </a>
+      <!-- Menu principal -->
+      <nav class="sidebar-nav flex-grow-1 overflow-auto py-3">
+        <!-- Accueil -->
+        <a
+          class="nav-item d-flex align-items-center p-2 text-white text-decoration-none"
+          routerLink="/"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          <fa-icon icon="home" class="nav-icon me-2"></fa-icon>
+          @if (!isSidebarCollapsed()) {
+            <span class="nav-text" jhiTranslate="global.menu.home">Accueil</span>
+          }
+        </a>
 
-      @if (account() !== null) {
         <!-- SECTION RÉSEAU -->
         <div class="nav-section">
           <div class="section-header d-flex align-items-center p-2 cursor-pointer" (click)="toggleSubmenu('network')">
@@ -225,12 +225,12 @@
             }
           </div>
         }
-      }
-    </nav>
+        <!-- } -->
+      </nav>
 
-    <!-- Pied de page sidebar avec infos utilisateur -->
-    <div class="sidebar-footer p-3 border-top">
-      @if (account() !== null) {
+      <!-- Pied de page sidebar avec infos utilisateur -->
+      <div class="sidebar-footer p-3 border-top">
+        <!-- @if (account() !== null) { -->
         <div class="user-info d-flex align-items-center gap-3 cursor-pointer">
           <fa-icon icon="user-circle" class="user-avatar fs-2"></fa-icon>
           @if (!isSidebarCollapsed()) {
@@ -246,14 +246,15 @@
             <span jhiTranslate="global.menu.account.logout">Déconnexion</span>
           </button>
         }
-      } @else {
+        <!-- } @else {
         <div class="user-info d-flex align-items-center gap-2 cursor-pointer" (click)="login()">
           <fa-icon icon="sign-in-alt" class="user-avatar fs-2"></fa-icon>
           @if (!isSidebarCollapsed()) {
             <span class="login-text" jhiTranslate="global.menu.account.login">Se connecter</span>
           }
         </div>
-      }
-    </div>
-  </aside>
-</div>
+      } -->
+      </div>
+    </aside>
+  </div>
+}

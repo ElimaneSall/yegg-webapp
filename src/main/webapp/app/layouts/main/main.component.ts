@@ -1,5 +1,4 @@
-// src/main/webapp/app/layouts/main/main.component.ts
-import { Component, OnInit, Renderer2, RendererFactory2, inject } from '@angular/core';
+import { Component, OnInit, Renderer2, RendererFactory2, inject, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
@@ -13,11 +12,15 @@ import SidebarComponent from '../sidebar/sidebar.component';
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html',
+  styleUrl: './main.component.scss',
   providers: [AppPageTitleStrategy],
   imports: [RouterOutlet, FooterComponent, NavbarComponent, SidebarComponent],
 })
 export default class MainComponent implements OnInit {
   private readonly renderer: Renderer2;
+
+  // ✅ Signal pour savoir si la sidebar doit être affichée
+  showSidebar = signal(false);
 
   private readonly router = inject(Router);
   private readonly appPageTitleStrategy = inject(AppPageTitleStrategy);
@@ -30,6 +33,11 @@ export default class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // ✅ Abonnement pour mettre à jour showSidebar quand l'authentification change
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.showSidebar.set(account !== null);
+    });
+
     this.accountService.identity().subscribe();
 
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {

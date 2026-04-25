@@ -1,0 +1,56 @@
+// src/main/webapp/app/layouts/main/main.component.scss
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 70px);
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+
+  &.with-sidebar {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+  }
+
+  background: #f8f9fa;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .container-fluid {
+    padding: 20px;
+    flex: 1;
+  }
+
+  .jh-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-height: calc(100vh - 140px); // Ajustez selon navbar + footer
+  }
+}
+
+// États collapsed de la sidebar
+.with-sidebar.sidebar-collapsed {
+  margin-left: 70px !important;
+}
+
+// Mobile : pas de margin
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+
+    &.with-sidebar {
+      margin-left: 0 !important;
+    }
+  }
+}

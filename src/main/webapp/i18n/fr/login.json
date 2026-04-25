@@ -1,6 +1,8 @@
 {
   "login": {
     "title": "Authentification",
+    "subtitle": "Ne manquez plus jamais votre bus",
+    "welcome": "Bienvenue",
     "form": {
       "password": "Mot de passe",
       "password.placeholder": "Votre mot de passe",

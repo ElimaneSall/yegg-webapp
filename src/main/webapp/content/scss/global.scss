@@ -2,7 +2,31 @@
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 @import 'leaflet/dist/leaflet.css';
+/* ===== SIGMA Design Tokens ===== */
+:root {
+  --sigma-primary: #2563eb;
+  --sigma-primary-light: #60a5fa;
+  --sigma-bg: #f8fafc;
+  --sigma-text: #0f172a;
+  --sigma-muted: #64748b;
+  --sigma-radius: 1rem;
+  --sigma-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-bg: rgba(15, 23, 42, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
 
+/* ===== Reset & Base ===== */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: var(--sigma-text);
+  background: var(--sigma-bg);
+  overflow-x: hidden;
+}
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
@@ -68,8 +92,8 @@ Generic styles
 /* other generic styles */
 
 .jh-card {
-  padding: 1.5%;
-  margin-top: 20px;
+  //padding: 1.5%;
+  //margin-top: 20px;
   border: none;
 }
 
@@ -237,45 +261,6 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
 /* jhipster-needle-scss-add-main JHipster will add new css style */
 
 // src/main/webapp/content/scss/global.scss (à ajouter)
-.app-wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-container {
-  display: flex;
-  flex: 1;
-  min-height: calc(100vh - 70px); // Hauteur navbar = 70px
-}
-
-.main-content {
-  flex: 1;
-  margin-left: 250px; // Largeur sidebar
-  transition: margin-left 0.3s ease;
-  background: #f8f9fa;
-  min-height: 100%;
-
-  .container-fluid {
-    padding: 20px;
-  }
-
-  .jh-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-}
 
 // Quand la sidebar est réduite
-.sidebar.collapsed + .main-content {
-  margin-left: 70px;
-}
-
 // Responsive
-@media (max-width: 768px) {
-  .main-content {
-    margin-left: 0 !important;
-  }
-}

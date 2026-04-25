@@ -1,107 +1,319 @@
-<div class="home-wrapper">
-  <section class="hero-section text-center">
-    <div class="container py-5">
-      <div class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2 mb-3">
-        🚀 Version 1.0 disponible - Réseau Dakar & Banlieue
-      </div>
-      <h1 class="display-4 fw-bold">Voyagez plus intelligemment avec <span class="text-primary">Yegg</span></h1>
-      <p class="lead text-white mx-auto" style="max-width: 700px">
-        La plateforme de gestion de flotte qui connecte passagers, chauffeurs et opérateurs pour une mobilité urbaine fluide et ponctuelle.
+<div class="sigma-landing">
+  <!-- HERO -->
+  <section class="hero-section position-relative text-center overflow-hidden">
+    <div class="hero-gradient"></div>
+    <div class="hero-grid"></div>
+    <div class="container py-5 position-relative z-2 mt-5 pt-5">
+      <span class="badge rounded-pill bg-white text-dark px-3 py-2 mb-4 mx-auto d-inline-block shadow-sm">
+        📍 Réseau Dakar & Banlieue • Fonctionne même avec connexion faible
+      </span>
+      <h1 class="display-3 fw-bold text-white mb-3 scroll-reveal">
+        Ne manquez plus jamais votre <span class="text-primary-light">bus</span>
+      </h1>
+      <p class="lead text-white-75 mx-auto mb-4 scroll-reveal" style="max-width: 700px; animation-delay: 0.15s">
+        Suivez votre ligne en temps réel, recevez une alerte à l'approche et voyagez sereinement. Une application pensée pour la mobilité
+        urbaine africaine.
       </p>
 
-      <div class="mt-4 d-flex justify-content-center gap-3">
+      <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap scroll-reveal" style="animation-delay: 0.3s">
         @if (account() === null) {
-          <button class="btn btn-primary btn-lg shadow" (click)="login()"><i class="fas fa-sign-in-alt me-2"></i>Se connecter</button>
-          <button class="btn btn-outline-secondary btn-lg" routerLink="/account/register">Créer un compte</button>
+          <button class="btn btn-primary btn-lg px-4 py-2 shadow-sm" (click)="login()"><i class="fas fa-user me-2"></i>Se connecter</button>
+          <button class="btn btn-outline-light btn-lg px-4 py-2" routerLink="/account/register">Créer un compte gratuit</button>
         } @else {
-          <button class="btn btn-primary btn-lg shadow" routerLink="/tracking">
-            <i class="fas fa-map-marker-alt me-2"></i>Suivre mon bus
+          <button class="btn btn-primary btn-lg px-4 py-2 shadow-sm" routerLink="/tracking">
+            <i class="fas fa-location-arrow me-2"></i>Ouvrir le suivi
           </button>
         }
       </div>
     </div>
+    <div class="hero-wave position-absolute bottom-0 start-0 w-100">
+      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V120Z"
+          fill="#f8fafc"
+        />
+      </svg>
+    </div>
   </section>
 
-  <section class="container py-5">
+  <!-- TRUST / PARTENAIRES -->
+  <section class="py-4 bg-light border-bottom">
+    <div class="container text-center">
+      <p class="text-muted small mb-3">Développé en partenariat avec les acteurs du transport sénégalais</p>
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 opacity-75">
+        <span class="fw-bold text-secondary">CETUD</span>
+        <span class="fw-bold text-secondary">AFTU</span>
+        <span class="fw-bold text-secondary">DDD</span>
+        <span class="fw-bold text-secondary">SONAGED</span>
+        <span class="fw-bold text-secondary">UCAD • Labo IoT</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMENT ÇA MARCHE -->
+  <section class="container py-5 scroll-reveal">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Comment ça fonctionne ?</h2>
+      <p class="text-muted">3 étapes simples pour optimiser vos déplacements</p>
+    </div>
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="step-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <div class="step-number bg-primary text-white mb-3">1</div>
+          <h5 class="fw-bold">Choisissez votre ligne</h5>
+          <p class="text-muted mb-0">Recherchez votre trajet ou activez la géolocalisation pour voir les bus proches.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <div class="step-number bg-primary text-white mb-3">2</div>
+          <h5 class="fw-bold">Activez l'alerte</h5>
+          <p class="text-muted mb-0">Sélectionnez votre arrêt. L'application vous notifie quand le bus est à 500m.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <div class="step-number bg-primary text-white mb-3">3</div>
+          <h5 class="fw-bold">Voyagez sereinement</h5>
+          <p class="text-muted mb-0">Consultez le trafic, signalez un incident et partagez votre position en un tap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FONCTIONNALITÉS -->
+  <section class="bg-light py-5">
+    <div class="container scroll-reveal">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="mock-app p-4 bg-white rounded-4 shadow-sm border position-relative overflow-hidden">
+            <div class="d-flex gap-2 mb-3">
+              <span class="badge bg-success-subtle text-success">🟢 Ligne 7 • Fluide</span>
+              <span class="badge bg-warning-subtle text-warning">🟡 Ligne 12 • Ralentissement</span>
+            </div>
+            <div class="progress mb-3" style="height: 8px">
+              <div class="progress-bar bg-primary animate-pulse-width" style="width: 75%"></div>
+            </div>
+            <div class="d-flex align-items-center gap-3 p-3 rounded-3 bg-light">
+              <div class="pulse-dot"></div>
+              <div>
+                <div class="fw-bold">Prochain bus dans ~4 min</div>
+                <small class="text-muted">Arrêt Terminus • Direction Plateau</small>
+              </div>
+            </div>
+            <div class="position-absolute top-0 end-0 p-2 opacity-25"><i class="fas fa-map-marked-alt fa-5x text-primary"></i></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <h2 class="fw-bold mb-4">Des fonctionnalités pensées pour le terrain</h2>
+          <div class="d-flex flex-column gap-3">
+            <div class="d-flex align-items-start gap-3">
+              <div class="feature-icon bg-primary-subtle text-primary"><i class="fas fa-signal"></i></div>
+              <div>
+                <h6 class="fw-bold mb-1">Mode faible connexion</h6>
+                <p class="text-muted mb-0">
+                  L'app se synchronise automatiquement dès qu'un signal est détecté. Idéale pour les zones à couverture instable.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-start gap-3">
+              <div class="feature-icon bg-success-subtle text-success"><i class="fas fa-battery-half"></i></div>
+              <div>
+                <h6 class="fw-bold mb-1">Consommation optimisée</h6>
+                <p class="text-muted mb-0">
+                  Architecture légère qui ne draine pas votre batterie. Notifications push natives et GPS intelligent.
+                </p>
+              </div>
+            </div>
+            <div class="d-flex align-items-start gap-3">
+              <div class="feature-icon bg-info-subtle text-info"><i class="fas fa-shield-alt"></i></div>
+              <div>
+                <h6 class="fw-bold mb-1">Données sécurisées & anonymisées</h6>
+                <p class="text-muted mb-0">Vos trajets restent privés. Seules les données agrégées servent à améliorer le réseau urbain.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TÉMOIGNAGES -->
+  <section class="container py-5 scroll-reveal">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Ce que disent les usagers</h2>
+    </div>
     <div class="row g-4">
       <div class="col-md-4">
-        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
-          <div class="icon-box bg-blue-soft mb-3">
-            <i class="fas fa-bell text-primary"></i>
+        <div class="testimonial-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <p class="fst-italic mb-3">
+            "Avant, je devais attendre 40 min sans savoir si le bus passait. Maintenant, je sors de chez moi pile quand il arrive.
+            Incroyable."
+          </p>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar bg-primary-subtle text-primary fw-bold rounded-circle">A.D.</div>
+            <div>
+              <div class="fw-bold">Aminata D.</div>
+              <small class="text-muted">Usagère quotidienne • Dakar Plateau</small>
+            </div>
           </div>
-          <h4>Alertes d'approche</h4>
-          <p class="text-muted">Définissez vos arrêts favoris et recevez une notification dès que le bus est à moins de 500m.</p>
-          <a routerLink="/alerte-approche" class="stretched-link text-primary fw-bold text-decoration-none">
-            Gérer mes alertes <i class="fas fa-arrow-right ms-1"></i>
-          </a>
         </div>
       </div>
-
       <div class="col-md-4">
-        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
-          <div class="icon-box bg-pink-soft mb-3">
-            <i class="fas fa-bus text-danger"></i>
+        <div class="testimonial-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <p class="fst-italic mb-3">"L'alerte à 500m change tout. Je peux finir mon café tranquillement avant de descendre à l'arrêt."</p>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar bg-success-subtle text-success fw-bold rounded-circle">M.S.</div>
+            <div>
+              <div class="fw-bold">Moussa S.</div>
+              <small class="text-muted">Étudiant • Pikine</small>
+            </div>
           </div>
-          <h4>Espace Chauffeur</h4>
-          <p class="text-muted">Signalez un incident, mettez à jour votre statut (pause, panne) et consultez vos statistiques de trajet.</p>
-          <a routerLink="/bus" class="stretched-link text-danger fw-bold text-decoration-none">
-            Mettre à jour mon statut <i class="fas fa-arrow-right ms-1"></i>
-          </a>
         </div>
       </div>
-
       <div class="col-md-4">
-        <div class="feature-card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
-          <div class="icon-box bg-cyan-soft mb-3">
-            <i class="fas fa-chart-bar text-info"></i>
+        <div class="testimonial-card p-4 bg-white rounded-4 border shadow-sm h-100">
+          <p class="fst-italic mb-3">
+            "Fonctionne même quand mon réseau passe en 2G. C'est exactement ce qu'il fallait pour nos lignes périurbaines."
+          </p>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar bg-info-subtle text-info fw-bold rounded-circle">K.F.</div>
+            <div>
+              <div class="fw-bold">Khadim F.</div>
+              <small class="text-muted">Chauffeur partenaire • Ligne 45</small>
+            </div>
           </div>
-          <h4>Supervision Réseau</h4>
-          <p class="text-muted">Visualisez l'état des lignes, gérez les arrêts et générez des rapports mensuels de performance.</p>
-          <a routerLink="/ligne" class="stretched-link text-info fw-bold text-decoration-none">
-            Administration <i class="fas fa-arrow-right ms-1"></i>
-          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="bg-light py-5 mt-4">
+  <!-- IMPACT & ALIGNEMENT STRATÉGIQUE -->
+  <section class="bg-dark text-white py-5 scroll-reveal">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-3">Plus qu'une app, un levier de mobilité durable</h2>
+      <p class="text-white-50 mb-4 mx-auto" style="max-width: 650px">
+        SIGMA s'inscrit dans le <span class="text-white">New Deal Technologique 2034</span> et les
+        <span class="text-white">ODD 9, 11 & 13</span>. Grâce à la technologie LoRaWAN, nous réduisons les coûts de connectivité, optimisons
+        les trajets et diminuons les émissions CO₂ urbaines.
+      </p>
+      <div class="d-flex flex-wrap justify-content-center gap-4">
+        <div class="impact-box p-3 bg-white bg-opacity-10 rounded-3">
+          <div class="fs-4 fw-bold">>95%</div>
+          <small>Fiabilité des données</small>
+        </div>
+        <div class="impact-box p-3 bg-white bg-opacity-10 rounded-3">
+          <div class="fs-4 fw-bold"><10m</div>
+          <small>Précision GPS</small>
+        </div>
+        <div class="impact-box p-3 bg-white bg-opacity-10 rounded-3">
+          <div class="fs-4 fw-bold">-30%</div>
+          <small>Temps d'attente moyen</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container py-5 scroll-reveal">
+    <h2 class="fw-bold text-center mb-4">Questions fréquentes</h2>
+    <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+            L'application est-elle gratuite ?
+          </button>
+        </h2>
+        <div id="q1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">Oui. L'accès au suivi, aux alertes et à l'historique est entièrement gratuit pour les passagers.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+            Fonctionne-t-elle sans internet ?
+          </button>
+        </h2>
+        <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            L'app utilise une architecture optimisée qui met en cache les dernières positions et se synchronise dès qu'un signal est
+            détecté. Les notifications d'approche utilisent un protocole léger compatible avec les réseaux faibles.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">
+            Comment les données sont-elles utilisées ?
+          </button>
+        </h2>
+        <div id="q3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Vos trajets sont anonymisés et chiffrés. Seules les données agrégées sont partagées avec les autorités pour optimiser les lignes
+            et améliorer la planification urbaine.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="py-5 bg-primary text-white text-center scroll-reveal">
     <div class="container">
-      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="row g-0">
-          <div class="col-md-8 p-4 bg-white">
-            <h5 class="fw-bold mb-4">Lignes les plus actives</h5>
-            <div class="line-status-item mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span class="fw-medium">Ligne 7 (Ouakam - Plateau)</span>
-                <span class="badge bg-success">Fluide</span>
-              </div>
-              <div class="progress" style="height: 8px">
-                <div class="progress-bar bg-primary" style="width: 85%"></div>
-              </div>
-            </div>
-            <div class="line-status-item mb-3">
-              <div class="d-flex justify-content-between mb-1">
-                <span class="fw-medium">Ligne 12 (Pikine - Centre)</span>
-                <span class="badge bg-warning">Ralentissement</span>
-              </div>
-              <div class="progress" style="height: 8px">
-                <div class="progress-bar bg-primary" style="width: 60%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 p-4 bg-primary text-white d-flex flex-column justify-content-center align-items-center">
-            <div class="text-center">
-              <h2 class="display-5 fw-bold">48</h2>
-              <p class="mb-0">Bus connectés en direct</p>
-              <div class="pulse-container mt-3">
-                <div class="pulse-dot"></div>
-                <small>Système synchronisé</small>
-              </div>
-            </div>
-          </div>
+      <h3 class="fw-bold mb-3">Prêt à voyager différemment ?</h3>
+      <p class="mb-4 text-white-75 mx-auto" style="max-width: 500px">
+        Rejoignez des milliers d'usagers à Dakar et en banlieue qui optimisent déjà leurs déplacements.
+      </p>
+      @if (account() === null) {
+        <button class="btn btn-light btn-lg px-4 shadow" routerLink="/account/register">Créer mon compte gratuitement</button>
+      } @else {
+        <button class="btn btn-light btn-lg px-4 shadow" routerLink="/tracking">Accéder au suivi</button>
+      }
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-white-50 py-4 border-top">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <small>© 2024 SIGMA • Système Intelligent de Gestion de la Mobilité et des Alertes</small>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a routerLink="/privacy" class="text-white-50 text-decoration-none me-3">Confidentialité</a>
+          <a routerLink="/terms" class="text-white-50 text-decoration-none me-3">Conditions</a>
+          <a href="mailto:contact@sigma.sn" class="text-white-50 text-decoration-none">Contact</a>
         </div>
       </div>
     </div>
-  </section>
+  </footer>
 </div>
+
+<script>
+  // Scroll Reveal & Navbar Glass Effect
+  document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.getElementById('mainNav');
+    const reveals = document.querySelectorAll('.scroll-reveal');
+
+    // Navbar glass on scroll
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) nav.classList.add('glass');
+      else nav.classList.remove('glass');
+    });
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' },
+    );
+
+    reveals.forEach(el => observer.observe(el));
+  });
+</script>
